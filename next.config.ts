@@ -5,10 +5,9 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true, // Required for static export
   },
-  // If you are deploying to a subfolder (like https://username.github.io/repo-name/), 
-  // uncomment and change the following lines:
-  // basePath: '/repo-name',
-  // assetPrefix: '/repo-name/',
+  // Since the repository is named "if", we need to set the basePath
+  basePath: '/if',
+  assetPrefix: '/if/',
 };
 
 export default nextConfig;

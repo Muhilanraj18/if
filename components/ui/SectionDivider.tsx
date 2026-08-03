@@ -17,7 +17,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(DrawSVGPlugin, ScrollTrigger);
 
 interface SectionDividerProps {
-  variant?: "navy" | "cream";
+  variant?: "navy" | "cream" | "neon";
   showTagline?: boolean;
   className?: string;
 }
@@ -33,8 +33,8 @@ export default function SectionDivider({
   const diamondRef = useRef<SVGPathElement>(null);
   const taglineRef = useRef<HTMLParagraphElement>(null);
 
-  const color = variant === "navy" ? "#0B1F3F" : "#FAFAF8";
-  const dimColor = variant === "navy" ? "rgba(11,31,63,0.35)" : "rgba(250,250,248,0.35)";
+  const color = variant === "navy" ? "#0B1F3F" : variant === "neon" ? "#8ae614" : "#FAFAF8";
+  const dimColor = variant === "navy" ? "rgba(11,31,63,0.35)" : variant === "neon" ? "rgba(138,230,20,0.35)" : "rgba(250,250,248,0.35)";
 
   // gsap-react skill: useGSAP for proper cleanup
   useGSAP(

@@ -17,9 +17,10 @@ gsap.registerPlugin(ScrollTrigger);
 
 const TEAM = [
   { id: "muhilan", name: "Muhilan Raj", role: "Founder & CEO", handle: "@muhilan" },
-  { id: "deepsikha", name: "Deepsikha Regi", role: "UI/UX Designer", handle: "@deepsikha" },
-  { id: "dhanush", name: "Dhanush", role: "Tech Lead", handle: "@dhanush" },
-  { id: "shalu", name: "Shalu Mirsha", role: "AI Specialist", handle: "@shalu" },
+  { id: "dhanush", name: "Dhanush", role: "CTO", handle: "@dhanush" },
+  { id: "muneer", name: "Muneer", role: "CFO", handle: "@muneer" },
+  { id: "rahul", name: "Rahul", role: "CMO", handle: "@rahul" },
+  { id: "danupeter", name: "Danu Peter", role: "CPO", handle: "@danupeter" },
   { id: "abishake", name: "Abishake", role: "Data Scientist", handle: "@abishake" },
 ];
 

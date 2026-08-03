@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Inan Infinites
+
+This is a Next.js project configured for deployment to GitHub Pages.
 
 ## Getting Started
 
-First, run the development server:
-
+First, install dependencies:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
+Then, run the development server:
+```bash
+npm run dev
+```
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Deploy on GitHub Pages
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+This project is already pre-configured to be exported as a static HTML site (`output: "export"` in `next.config.ts`). This is the required configuration for GitHub Pages deployment without Vercel.
 
-## Learn More
+To automatically deploy this site to GitHub Pages whenever you push to the `main` branch, you can create a GitHub Actions workflow:
 
-To learn more about Next.js, take a look at the following resources:
+1. Create a file in your repository at `.github/workflows/deploy.yml`
+2. Add the following configuration to the file:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```yaml
+name: Deploy Next.js site to Pages
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
 
-## Deploy on Vercel
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install dependencies
+        run: npm ci
+      - name: Build with Next.js
+        run: npm run build
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./out
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+```
+
+3. Go to your repository **Settings > Pages**. Under **Build and deployment**, set the **Source** to **GitHub Actions**.
+
+> Note: If you are deploying your site to a subfolder repository (e.g. `username.github.io/my-repo`), you will need to uncomment and set the `basePath` property in `next.config.ts`.

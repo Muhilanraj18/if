@@ -44,6 +44,24 @@ export default function HowWeBuild() {
         });
       }
 
+      // Mobile green flowing line
+      const mobileLine = document.querySelector('.mobile-green-line');
+      if (mobileLine) {
+        gsap.fromTo(mobileLine, 
+          { scaleY: 0 },
+          { 
+            scaleY: 1, 
+            ease: "none",
+            scrollTrigger: {
+              trigger: ".process-container",
+              start: "top 60%",
+              end: "bottom 80%",
+              scrub: true,
+            }
+          }
+        );
+      }
+
       // 2. Node entrance animations using matchMedia for mobile responsiveness
       const mm = gsap.matchMedia();
       
@@ -133,7 +151,9 @@ export default function HowWeBuild() {
           </div>
           
           {/* Mobile Straight Line */}
-          <div className="absolute top-0 bottom-0 left-6 w-1 bg-[var(--dark-border)] block md:hidden -z-10" />
+          <div className="absolute top-0 bottom-0 left-6 w-1 bg-[var(--dark-border)] block md:hidden -z-10">
+            <div className="mobile-green-line w-full h-full bg-[var(--gsap-green)] origin-top shadow-[0_0_8px_rgba(138,230,20,0.5)]" />
+          </div>
 
           <div className="flex flex-col gap-12 md:gap-32">
             {PROCESS_STEPS.map((step, idx) => (

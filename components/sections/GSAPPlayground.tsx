@@ -50,7 +50,7 @@ export default function GSAPPlayground() {
             trigger: sectionRef.current,
             pin: true,
             scrub: 1,
-            end: () => `+=${horizontalContainerRef.current!.scrollWidth - window.innerWidth + 200}`,
+            end: () => `+=${horizontalContainerRef.current!.scrollWidth}`,
           }
         });
 
@@ -60,7 +60,7 @@ export default function GSAPPlayground() {
             const container = horizontalContainerRef.current!;
             const scrollWidth = container.scrollWidth;
             const containerLeft = container.getBoundingClientRect().left;
-            return -(scrollWidth - window.innerWidth + containerLeft * 2);
+            return -(scrollWidth - window.innerWidth + containerLeft + 24);
           },
           ease: "none",
         });
@@ -198,12 +198,12 @@ export default function GSAPPlayground() {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 relative z-10 w-full">
+      <div className="max-w-6xl mx-auto px-6 relative z-10 w-full overflow-visible">
         {/* ── HORIZONTAL SCROLL CARDS ── */}
         <div 
           ref={horizontalContainerRef} 
-          className="flex flex-col lg:flex-row gap-6 lg:gap-12 lg:w-fit"
-          style={{ willChange: "transform" }}
+          className="flex flex-col lg:flex-row gap-6 lg:gap-12 lg:w-max"
+          style={{ willChange: "transform", paddingRight: "10vw" }}
         >
           
           {/* Card 1: Butterfly */}

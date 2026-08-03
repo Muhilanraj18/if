@@ -29,6 +29,7 @@ import HowWeBuild from "@/components/sections/HowWeBuild";
 import Impact from "@/components/sections/Impact";
 import About from "@/components/sections/About";
 import GSAPPlayground from "@/components/sections/GSAPPlayground";
+import TextMarquee from "@/components/sections/TextMarquee";
 import Contact from "@/components/sections/Contact";
 
 export default function HomePage() {
@@ -50,6 +51,7 @@ export default function HomePage() {
 
       {/* ── Chapter 1: Liquid Glass / Spatial UI ───────────────────── */}
       <Hero preloaderDone={preloaderDone} />
+      <TextMarquee />
 
       {/* ── Chapter 2: Minimalism ───────────────────────────────────── */}
       <Manifesto />

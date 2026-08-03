@@ -70,7 +70,7 @@ export default function Showcase() {
             trigger: sectionRef.current,
             pin: true,
             scrub: 1,
-            end: () => `+=${horizontalContainerRef.current!.scrollWidth - window.innerWidth + 200}`,
+            end: () => `+=${horizontalContainerRef.current!.scrollWidth}`,
           }
         });
 
@@ -80,25 +80,24 @@ export default function Showcase() {
             const container = horizontalContainerRef.current!;
             const scrollWidth = container.scrollWidth;
             const containerLeft = container.getBoundingClientRect().left;
-            // Add containerLeft * 2 to account for both left and right margins to fully reveal the last card
-            return -(scrollWidth - window.innerWidth + containerLeft * 2);
+            return -(scrollWidth - window.innerWidth + containerLeft + 24);
           },
           ease: "none",
         });
 
         // Scrub in cards as they come into view
         cards.forEach((card) => {
-           gsap.fromTo(card, 
-             { opacity: 0.3, scale: 0.8, rotationY: 15 },
-             { opacity: 1, scale: 1, rotationY: 0, duration: 1, ease: "power2.out",
-               scrollTrigger: {
-                 trigger: card,
-                 containerAnimation: tl,
-                 start: "left center",
-                 toggleActions: "play none none reverse",
-               }
-             }
-           );
+            gsap.fromTo(card, 
+              { opacity: 0.3, scale: 0.8, rotationY: 15 },
+              { opacity: 1, scale: 1, rotationY: 0, duration: 1, ease: "power2.out",
+                scrollTrigger: {
+                  trigger: card,
+                  containerAnimation: tl,
+                  start: "left center",
+                  toggleActions: "play none none reverse",
+                }
+              }
+            );
         });
       });
 
@@ -157,8 +156,8 @@ export default function Showcase() {
         {/* Horizontal Scroll Container */}
         <div 
           ref={horizontalContainerRef} 
-          className="flex flex-col md:flex-row gap-8 md:gap-16 md:w-fit perspective-[1200px]"
-          style={{ willChange: "transform" }}
+          className="flex flex-col md:flex-row gap-6 md:gap-16 md:w-max perspective-[1200px]"
+          style={{ willChange: "transform", paddingRight: "10vw" }}
         >
           {PROJECTS.map((project) => (
             <article

@@ -71,7 +71,7 @@ export default function Navbar({ visible }: NavbarProps) {
       style={{
         visibility: "hidden",   // autoAlpha starts hidden
         backdropFilter: "blur(12px)",
-        background: "rgba(11,31,63,0.0)",
+        background: "rgba(14, 16, 15, 0.85)",
       }}
       aria-label="Main navigation"
     >
@@ -87,7 +87,7 @@ export default function Navbar({ visible }: NavbarProps) {
             <a
               href={link.href}
               onClick={(e) => handleNavClick(e, link.href)}
-              className="font-sans text-xs tracking-[0.18em] uppercase text-ice/70 hover:text-ice transition-colors duration-300"
+              className="font-sans text-xs tracking-[0.18em] uppercase text-[var(--light)] opacity-70 hover:opacity-100 transition-opacity duration-300"
               data-cursor="magnetic"
             >
               {link.label}
@@ -116,7 +116,7 @@ export default function Navbar({ visible }: NavbarProps) {
         {[0, 1, 2].map((i) => (
           <span
             key={i}
-            className="block w-5 h-px bg-ice/70 transition-all duration-300"
+            className="block w-5 h-px bg-[var(--light)] opacity-70 transition-all duration-300"
             style={{
               transform: menuOpen
                 ? i === 0 ? "rotate(45deg) translate(2px, 2px)"
@@ -137,7 +137,7 @@ export default function Navbar({ visible }: NavbarProps) {
                 <a
                   href={link.href}
                   onClick={(e) => handleNavClick(e, link.href)}
-                  className="font-sans text-sm tracking-widest uppercase text-ice/80"
+                  className="font-sans text-sm tracking-widest uppercase text-[var(--light)] opacity-80"
                 >
                   {link.label}
                 </a>

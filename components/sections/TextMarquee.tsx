@@ -33,13 +33,13 @@ export default function TextMarquee() {
   return (
     <section
       ref={sectionRef}
-      className="py-12 md:py-24 overflow-hidden bg-[var(--gsap-green)] flex items-center border-y-2 border-[var(--dark)]"
-      style={{ minHeight: "20vh" }}
+      className="py-4 md:py-8 overflow-hidden bg-[var(--gsap-green)] flex items-center border-y-2 border-[var(--dark)]"
+      style={{ minHeight: "10vh" }}
     >
       <div 
         ref={textRef} 
-        className="flex gap-16 md:gap-32 whitespace-nowrap will-change-transform font-sans font-black uppercase text-[var(--dark)] opacity-90"
-        style={{ width: "max-content", fontSize: "clamp(4rem, 15vw, 12rem)", letterSpacing: "-0.05em", lineHeight: 0.8 }}
+        className="flex gap-8 md:gap-16 whitespace-nowrap will-change-transform font-sans font-black uppercase text-[var(--dark)] opacity-90"
+        style={{ width: "max-content", fontSize: "clamp(2rem, 6vw, 4rem)", letterSpacing: "-0.02em", lineHeight: 1 }}
       >
         <span>WE ARE INAN INFINITES.</span>
         <span className="opacity-50">{"//"}</span>

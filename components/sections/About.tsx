@@ -44,11 +44,12 @@ export default function About() {
         stagger: 0.1,
         ease: "back.out(1.5)",
         scrollTrigger: {
-          trigger: ".gsap-team-grid",
+          trigger: ".gsap-team-grid-wrapper",
           start: "top 85%",
-          once: true,
+          toggleActions: "play reverse play reverse",
         },
       });
+
     },
     { scope: sectionRef }
   );
@@ -81,39 +82,42 @@ export default function About() {
           </h2>
         </div>
 
-        {/* Team Grid */}
-        <div className="gsap-team-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {TEAM.map((member) => (
-            <article
-              key={member.id}
-              className="gsap-code-card bg-[var(--dark)] border-2 border-[var(--dark-border)] rounded-xl overflow-hidden hover:border-[var(--gsap-purple)] transition-colors duration-300 group"
-              style={{ boxShadow: "6px 6px 0px rgba(0,0,0,1)" }}
-            >
-              {/* Fake Window Controls */}
-              <div className="flex items-center gap-2 px-4 py-2 border-b-2 border-[var(--dark-border)] bg-[var(--dark-surface)]">
-                <div className="w-3 h-3 rounded-full bg-red-500" />
-                <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                <div className="w-3 h-3 rounded-full bg-green-500" />
-                <span className="font-mono text-xs text-[var(--light)] opacity-50 ml-auto">{member.handle}.ts</span>
-              </div>
-              
-              {/* Fake Code Content */}
-              <div className="p-6 font-mono text-sm leading-loose">
-                <div><span className="text-[var(--gsap-purple)]">const</span> <span className="text-[var(--gsap-blue)]">member</span> = {"{"}</div>
-                <div className="pl-4">
-                  <span className="text-[var(--light)] opacity-70">name:</span> <span className="text-[var(--gsap-green)]">"{member.name}"</span>,
+        {/* Team Grid Wrapper */}
+        <div className="gsap-team-grid-wrapper relative overflow-visible mt-16 pt-8 pb-8">
+
+          {/* Team Grid */}
+          <div className="gsap-team-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
+            {TEAM.map((member) => (
+              <article
+                key={member.id}
+                className="gsap-code-card bg-white/10 backdrop-blur-2xl border border-white/20 rounded-3xl overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.3)] hover:shadow-[0_16px_48px_rgba(0,0,0,0.5)] hover:border-[var(--gsap-purple)] hover:bg-white/20 transition-all duration-300 group"
+              >
+                {/* Fake Window Controls */}
+                <div className="flex items-center gap-2 px-4 py-3 border-b border-white/20 bg-white/10 backdrop-blur-3xl">
+                  <div className="w-3 h-3 rounded-full bg-red-500" />
+                  <div className="w-3 h-3 rounded-full bg-yellow-500" />
+                  <div className="w-3 h-3 rounded-full bg-green-500" />
+                  <span className="font-mono text-xs text-[var(--light)] opacity-50 ml-auto">{member.handle}.ts</span>
                 </div>
-                <div className="pl-4">
-                  <span className="text-[var(--light)] opacity-70">role:</span> <span className="text-[var(--gsap-green)]">"{member.role}"</span>,
+                
+                {/* Fake Code Content */}
+                <div className="p-6 font-mono text-sm leading-loose">
+                  <div><span className="text-[var(--gsap-purple)]">const</span> <span className="text-[var(--gsap-blue)]">member</span> = {"{"}</div>
+                  <div className="pl-4">
+                    <span className="text-[var(--light)] opacity-70">name:</span> <span className="text-[var(--gsap-green)]">"{member.name}"</span>,
+                  </div>
+                  <div className="pl-4">
+                    <span className="text-[var(--light)] opacity-70">role:</span> <span className="text-[var(--gsap-green)]">"{member.role}"</span>,
+                  </div>
+                  <div className="pl-4 flex gap-4 mt-2">
+                    <span className="text-[var(--gsap-blue)] cursor-pointer hover:text-[var(--light)] transition-colors">{"<LinkedIn />"}</span>
+                    <span className="text-[var(--gsap-blue)] cursor-pointer hover:text-[var(--light)] transition-colors">{"<Twitter />"}</span>
+                  </div>
+                  <div>{"};"}</div>
                 </div>
-                <div className="pl-4 flex gap-4 mt-2">
-                  <span className="text-[var(--gsap-blue)] cursor-pointer hover:text-[var(--light)] transition-colors">{"<LinkedIn />"}</span>
-                  <span className="text-[var(--gsap-blue)] cursor-pointer hover:text-[var(--light)] transition-colors">{"<Twitter />"}</span>
-                </div>
-                <div>{"};"}</div>
-              </div>
-            </article>
-          ))}
+              </article>
+            ))}
+          </div>
         </div>
       </div>
     </section>

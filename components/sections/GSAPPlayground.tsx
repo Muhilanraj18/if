@@ -4,9 +4,10 @@ import React, { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { SplitText } from "gsap/SplitText";
 import SectionDivider from "@/components/ui/SectionDivider";
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, SplitText);
 
 export default function GSAPPlayground() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -23,19 +24,22 @@ export default function GSAPPlayground() {
 
   useGSAP(
     () => {
-      /* ── 1. Heading Entrance ───────────────────────────── */
+      /* ── 1. Heading Entrance (Jumping & Flying) ───────────────────────────── */
       if (headingRef.current) {
-        gsap.from(Array.from(headingRef.current.children), {
-          y: 60,
+        const split = new SplitText(headingRef.current, { type: "chars" });
+        gsap.from(split.chars, {
           opacity: 0,
-          duration: 1,
-          stagger: 0.12,
+          y: () => gsap.utils.random(-100, 100),
+          x: () => gsap.utils.random(-100, 100),
+          rotation: () => gsap.utils.random(-90, 90),
+          duration: 1.2,
+          stagger: 0.05,
           ease: "back.out(1.7)",
           scrollTrigger: {
             trigger: headingRef.current,
             start: "top 80%",
-            once: true,
-          },
+            toggleActions: "play reverse play reverse",
+          }
         });
       }
 
@@ -49,8 +53,9 @@ export default function GSAPPlayground() {
           scrollTrigger: {
             trigger: sectionRef.current,
             pin: true,
-            scrub: 1,
-            end: () => `+=${horizontalContainerRef.current!.scrollWidth}`,
+            scrub: true,
+            start: "bottom bottom", // Pin when the bottom of the section hits the bottom of the screen
+            end: () => `+=${horizontalContainerRef.current!.scrollWidth * 0.6}`,
           }
         });
 
@@ -87,7 +92,7 @@ export default function GSAPPlayground() {
             scrollTrigger: {
               trigger: card,
               start: "top 85%",
-              once: true,
+              toggleActions: "play reverse play reverse",
             },
           });
         });
@@ -128,10 +133,11 @@ export default function GSAPPlayground() {
       50%       { opacity: 0.5; }
     }
     .feature-card {
-      background: rgba(26, 28, 26, 0.4);
-      backdrop-filter: blur(10px);
-      border: 1px solid var(--dark-border);
-      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(24px) saturate(150%);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      border-radius: 24px;
       padding: 2rem;
       display: flex;
       flex-direction: column;
@@ -140,10 +146,12 @@ export default function GSAPPlayground() {
       min-height: 450px;
       position: relative;
       overflow: hidden;
-      transition: border-color 0.4s ease;
+      transition: border-color 0.4s ease, box-shadow 0.4s ease;
     }
     .feature-card:hover {
-      border-color: rgba(206,38,255, 0.4); /* Purple glow on hover */
+      border-color: rgba(138, 230, 20, 0.8); /* Match gsap-green hover theme */
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+      background: rgba(255, 255, 255, 0.15);
     }
     .feature-card::before {
       content: "";
@@ -162,7 +170,7 @@ export default function GSAPPlayground() {
     <section
       ref={sectionRef}
       id="playground"
-      className="section-container relative overflow-hidden bg-[var(--dark)] py-24 md:py-32"
+      className="section-container relative overflow-hidden bg-[var(--dark)] min-h-screen flex flex-col justify-center py-20"
     >
       <style>{style}</style>
 

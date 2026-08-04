@@ -169,7 +169,7 @@ export default function HowWeBuild() {
                 </div>
 
                 {/* Content Panel */}
-                <div className="bg-[var(--dark)] border border-[var(--dark-border)] p-6 md:p-8 rounded-xl w-full hover:border-[var(--gsap-green)] transition-colors group">
+                <div className="process-card bg-white/10 backdrop-blur-2xl border border-[var(--gsap-green)] shadow-[0_0_20px_rgba(138,230,20,0.2)] p-6 md:p-8 rounded-3xl w-full hover:shadow-[0_0_30px_rgba(138,230,20,0.4)] hover:bg-white/20 transition-all duration-300 group">
                   <h3 className="font-sans font-black text-2xl text-[var(--light)] mb-2 uppercase tracking-tight group-hover:text-[var(--gsap-green)] transition-colors">
                     {step.title}
                   </h3>

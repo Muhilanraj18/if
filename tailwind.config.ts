@@ -25,6 +25,7 @@ const config: Config = {
       fontFamily: {
         // Chunky sans for headers, keeping inter for body, monospace for code
         sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        serif: ["var(--font-playfair)", "Georgia", "serif"],
         mono: ["var(--font-geist-mono)", "Menlo", "monospace"],
       },
       borderRadius: {
@@ -37,9 +38,13 @@ const config: Config = {
         "brutal-hover": "12px 12px 0px rgba(138, 230, 20, 1)",
         "brutal-purple": "8px 8px 0px rgba(206, 38, 255, 0.2)",
         "brutal-purple-hover": "12px 12px 0px rgba(206, 38, 255, 1)",
+        // Glassmorphism shadows
+        glass: "0 4px 30px rgba(0, 0, 0, 0.1)",
+        "glass-hover": "0 8px 40px rgba(0, 0, 0, 0.2)",
       },
       backgroundImage: {
         "grid-pattern": "linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)",
+        "glass-gradient": "linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.0) 100%)",
       },
       animation: {
         "mesh-drift": "meshDrift 8s ease-in-out infinite alternate",

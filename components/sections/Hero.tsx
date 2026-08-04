@@ -11,8 +11,9 @@ import React, { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-gsap.registerPlugin(SplitText);
+gsap.registerPlugin(SplitText, ScrollTrigger);
 
 export default function Hero({ preloaderDone = true }: { preloaderDone?: boolean }) {
   const sectionRef = useRef<HTMLElement>(null);
@@ -22,6 +23,7 @@ export default function Hero({ preloaderDone = true }: { preloaderDone?: boolean
   const shapesRef = useRef<HTMLDivElement>(null);
   const watermarkRef = useRef<HTMLDivElement>(null);
   const cursorGlowRef = useRef<HTMLDivElement>(null);
+  const engineeredRef = useRef<HTMLSpanElement>(null);
 
   useGSAP(
     () => {
@@ -88,7 +90,29 @@ export default function Hero({ preloaderDone = true }: { preloaderDone?: boolean
         });
       }
 
-      // ── 4. Mouse Interactive Glow ──
+      // ── 4. Engineered scroll visibility ──
+      if (engineeredRef.current) {
+        gsap.set(engineeredRef.current, { opacity: 0 }); // Hidden by default
+        let scrollTimeout: NodeJS.Timeout;
+        
+        ScrollTrigger.create({
+          trigger: document.body,
+          start: "top top",
+          end: "bottom bottom",
+          onUpdate: () => {
+            // Show when scrolling
+            gsap.to(engineeredRef.current, { opacity: 1, duration: 0.2 });
+            
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+              // Hide when scroll stops
+              gsap.to(engineeredRef.current, { opacity: 0, duration: 0.5 });
+            }, 150);
+          }
+        });
+      }
+
+      // ── 5. Mouse Interactive Glow ──
       const heroEl = sectionRef.current;
       if (heroEl && cursorGlowRef.current) {
         const xTo = gsap.quickTo(cursorGlowRef.current, "x", { duration: 0.6, ease: "power3" });
@@ -127,6 +151,26 @@ export default function Hero({ preloaderDone = true }: { preloaderDone?: boolean
       className="section-container relative min-h-[100vh] flex items-center justify-center overflow-hidden gsap-grid-bg"
       style={{ backgroundColor: "var(--dark)" }}
     >
+      <style>{`
+        .infinite-text {
+          color: transparent;
+          -webkit-text-stroke: 3px rgba(255, 255, 255, 0.9);
+          transition: color 0.3s ease;
+        }
+        .infinite-text:hover {
+          color: white;
+        }
+        .ideas-text {
+          color: white;
+          -webkit-text-stroke: 3px transparent;
+          transition: color 0.3s ease, -webkit-text-stroke 0.3s ease;
+        }
+        .ideas-text:hover {
+          color: transparent;
+          -webkit-text-stroke: 3px rgba(255, 255, 255, 0.9);
+        }
+      `}</style>
+
       {/* ── INTERACTIVE MOUSE GLOW ── */}
       <div 
         ref={cursorGlowRef} 
@@ -147,50 +191,50 @@ export default function Hero({ preloaderDone = true }: { preloaderDone?: boolean
         </span>
       </div>
 
-      {/* Floating Shapes Background */}
+      {/* Floating Shapes Background - Premium Glass Panels */}
       <div ref={shapesRef} className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-        {/* Neon Green Box */}
-        <div className="gsap-shape absolute top-[15%] left-[20%] w-12 h-12 bg-[var(--gsap-green)] opacity-60" style={{ borderRadius: '4px', transform: 'rotate(15deg)' }} />
-        <div className="gsap-shape absolute top-[75%] left-[10%] w-8 h-8 border-2 border-[var(--gsap-green)] opacity-40" style={{ transform: 'rotate(45deg)' }} />
+        {/* Glass Panels */}
+        <div className="gsap-shape absolute top-[15%] left-[20%] w-32 h-32 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-glass" style={{ transform: 'rotate(15deg)' }} />
+        <div className="gsap-shape absolute top-[70%] left-[10%] w-24 h-24 bg-white/5 backdrop-blur-md border border-white/20 rounded-full shadow-glass" />
         
-        {/* Purple Circles */}
-        <div className="gsap-shape absolute bottom-[25%] right-[15%] w-24 h-24 bg-[var(--gsap-purple)] rounded-full opacity-50 blur-[2px]" />
-        <div className="gsap-shape absolute top-[25%] right-[30%] w-6 h-6 border-2 border-[var(--gsap-purple)] rounded-full opacity-60" />
+        {/* Purple/Blue Glow Orbs behind glass */}
+        <div className="gsap-shape absolute bottom-[25%] right-[15%] w-64 h-64 bg-[var(--gsap-purple)] rounded-full opacity-30 blur-[80px]" />
+        <div className="gsap-shape absolute top-[25%] right-[30%] w-48 h-48 bg-[var(--gsap-blue)] rounded-full opacity-20 blur-[60px]" />
 
-        {/* Blue Triangle */}
-        <div className="gsap-shape absolute top-[40%] right-[20%] opacity-60" style={{ width: 0, height: 0, borderLeft: '30px solid transparent', borderRight: '30px solid transparent', borderBottom: '50px solid var(--gsap-blue)', transform: 'rotate(-25deg)' }} />
-        <div className="gsap-shape absolute bottom-[15%] right-[35%] w-16 h-16 border-4 border-[var(--gsap-blue)] opacity-40 rounded-lg" style={{ transform: 'rotate(12deg)' }} />
+        {/* More Glass Panels */}
+        <div className="gsap-shape absolute top-[40%] right-[15%] w-40 h-64 bg-white/5 backdrop-blur-lg border border-white/10 rounded-3xl shadow-glass" style={{ transform: 'rotate(-15deg)' }} />
+        <div className="gsap-shape absolute bottom-[15%] right-[35%] w-16 h-16 bg-white/10 backdrop-blur-2xl border border-white/30 rounded-xl shadow-glass" style={{ transform: 'rotate(12deg)' }} />
 
-        {/* Orange Accents */}
-        <div className="gsap-shape absolute bottom-[40%] left-[25%] w-3 h-3 bg-[#FF7A2F] rounded-full opacity-80" />
-        <div className="gsap-shape absolute top-[15%] right-[45%] w-4 h-4 bg-[#FFB347] rounded-sm opacity-70 transform rotate-45" />
-
-        {/* Floating Lines */}
-        <div className="gsap-shape absolute top-[50%] left-[5%] w-24 h-[2px] bg-gradient-to-r from-[var(--gsap-green)] to-transparent opacity-40" />
-        <div className="gsap-shape absolute top-[60%] right-[5%] w-32 h-[2px] bg-gradient-to-l from-[var(--gsap-purple)] to-transparent opacity-40" />
+        {/* Ambient Gradient Lines */}
+        <div className="gsap-shape absolute top-[50%] left-[5%] w-32 h-[1px] bg-gradient-to-r from-white/40 to-transparent opacity-60" />
+        <div className="gsap-shape absolute top-[60%] right-[5%] w-48 h-[1px] bg-gradient-to-l from-white/40 to-transparent opacity-60" />
       </div>
 
       {/* Main Content */}
       <div className="relative z-10 max-w-5xl w-full mx-6 md:mx-auto text-center flex flex-col items-center pointer-events-none">
         
         {/* Tagline */}
-        <div className="inline-block px-6 py-2 border border-[var(--gsap-green)] border-opacity-30 rounded-full text-xs font-mono text-[var(--gsap-green)] mb-10 tracking-widest bg-[var(--dark-surface)] backdrop-blur-md shadow-[0_0_20px_rgba(138,230,20,0.1)]">
+        <div className="inline-block px-6 py-2 border border-white/20 rounded-full text-xs font-mono text-[var(--light)] mb-10 tracking-widest bg-white/5 backdrop-blur-xl shadow-glass">
           // INAN INFINITES_
         </div>
 
         {/* Headline */}
         <h1
           ref={headlineRef}
-          className="font-sans font-black mb-8"
+          className="font-sans font-black uppercase mb-8 leading-none"
           style={{
-            fontSize: "clamp(3.5rem, 9vw, 8rem)",
-            lineHeight: 0.95,
+            fontSize: "clamp(4rem, 11vw, 10rem)",
             letterSpacing: "-0.04em",
           }}
         >
-          <span className="text-[var(--light)] drop-shadow-[0_0_30px_rgba(255,255,255,0.1)]">INFINITE IDEAS.</span>
+          {/* Infinite */}
+          <span className="infinite-text cursor-pointer">Infinite</span>
           <br />
-          <span className="gsap-text-gradient">ENGINEERED.</span>
+          {/* Ideas */}
+          <span className="ideas-text cursor-pointer">Ideas.</span>
+          <br />
+          {/* Engineered */}
+          <span ref={engineeredRef} className="gsap-text-gradient drop-shadow-[0_0_30px_rgba(138,230,20,0.4)] inline-block opacity-0">Engineered.</span>
         </h1>
 
         {/* Subtitle */}

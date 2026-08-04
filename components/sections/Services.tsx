@@ -70,7 +70,7 @@ export default function Services() {
             scrollTrigger: {
               trigger: card,
               start: "top 85%",
-              once: true,
+              toggleActions: "play reverse play reverse",
             }
           }
         );
@@ -113,8 +113,7 @@ export default function Services() {
             <article
               key={service.id}
               id={service.id}
-              className={`gsap-service-card p-8 md:p-10 group bg-[var(--dark-surface)] border-2 border-[var(--dark-border)] rounded-2xl hover:border-[var(--gsap-green)] hover:-translate-y-2 hover:-translate-x-2 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${index % 2 !== 0 ? 'md:mt-16' : ''}`}
-              style={{ boxShadow: "8px 8px 0px rgba(0,0,0,1)" }}
+              className={`gsap-service-card p-8 md:p-10 group bg-glass-gradient bg-white/10 backdrop-blur-2xl border border-white/20 rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.3)] hover:shadow-[0_16px_48px_rgba(0,0,0,0.5)] hover:border-[var(--gsap-green)] hover:bg-white/20 hover:-translate-y-2 hover:-translate-x-2 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${index % 2 !== 0 ? 'md:mt-16' : ''}`}
             >
               {/* Icon */}
               <div

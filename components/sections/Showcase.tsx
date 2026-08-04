@@ -11,10 +11,11 @@ import React, { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { SplitText } from "gsap/SplitText";
 import SectionDivider from "@/components/ui/SectionDivider";
 import { createLineReveal } from "@/lib/animations/textReveal";
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, SplitText);
 
 const PROJECTS = [
   {
@@ -55,7 +56,22 @@ export default function Showcase() {
     () => {
       if (!headingRef.current) return;
 
-      createLineReveal(headingRef.current, { start: "top 80%" });
+      // Jumping & Flying Letters Animation
+      const split = new SplitText(headingRef.current, { type: "chars" });
+      gsap.from(split.chars, {
+        opacity: 0,
+        y: () => gsap.utils.random(-100, 100),
+        x: () => gsap.utils.random(-100, 100),
+        rotation: () => gsap.utils.random(-90, 90),
+        duration: 1.2,
+        stagger: 0.05,
+        ease: "back.out(1.7)",
+        scrollTrigger: {
+          trigger: headingRef.current,
+          start: "top 80%",
+          toggleActions: "play reverse play reverse",
+        }
+      });
 
       let mm = gsap.matchMedia();
 
@@ -69,8 +85,9 @@ export default function Showcase() {
           scrollTrigger: {
             trigger: sectionRef.current,
             pin: true,
-            scrub: 1,
-            end: () => `+=${horizontalContainerRef.current!.scrollWidth}`,
+            scrub: true,
+            start: "bottom bottom", // Pin when the bottom of the section hits the bottom of the screen
+            end: () => `+=${horizontalContainerRef.current!.scrollWidth * 0.6}`,
           }
         });
 
@@ -85,20 +102,6 @@ export default function Showcase() {
           ease: "none",
         });
 
-        // Scrub in cards as they come into view
-        cards.forEach((card) => {
-            gsap.fromTo(card, 
-              { opacity: 0.3, scale: 0.8, rotationY: 15 },
-              { opacity: 1, scale: 1, rotationY: 0, duration: 1, ease: "power2.out",
-                scrollTrigger: {
-                  trigger: card,
-                  containerAnimation: tl,
-                  start: "left center",
-                  toggleActions: "play none none reverse",
-                }
-              }
-            );
-        });
       });
 
       mm.add("(max-width: 767px)", () => {
@@ -115,7 +118,7 @@ export default function Showcase() {
               scrollTrigger: {
                 trigger: card,
                 start: "top 85%",
-                once: true,
+                toggleActions: "play reverse play reverse",
               }
             }
           );
@@ -129,10 +132,10 @@ export default function Showcase() {
     <section
       ref={sectionRef}
       id="work"
-      className="section-container py-32 px-6 relative overflow-hidden bg-[var(--dark)]"
+      className="section-container relative overflow-hidden bg-[var(--dark)] min-h-screen flex flex-col justify-center py-20"
       aria-label="Innovation Showcase"
     >
-      <div className="max-w-5xl mx-auto relative z-10">
+      <div className="max-w-5xl mx-auto relative z-10 w-full">
         {/* Header */}
         <div className="text-center mb-10 md:mb-20">
           <SectionDivider variant="cream" showTagline={false} />
@@ -163,14 +166,13 @@ export default function Showcase() {
             <article
               key={project.id}
               id={project.id}
-              className="gsap-showcase-card group rounded-2xl overflow-hidden w-full md:w-[700px] shrink-0 border-2 border-[var(--dark-border)] bg-[var(--dark-surface)] hover:border-[var(--gsap-green)] transition-colors duration-300"
-              style={{ boxShadow: "12px 12px 0px rgba(0,0,0,1)" }}
+              className="gsap-showcase-card group rounded-3xl overflow-hidden w-full md:w-[700px] shrink-0 bg-white/10 backdrop-blur-2xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3)] hover:shadow-[0_16px_48px_rgba(0,0,0,0.5)] hover:border-[var(--gsap-green)] hover:bg-white/20 transition-all duration-300"
             >
               <div className="flex flex-col h-full min-h-[400px]">
                 {/* Top heavy color bar */}
                 <div 
-                  className="h-32 md:h-48 w-full border-b-2 border-[var(--dark-border)] flex items-center justify-center relative overflow-hidden"
-                  style={{ backgroundColor: project.color }}
+                  className="h-32 md:h-48 w-full border-b border-white/10 flex items-center justify-center relative overflow-hidden"
+                  style={{ backgroundColor: `color-mix(in srgb, ${project.color} 20%, transparent)` }}
                 >
                   <span className="font-mono text-8xl md:text-9xl font-black text-[var(--dark)] opacity-20 absolute -right-4 -bottom-8">
                     {project.year.slice(-2)}

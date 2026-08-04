@@ -18,6 +18,8 @@ gsap.registerPlugin(SplitText, ScrollTrigger);
 export default function Hero({ preloaderDone = true }: { preloaderDone?: boolean }) {
   const sectionRef = useRef<HTMLElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
+  const infiniteRef = useRef<HTMLSpanElement>(null);
+  const ideasRef = useRef<HTMLSpanElement>(null);
   const subRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLAnchorElement>(null);
   const shapesRef = useRef<HTMLDivElement>(null);
@@ -46,19 +48,18 @@ export default function Hero({ preloaderDone = true }: { preloaderDone?: boolean
         { opacity: 0.03, scale: 1, duration: 2, ease: "power2.out" }
       );
 
-      // ── 1. SplitText headline reveal (bouncy)
-      const split = new SplitText(headlineRef.current, { type: "words,chars" });
-      
+      // ── 1. Animate each headline line individually (no SplitText — preserves hover CSS classes)
       const tl = gsap.timeline({ delay: 0.2 });
 
-      tl.from(split.chars, {
-        y: 100,
+      tl.from([infiniteRef.current, ideasRef.current], {
+        y: 120,
         opacity: 0,
-        rotationZ: 10,
-        scale: 0.5,
+        rotationZ: 8,
+        scale: 0.6,
         duration: 1.2,
-        stagger: 0.04,
+        stagger: 0.15,
         ease: "back.out(1.7)",
+        clearProps: "all",  // Clear inline styles when done so CSS hover works perfectly
       });
 
       // ── 2. Subtitle + CTA reveal
@@ -152,21 +153,26 @@ export default function Hero({ preloaderDone = true }: { preloaderDone?: boolean
       style={{ backgroundColor: "var(--dark)" }}
     >
       <style>{`
+        /* Default states */
         .infinite-text {
-          color: transparent;
+          color: transparent !important;
           -webkit-text-stroke: 3px rgba(255, 255, 255, 0.9);
-          transition: color 0.3s ease;
-        }
-        .infinite-text:hover {
-          color: white;
+          transition: color 0.15s ease, -webkit-text-stroke 0.15s ease;
+          display: block;
         }
         .ideas-text {
-          color: white;
+          color: white !important;
           -webkit-text-stroke: 3px transparent;
-          transition: color 0.3s ease, -webkit-text-stroke 0.3s ease;
+          transition: color 0.15s ease, -webkit-text-stroke 0.15s ease;
+          display: block;
         }
-        .ideas-text:hover {
-          color: transparent;
+        /* When hovering the group — BOTH change simultaneously */
+        .headline-group:hover .infinite-text {
+          color: white !important;
+          -webkit-text-stroke: 3px transparent;
+        }
+        .headline-group:hover .ideas-text {
+          color: transparent !important;
           -webkit-text-stroke: 3px rgba(255, 255, 255, 0.9);
         }
       `}</style>
@@ -221,20 +227,23 @@ export default function Hero({ preloaderDone = true }: { preloaderDone?: boolean
         {/* Headline */}
         <h1
           ref={headlineRef}
-          className="font-sans font-black uppercase mb-8 leading-none"
+          className="font-sans font-black uppercase mb-8 leading-none pointer-events-auto"
           style={{
             fontSize: "clamp(4rem, 11vw, 10rem)",
             letterSpacing: "-0.04em",
           }}
         >
-          {/* Infinite */}
-          <span className="infinite-text cursor-pointer">Infinite</span>
-          <br />
-          {/* Ideas */}
-          <span className="ideas-text cursor-pointer">Ideas.</span>
-          <br />
-          {/* Engineered */}
-          <span ref={engineeredRef} className="gsap-text-gradient drop-shadow-[0_0_30px_rgba(138,230,20,0.4)] inline-block opacity-0">Engineered.</span>
+          {/* Linked hover group — hovering anywhere flips both words */}
+          <div className="headline-group cursor-pointer">
+            <span ref={infiniteRef} className="infinite-text block">Infinite</span>
+            <span ref={ideasRef} className="ideas-text block">Ideas.</span>
+          </div>
+          {/* Engineered — lifted slightly up, shows while scrolling */}
+          <span
+            ref={engineeredRef}
+            className="gsap-text-gradient drop-shadow-[0_0_30px_rgba(138,230,20,0.4)] inline-block opacity-0"
+            style={{ marginTop: "-1.2rem" }}
+          >Engineered.</span>
         </h1>
 
         {/* Subtitle */}

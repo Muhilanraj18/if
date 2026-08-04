@@ -69,7 +69,7 @@ export default function Showcase() {
         scrollTrigger: {
           trigger: headingRef.current,
           start: "top 80%",
-          toggleActions: "play reverse play reverse",
+          toggleActions: "play none none reverse",
         }
       });
 
@@ -118,7 +118,7 @@ export default function Showcase() {
               scrollTrigger: {
                 trigger: card,
                 start: "top 85%",
-                toggleActions: "play reverse play reverse",
+                toggleActions: "play none none reverse",
               }
             }
           );

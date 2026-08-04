@@ -70,7 +70,7 @@ export default function Services() {
             scrollTrigger: {
               trigger: card,
               start: "top 85%",
-              toggleActions: "play reverse play reverse",
+              toggleActions: "play none none reverse",
             }
           }
         );

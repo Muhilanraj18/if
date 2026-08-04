@@ -46,7 +46,7 @@ export default function About() {
         scrollTrigger: {
           trigger: ".gsap-team-grid-wrapper",
           start: "top 85%",
-          toggleActions: "play reverse play reverse",
+          toggleActions: "play none none reverse",
         },
       });
 

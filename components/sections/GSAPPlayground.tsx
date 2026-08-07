@@ -10,17 +10,17 @@ import SectionDivider from "@/components/ui/SectionDivider";
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
 export default function GSAPPlayground() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const horizontalContainerRef = useRef<HTMLDivElement>(null);
+  const sectionRef              = useRef<HTMLElement>(null);
+  const horizontalContainerRef  = useRef<HTMLDivElement>(null);
 
   /* Refs for the SVGs */
-  const butterflyRef = useRef<HTMLDivElement>(null);
-  const leftWingRef  = useRef<SVGGElement>(null);
-  const rightWingRef = useRef<SVGGElement>(null);
-  const ballRef = useRef<HTMLDivElement>(null);
+  const butterflyRef    = useRef<HTMLDivElement>(null);
+  const leftWingRef     = useRef<SVGGElement>(null);
+  const rightWingRef    = useRef<SVGGElement>(null);
+  const ballRef         = useRef<HTMLDivElement>(null);
   const windmillBladesRef = useRef<HTMLDivElement>(null);
-  const kiteRef = useRef<HTMLDivElement>(null);
-  const headingRef = useRef<HTMLDivElement>(null);
+  const kiteRef         = useRef<HTMLDivElement>(null);
+  const headingRef      = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
@@ -54,7 +54,7 @@ export default function GSAPPlayground() {
             trigger: sectionRef.current,
             pin: true,
             scrub: true,
-            start: "bottom bottom", // Pin when the bottom of the section hits the bottom of the screen
+            start: "bottom bottom",
             end: () => `+=${horizontalContainerRef.current!.scrollWidth * 0.6}`,
           }
         });
@@ -70,7 +70,7 @@ export default function GSAPPlayground() {
           ease: "none",
         });
 
-        // The inner elements (butterfly, ball, etc.) will animate relative to this scrub timeline
+        // Inner elements animate relative to scrub timeline
         tl.to(butterflyRef.current, { y: -30, rotation: 10, ease: "sine.inOut" }, 0);
         tl.to(ballRef.current, { x: 40, rotation: 360, ease: "none" }, 0);
         tl.to(windmillBladesRef.current, { rotation: 720, ease: "none" }, 0);
@@ -78,7 +78,6 @@ export default function GSAPPlayground() {
       });
 
       mm.add("(max-width: 1023px)", () => {
-        // Vertical mobile layout animations
         if (!horizontalContainerRef.current) return;
         const cards = gsap.utils.toArray(".feature-card") as HTMLElement[];
         
@@ -97,7 +96,6 @@ export default function GSAPPlayground() {
           });
         });
 
-        // Fallback scrub animations for mobile vertical scrolling
         const scrollTl = gsap.timeline({
           scrollTrigger: {
             trigger: sectionRef.current,
@@ -132,6 +130,10 @@ export default function GSAPPlayground() {
       0%, 100% { opacity: 1; }
       50%       { opacity: 0.5; }
     }
+    @keyframes plane-trail {
+      0%   { opacity: 0.6; width: 0; }
+      100% { opacity: 0;   width: 80px; }
+    }
     .feature-card {
       background: rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(24px) saturate(150%);
@@ -149,7 +151,7 @@ export default function GSAPPlayground() {
       transition: border-color 0.4s ease, box-shadow 0.4s ease;
     }
     .feature-card:hover {
-      border-color: rgba(138, 230, 20, 0.8); /* Match gsap-green hover theme */
+      border-color: rgba(157, 255, 47, 0.8);
       box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
       background: rgba(255, 255, 255, 0.15);
     }
@@ -163,6 +165,15 @@ export default function GSAPPlayground() {
     }
     .feature-card:hover::before {
       opacity: 1;
+    }
+    .paper-plane-trail {
+      position: absolute;
+      right: 100%;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 2px;
+      background: linear-gradient(to left, rgba(157,255,47,0.6), transparent);
+      animation: plane-trail 0.6s ease-out infinite;
     }
   `;
 
@@ -235,12 +246,12 @@ export default function GSAPPlayground() {
                     <ellipse cx="25"  cy="15"  rx="24" ry="17" fill="#FFB347" opacity="0.88" />
                     <circle  cx="22"  cy="12"  r="4.5" fill="rgba(255,255,255,0.18)" />
                   </g>
-                  <ellipse cx="0" cy="2"   rx="4.5" ry="25" fill="#8ae614" />
-                  <ellipse cx="0" cy="-18" rx="5.5" ry="7"  fill="#a8f028" />
-                  <path d="M-3,-23 Q-15,-40 -11,-52" stroke="#8ae614" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-                  <path d=" M3,-23 Q 15,-40  11,-52" stroke="#8ae614" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-                  <circle cx="-11" cy="-52" r="3" fill="#8ae614" />
-                  <circle cx=" 11" cy="-52" r="3" fill="#8ae614" />
+                  <ellipse cx="0" cy="2"   rx="4.5" ry="25" fill="#9dff2f" />
+                  <ellipse cx="0" cy="-18" rx="5.5" ry="7"  fill="#b8ff5a" />
+                  <path d="M-3,-23 Q-15,-40 -11,-52" stroke="#9dff2f" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+                  <path d=" M3,-23 Q 15,-40  11,-52" stroke="#9dff2f" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+                  <circle cx="-11" cy="-52" r="3" fill="#9dff2f" />
+                  <circle cx=" 11" cy="-52" r="3" fill="#9dff2f" />
                 </svg>
               </div>
             </div>
@@ -255,15 +266,15 @@ export default function GSAPPlayground() {
             <div className="flex-grow flex items-center justify-center w-full relative">
               <div ref={ballRef} className="will-change-transform z-10" style={{ transform: "translateX(-20px)" }}>
                 <svg viewBox="-46 -46 92 92" width="100" height="100" xmlns="http://www.w3.org/2000/svg">
-                  <circle r="44" fill="#ce26ff" />
+                  <circle r="44" fill="#c026ff" />
                   <path d="M-44,0 Q0,-22 44,0" fill="none" stroke="rgba(255,255,255,0.28)" strokeWidth="3" />
                   <path d="M-44,12 Q0,-10 44,12" fill="none" stroke="rgba(255,255,255,0.13)" strokeWidth="2" />
                   <path d="M-40,-20 Q0,-42 40,-20" fill="none" stroke="rgba(255,255,255,0.13)" strokeWidth="2" />
-                  <ellipse rx="44" ry="17" fill="none" stroke="rgba(206,38,255,0.35)" strokeWidth="2.5" />
+                  <ellipse rx="44" ry="17" fill="none" stroke="rgba(192,38,255,0.35)" strokeWidth="2.5" />
                   <circle cx="-13" cy="-15" r="12" fill="rgba(255,255,255,0.22)" />
                   <circle cx="-8" cy="-10" r="5" fill="rgba(255,255,255,0.18)" />
                 </svg>
-                <div style={{ width: "100px", height: "10px", background: "radial-gradient(ellipse at center, rgba(206,38,255,0.55) 0%, transparent 75%)", marginTop: "6px" }} />
+                <div style={{ width: "100px", height: "10px", background: "radial-gradient(ellipse at center, rgba(192,38,255,0.55) 0%, transparent 75%)", marginTop: "6px" }} />
               </div>
             </div>
             <div className="mt-8 text-center px-4">
@@ -278,13 +289,13 @@ export default function GSAPPlayground() {
               <div style={{ position: "relative", width: "90px" }}>
                 <div ref={windmillBladesRef} style={{ position: "absolute", top: "-55px", left: "-15px", width: "120px", height: "120px", zIndex: 2 }}>
                   <svg viewBox="-60 -60 120 120" width="120" height="120" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="-7" y="-58" width="14" height="60" rx="7" fill="#8ae614" />
-                    <rect x="2" y="-7" width="58" height="14" rx="7" fill="#8ae614" />
-                    <rect x="-7" y="-2" width="14" height="60" rx="7" fill="rgba(138,230,20,0.6)" />
-                    <rect x="-60" y="-7" width="58" height="14" rx="7" fill="rgba(138,230,20,0.6)" />
-                    <circle r="16" fill="none" stroke="rgba(138,230,20,0.25)" strokeWidth="8" style={{ animation: "hub-pulse 2s ease-in-out infinite" }} />
-                    <circle r="12" fill="#1a1c1a" stroke="#8ae614" strokeWidth="2.5" />
-                    <circle r="5" fill="#8ae614" />
+                    <rect x="-7" y="-58" width="14" height="60" rx="7" fill="#9dff2f" />
+                    <rect x="2" y="-7" width="58" height="14" rx="7" fill="#9dff2f" />
+                    <rect x="-7" y="-2" width="14" height="60" rx="7" fill="rgba(157,255,47,0.6)" />
+                    <rect x="-60" y="-7" width="58" height="14" rx="7" fill="rgba(157,255,47,0.6)" />
+                    <circle r="16" fill="none" stroke="rgba(157,255,47,0.25)" strokeWidth="8" style={{ animation: "hub-pulse 2s ease-in-out infinite" }} />
+                    <circle r="12" fill="#1a1c1a" stroke="#9dff2f" strokeWidth="2.5" />
+                    <circle r="5" fill="#9dff2f" />
                   </svg>
                 </div>
                 <svg viewBox="0 0 100 238" width="90" height="180" xmlns="http://www.w3.org/2000/svg" style={{ display: "block" }}>
@@ -308,7 +319,7 @@ export default function GSAPPlayground() {
             <div className="flex-grow flex items-center justify-center w-full relative">
               <div ref={kiteRef} className="will-change-transform z-10">
                 <svg viewBox="-68 -92 136 390" width="100" height="280" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M0,-88 L62,0 L0,88 L-62,0 Z" fill="#26a8ff" />
+                  <path d="M0,-88 L62,0 L0,88 L-62,0 Z" fill="#2aabff" />
                   <path d="M0,-88 L62,0 L0,0 Z" fill="rgba(255,255,255,0.12)" />
                   <path d="M0,0 L0,88 L-62,0 Z" fill="rgba(0,0,0,0.10)" />
                   <line x1="-62" y1="0" x2="62" y2="0" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
@@ -316,10 +327,10 @@ export default function GSAPPlayground() {
                   <path d="M0,-88 L62,0 L0,88 L-62,0 Z" fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="2" />
                   <circle r="6" fill="rgba(255,255,255,0.7)" />
                   <path d="M0,88 Q30,120 18,160 Q6,196 32,222 Q50,244 24,272 Q10,288 34,308" fill="none" stroke="rgba(255,255,255,0.48)" strokeWidth="1.5" strokeLinecap="round" />
-                  <ellipse cx="35" cy="310" rx="14" ry="6" fill="#ce26ff" transform="rotate(22, 35, 310)" />
+                  <ellipse cx="35" cy="310" rx="14" ry="6" fill="#c026ff" transform="rotate(22, 35, 310)" />
                   <ellipse cx="22" cy="278" rx="14" ry="6" fill="#FF7A2F" transform="rotate(-14,22, 278)" />
-                  <ellipse cx="33" cy="247" rx="14" ry="6" fill="#8ae614" transform="rotate(20, 33, 247)" />
-                  <ellipse cx="14" cy="216" rx="14" ry="6" fill="#26a8ff" transform="rotate(-9, 14, 216)" opacity="0.85" />
+                  <ellipse cx="33" cy="247" rx="14" ry="6" fill="#9dff2f" transform="rotate(20, 33, 247)" />
+                  <ellipse cx="14" cy="216" rx="14" ry="6" fill="#2aabff" transform="rotate(-9, 14, 216)" opacity="0.85" />
                 </svg>
               </div>
             </div>

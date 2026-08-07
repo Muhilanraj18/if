@@ -2,6 +2,7 @@
  * Services Section — Chapter 3: GSAP Aesthetic
  * 
  * Flat, neo-brutalist cards with bouncy hover states.
+ * SplitText char-by-char reveal on service titles.
  */
 
 "use client";
@@ -10,10 +11,11 @@ import React, { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { SplitText } from "gsap/SplitText";
 import SectionDivider from "@/components/ui/SectionDivider";
 import { createLineReveal } from "@/lib/animations/textReveal";
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, SplitText);
 
 const SERVICES = [
   {
@@ -56,7 +58,7 @@ export default function Services() {
 
       createLineReveal(headingRef.current, { start: "top 80%" });
 
-      // Bouncy entrance
+      // Bouncy entrance for cards
       const cards = gsap.utils.toArray(".gsap-service-card") as HTMLElement[];
       cards.forEach((card) => {
         gsap.fromTo(card,
@@ -74,6 +76,25 @@ export default function Services() {
             }
           }
         );
+
+        // SplitText char-by-char reveal on service card title
+        const titleEl = card.querySelector<HTMLElement>(".service-title");
+        if (titleEl) {
+          const split = new SplitText(titleEl, { type: "chars" });
+          gsap.from(split.chars, {
+            opacity: 0,
+            y: 20,
+            rotationX: -60,
+            stagger: 0.04,
+            duration: 0.5,
+            ease: "back.out(1.7)",
+            scrollTrigger: {
+              trigger: card,
+              start: "top 80%",
+              toggleActions: "play none none reverse",
+            },
+          });
+        }
       });
     },
     { scope: sectionRef }
@@ -124,7 +145,7 @@ export default function Services() {
               </div>
 
               <h3
-                className="font-sans text-[var(--light)] text-2xl md:text-3xl font-bold mb-4 uppercase"
+                className="service-title font-sans text-[var(--light)] text-2xl md:text-3xl font-bold mb-4 uppercase"
                 style={{ letterSpacing: "-0.02em" }}
               >
                 {service.title}

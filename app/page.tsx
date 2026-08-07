@@ -20,6 +20,7 @@
 
 import React, { useState, useCallback } from "react";
 import Preloader from "@/components/Preloader";
+import KineticLoader from "@/components/KineticLoader";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/sections/Hero";
 import Manifesto from "@/components/sections/Manifesto";
@@ -30,13 +31,20 @@ import Impact from "@/components/sections/Impact";
 import About from "@/components/sections/About";
 import GSAPPlayground from "@/components/sections/GSAPPlayground";
 import TextMarquee from "@/components/sections/TextMarquee";
+import HorizontalTextReveal from "@/components/sections/HorizontalTextReveal";
+import WordFlowStatement from "@/components/sections/WordFlowStatement";
 import Contact from "@/components/sections/Contact";
 
 export default function HomePage() {
   const [preloaderDone, setPreloaderDone] = useState(false);
+  const [kineticDone, setKineticDone] = useState(false);
 
   const handlePreloaderComplete = useCallback(() => {
     setPreloaderDone(true);
+  }, []);
+
+  const handleKineticComplete = useCallback(() => {
+    setKineticDone(true);
   }, []);
 
   return (
@@ -46,12 +54,23 @@ export default function HomePage() {
         <Preloader onComplete={handlePreloaderComplete} />
       )}
 
+      {/* KineticLoader — underneath Preloader, waits for preloaderDone */}
+      {!kineticDone && (
+        <KineticLoader preloaderDone={preloaderDone} onComplete={handleKineticComplete} />
+      )}
+
       {/* Fixed navigation */}
-      <Navbar visible={preloaderDone} />
+      <Navbar visible={kineticDone} />
 
       {/* ── Chapter 1: Liquid Glass / Spatial UI ───────────────────── */}
-      <Hero preloaderDone={preloaderDone} />
+      <Hero preloaderDone={kineticDone} />
       <TextMarquee />
+
+      {/* ── Horizontal Text Reveal ──────────────────────────────────── */}
+      <HorizontalTextReveal />
+
+      {/* ── Word Flow Statement (brand statement, words slide left→right) ── */}
+      <WordFlowStatement />
 
       {/* ── Chapter 2: Minimalism ───────────────────────────────────── */}
       <Manifesto />

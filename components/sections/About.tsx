@@ -1,7 +1,9 @@
 /**
- * About Section — Chapter 7: GSAP Aesthetic
- * 
- * Monospace "Code Editor" panels for team bios.
+ * About Section — Chapter 7
+ *
+ * Team cards — all 8 members, names listed as "Soon Revealed".
+ * Roles: CEO · CTO · CFO · CMO · CPO · CDO · COO · CHRO
+ * Colour theory: orange/amber glass cards, warm ember accents.
  */
 
 "use client";
@@ -15,13 +17,71 @@ import { createLineReveal } from "@/lib/animations/textReveal";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const TEAM = [
-  { id: "muhilan", name: "Muhilan Raj", role: "Founder & CEO", handle: "@muhilan" },
-  { id: "dhanush", name: "Dhanush", role: "CTO", handle: "@dhanush" },
-  { id: "muneer", name: "Muneer", role: "CFO", handle: "@muneer" },
-  { id: "rahul", name: "Rahul", role: "CMO", handle: "@rahul" },
-  { id: "danupeter", name: "Danu Peter", role: "CPO", handle: "@danupeter" },
-  { id: "abishake", name: "Abishake", role: "Data Scientist", handle: "@abishake" },
+type Member = {
+  id: string;
+  role: string;
+  title: string;          // Full title label
+  handle: string;
+  accentVar: string;      // CSS var for card accent colour
+};
+
+const TEAM: Member[] = [
+  {
+    id:        "ceo",
+    role:      "CEO",
+    title:     "Founder & CEO",
+    handle:    "@inan.ceo",
+    accentVar: "--gsap-green",
+  },
+  {
+    id:        "cto",
+    role:      "CTO",
+    title:     "Chief Technology Officer",
+    handle:    "@inan.cto",
+    accentVar: "--gsap-purple",
+  },
+  {
+    id:        "cfo",
+    role:      "CFO",
+    title:     "Chief Financial Officer",
+    handle:    "@inan.cfo",
+    accentVar: "--gsap-amber",
+  },
+  {
+    id:        "cmo",
+    role:      "CMO",
+    title:     "Chief Marketing Officer",
+    handle:    "@inan.cmo",
+    accentVar: "--gsap-teal",
+  },
+  {
+    id:        "cpo",
+    role:      "CPO",
+    title:     "Chief Product Officer",
+    handle:    "@inan.cpo",
+    accentVar: "--gsap-green",
+  },
+  {
+    id:        "cdo",
+    role:      "CDO",
+    title:     "Chief Data Officer",
+    handle:    "@inan.cdo",
+    accentVar: "--gsap-purple",
+  },
+  {
+    id:        "coo",
+    role:      "COO",
+    title:     "Chief Operating Officer",
+    handle:    "@inan.coo",
+    accentVar: "--gsap-amber",
+  },
+  {
+    id:        "chro",
+    role:      "CHRO",
+    title:     "Chief Human Resources Officer",
+    handle:    "@inan.chro",
+    accentVar: "--gsap-teal",
+  },
 ];
 
 export default function About() {
@@ -31,25 +91,33 @@ export default function About() {
   useGSAP(
     () => {
       if (!headingRef.current) return;
-
       createLineReveal(headingRef.current, { start: "top 80%" });
 
-      // Staggered Code Panel Reveal
-      gsap.set(".gsap-code-card", { scale: 0.8, opacity: 0, rotation: -5 });
-      gsap.to(".gsap-code-card", {
-        scale: 1,
+      /* Staggered card entrance */
+      gsap.set(".team-card", { y: 50, opacity: 0, scale: 0.92 });
+      gsap.to(".team-card", {
+        y: 0,
         opacity: 1,
-        rotation: 0,
-        duration: 0.8,
-        stagger: 0.1,
-        ease: "back.out(1.5)",
+        scale: 1,
+        duration: 0.7,
+        stagger: { each: 0.08, from: "start" },
+        ease: "back.out(1.4)",
         scrollTrigger: {
-          trigger: ".gsap-team-grid-wrapper",
-          start: "top 85%",
+          trigger: ".team-grid",
+          start: "top 82%",
           toggleActions: "play none none reverse",
         },
       });
 
+      /* Subtle hover float per card */
+      gsap.utils.toArray<HTMLElement>(".team-card").forEach((card) => {
+        card.addEventListener("mouseenter", () =>
+          gsap.to(card, { y: -6, duration: 0.35, ease: "power2.out", overwrite: "auto" })
+        );
+        card.addEventListener("mouseleave", () =>
+          gsap.to(card, { y: 0, duration: 0.4, ease: "power2.inOut", overwrite: "auto" })
+        );
+      });
     },
     { scope: sectionRef }
   );
@@ -58,68 +126,178 @@ export default function About() {
     <section
       ref={sectionRef}
       id="about"
-      className="section-container bg-[var(--dark-surface)] py-32 px-6 border-t border-[var(--dark-border)]"
-      aria-label="About Inan Infinites"
+      className="section-container py-28 px-4 sm:px-6"
+      style={{
+        background:
+          "linear-gradient(180deg, var(--dark) 0%, var(--dark-surface) 100%)",
+        borderTop: "1px solid var(--dark-border)",
+      }}
+      aria-label="About Inan Infinites — The Core Team"
     >
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-16">
+      <div className="max-w-7xl mx-auto">
+
+        {/* ── Header ── */}
+        <div className="text-center mb-16 md:mb-20">
           <SectionDivider variant="cream" showTagline={false} />
-          <p className="font-mono text-[var(--gsap-green)] text-xs tracking-[0.3em] uppercase mb-4 font-bold">
+          <p
+            className="font-mono text-xs tracking-[0.38em] uppercase mb-4 font-bold mt-6"
+            style={{ color: "var(--gsap-green)" }}
+          >
             // The Core Team
           </p>
           <h2
             ref={headingRef}
             className="font-sans font-black text-[var(--light)] uppercase"
             style={{
-              fontSize: "clamp(2rem, 4vw, 4rem)",
+              fontSize: "clamp(2rem, 5vw, 4.5rem)",
               letterSpacing: "-0.04em",
               lineHeight: 1.0,
             }}
           >
-            Minds Behind <br />
-            <span className="gsap-text-gradient">The Machine</span>
+            Minds Behind&nbsp;
+            <br className="sm:hidden" />
+            <span
+              style={{
+                background:
+                  "linear-gradient(110deg, var(--gsap-green) 0%, var(--gsap-teal) 50%, var(--gsap-purple) 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
+            >
+              The Machine
+            </span>
           </h2>
+          <p
+            className="font-mono text-sm mt-5 max-w-md mx-auto leading-relaxed"
+            style={{ color: "var(--light)", opacity: 0.5 }}
+          >
+            8 roles. Infinite vision. Names reveal as we grow.
+          </p>
         </div>
 
-        {/* Team Grid Wrapper */}
-        <div className="gsap-team-grid-wrapper relative overflow-visible mt-16 pt-8 pb-8">
-
-          {/* Team Grid */}
-          <div className="gsap-team-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
-            {TEAM.map((member) => (
-              <article
-                key={member.id}
-                className="gsap-code-card bg-white/10 backdrop-blur-2xl border border-white/20 rounded-3xl overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.3)] hover:shadow-[0_16px_48px_rgba(0,0,0,0.5)] hover:border-[var(--gsap-purple)] hover:bg-white/20 transition-all duration-300 group"
-              >
-                {/* Fake Window Controls */}
-                <div className="flex items-center gap-2 px-4 py-3 border-b border-white/20 bg-white/10 backdrop-blur-3xl">
-                  <div className="w-3 h-3 rounded-full bg-red-500" />
-                  <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                  <div className="w-3 h-3 rounded-full bg-green-500" />
-                  <span className="font-mono text-xs text-[var(--light)] opacity-50 ml-auto">{member.handle}.ts</span>
-                </div>
-                
-                {/* Fake Code Content */}
-                <div className="p-6 font-mono text-sm leading-loose">
-                  <div><span className="text-[var(--gsap-purple)]">const</span> <span className="text-[var(--gsap-blue)]">member</span> = {"{"}</div>
-                  <div className="pl-4">
-                    <span className="text-[var(--light)] opacity-70">name:</span> <span className="text-[var(--gsap-green)]">"{member.name}"</span>,
-                  </div>
-                  <div className="pl-4">
-                    <span className="text-[var(--light)] opacity-70">role:</span> <span className="text-[var(--gsap-green)]">"{member.role}"</span>,
-                  </div>
-                  <div className="pl-4 flex gap-4 mt-2">
-                    <span className="text-[var(--gsap-blue)] cursor-pointer hover:text-[var(--light)] transition-colors">{"<LinkedIn />"}</span>
-                    <span className="text-[var(--gsap-blue)] cursor-pointer hover:text-[var(--light)] transition-colors">{"<Twitter />"}</span>
-                  </div>
-                  <div>{"};"}</div>
-                </div>
-              </article>
-            ))}
-          </div>
+        {/* ── Team Grid ── */}
+        <div className="team-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
+          {TEAM.map((member) => (
+            <MemberCard key={member.id} member={member} />
+          ))}
         </div>
+
       </div>
     </section>
+  );
+}
+
+/* ── Individual Card ─────────────────────────────────────────────── */
+function MemberCard({ member }: { member: Member }) {
+  const accent = `var(${member.accentVar})`;
+
+  return (
+    <article
+      className="team-card group relative rounded-2xl overflow-hidden cursor-default w-full max-w-xs mx-auto sm:max-w-none"
+      style={{
+        background:
+          `linear-gradient(145deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.03) 100%)`,
+        border: `1px solid rgba(157,255,47,0.12)`,
+        backdropFilter: "blur(20px) saturate(140%)",
+        boxShadow: "0 4px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.06)",
+        willChange: "transform",
+      }}
+    >
+      {/* Top accent bar */}
+      <div
+        className="h-[3px] w-full"
+        style={{
+          background: `linear-gradient(90deg, ${accent} 0%, transparent 100%)`,
+        }}
+      />
+
+      {/* Glow on hover */}
+      <div
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none rounded-2xl transition-opacity duration-500"
+        style={{
+          background: `radial-gradient(circle at 30% 30%, ${accent}18 0%, transparent 65%)`,
+        }}
+      />
+
+      {/* Window dots */}
+      <div
+        className="flex items-center gap-1.5 px-4 py-3"
+        style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
+      >
+        <div className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(255,75,43,0.7)" }} />
+        <div className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(255,184,48,0.7)" }} />
+        <div className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(40,200,80,0.6)" }} />
+        <span
+          className="font-mono text-[10px] ml-auto tracking-widest"
+          style={{ color: accent, opacity: 0.65 }}
+        >
+          {member.handle}
+        </span>
+      </div>
+
+      {/* Code content */}
+      <div className="p-5 font-mono text-xs leading-loose">
+        {/* Role badge */}
+        <div
+          className="inline-block px-3 py-1 rounded-full mb-4 font-bold text-[10px] tracking-[0.22em] uppercase"
+          style={{
+            background: `${accent}18`,
+            border: `1px solid ${accent}40`,
+            color: accent,
+          }}
+        >
+          {member.role}
+        </div>
+
+        <div style={{ color: "rgba(240,242,239,0.45)" }}>const member = {"{"}</div>
+
+        <div className="pl-4 mt-1">
+          <span style={{ color: "rgba(240,242,239,0.45)" }}>name:&nbsp;</span>
+          <span
+            className="italic"
+            style={{
+              color: accent,
+              opacity: 0.8,
+              fontStyle: "italic",
+            }}
+          >
+            &quot;Soon Revealed&quot;
+          </span>
+          ,
+        </div>
+
+        <div className="pl-4">
+          <span style={{ color: "rgba(240,242,239,0.45)" }}>title:&nbsp;</span>
+          <span style={{ color: "var(--light)", opacity: 0.85 }}>
+            &quot;{member.title}&quot;
+          </span>
+          ,
+        </div>
+
+        <div className="pl-4">
+          <span style={{ color: "rgba(240,242,239,0.45)" }}>status:&nbsp;</span>
+          <span style={{ color: accent, opacity: 0.7 }}>
+            &quot;Active&quot;
+          </span>
+          ,
+        </div>
+
+        <div style={{ color: "rgba(240,242,239,0.45)" }}>{"};"}</div>
+
+        {/* Social links */}
+        <div className="flex gap-3 mt-4">
+          {["LinkedIn", "X"].map((s) => (
+            <span
+              key={s}
+              className="text-[10px] tracking-widest uppercase cursor-pointer transition-opacity duration-200 hover:opacity-100"
+              style={{ color: accent, opacity: 0.5 }}
+            >
+              {s}
+            </span>
+          ))}
+        </div>
+      </div>
+    </article>
   );
 }

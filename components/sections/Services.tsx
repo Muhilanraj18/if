@@ -104,7 +104,7 @@ export default function Services() {
     <section
       ref={sectionRef}
       id="services"
-      className="section-container bg-[var(--dark)] py-32 px-6 border-t border-[var(--dark-border)]"
+      className="section-container bg-[var(--dark)] py-32 px-6"
       aria-label="Products and Services"
     >
       <div className="max-w-6xl mx-auto">

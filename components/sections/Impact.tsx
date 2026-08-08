@@ -83,7 +83,7 @@ export default function Impact() {
     <section
       ref={sectionRef}
       id="impact"
-      className="section-container bg-[var(--dark)] py-32 px-6 border-t border-[var(--dark-border)] relative overflow-hidden"
+      className="section-container bg-[var(--dark)] py-32 px-6 relative overflow-hidden"
     >
       {/* Background Grid */}
       <div className="absolute inset-0 gsap-grid-bg opacity-30 pointer-events-none" />

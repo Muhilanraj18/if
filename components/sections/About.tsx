@@ -20,68 +20,19 @@ gsap.registerPlugin(ScrollTrigger);
 type Member = {
   id: string;
   role: string;
-  title: string;          // Full title label
   handle: string;
   accentVar: string;      // CSS var for card accent colour
 };
 
 const TEAM: Member[] = [
-  {
-    id:        "ceo",
-    role:      "CEO",
-    title:     "Founder & CEO",
-    handle:    "@inan.ceo",
-    accentVar: "--gsap-green",
-  },
-  {
-    id:        "cto",
-    role:      "CTO",
-    title:     "Chief Technology Officer",
-    handle:    "@inan.cto",
-    accentVar: "--gsap-purple",
-  },
-  {
-    id:        "cfo",
-    role:      "CFO",
-    title:     "Chief Financial Officer",
-    handle:    "@inan.cfo",
-    accentVar: "--gsap-amber",
-  },
-  {
-    id:        "cmo",
-    role:      "CMO",
-    title:     "Chief Marketing Officer",
-    handle:    "@inan.cmo",
-    accentVar: "--gsap-teal",
-  },
-  {
-    id:        "cpo",
-    role:      "CPO",
-    title:     "Chief Product Officer",
-    handle:    "@inan.cpo",
-    accentVar: "--gsap-green",
-  },
-  {
-    id:        "cdo",
-    role:      "CDO",
-    title:     "Chief Data Officer",
-    handle:    "@inan.cdo",
-    accentVar: "--gsap-purple",
-  },
-  {
-    id:        "coo",
-    role:      "COO",
-    title:     "Chief Operating Officer",
-    handle:    "@inan.coo",
-    accentVar: "--gsap-amber",
-  },
-  {
-    id:        "chro",
-    role:      "CHRO",
-    title:     "Chief Human Resources Officer",
-    handle:    "@inan.chro",
-    accentVar: "--gsap-teal",
-  },
+  { id: "ceo",  role: "CEO",  handle: "@inan.ceo",  accentVar: "--gsap-green"  },
+  { id: "cto",  role: "CTO",  handle: "@inan.cto",  accentVar: "--gsap-purple" },
+  { id: "cfo",  role: "CFO",  handle: "@inan.cfo",  accentVar: "--gsap-amber"  },
+  { id: "cmo",  role: "CMO",  handle: "@inan.cmo",  accentVar: "--gsap-teal"   },
+  { id: "cpo",  role: "CPO",  handle: "@inan.cpo",  accentVar: "--gsap-green"  },
+  { id: "cdo",  role: "CDO",  handle: "@inan.cdo",  accentVar: "--gsap-purple" },
+  { id: "coo",  role: "COO",  handle: "@inan.coo",  accentVar: "--gsap-amber"  },
+  { id: "chro", role: "CHRO", handle: "@inan.chro", accentVar: "--gsap-teal"   },
 ];
 
 export default function About() {
@@ -130,7 +81,6 @@ export default function About() {
       style={{
         background:
           "linear-gradient(180deg, var(--dark) 0%, var(--dark-surface) 100%)",
-        borderTop: "1px solid var(--dark-border)",
       }}
       aria-label="About Inan Infinites — The Core Team"
     >
@@ -267,13 +217,6 @@ function MemberCard({ member }: { member: Member }) {
           ,
         </div>
 
-        <div className="pl-4">
-          <span style={{ color: "rgba(240,242,239,0.45)" }}>title:&nbsp;</span>
-          <span style={{ color: "var(--light)", opacity: 0.85 }}>
-            &quot;{member.title}&quot;
-          </span>
-          ,
-        </div>
 
         <div className="pl-4">
           <span style={{ color: "rgba(240,242,239,0.45)" }}>status:&nbsp;</span>

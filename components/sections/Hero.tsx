@@ -50,17 +50,19 @@ export default function Hero({ preloaderDone = true }: { preloaderDone?: boolean
         { opacity: 0.03, scale: 1, duration: 2, ease: "power2.out" }
       );
 
-      // ── 0.5. Clover Spin (fast then slow-mo)
-      gsap.fromTo(".hero-clover", 
-        { transformOrigin: "50% 50%", rotation: 0 },
-        { rotation: 1440, duration: 4, ease: "power4.out" }
-      );
+      // ── 0.5. Clover Spin
+      // CSS transform-box:fill-box makes transform-origin:center use the
+      // path's OWN bounding box centre — not the SVG viewport origin.
+      // This guarantees the clover always spins around its visual centre.
+      gsap.set(".hero-clover", {
+        transformBox: "fill-box",
+        transformOrigin: "center center",
+      });
       gsap.to(".hero-clover", {
-        rotation: "+=360",
-        duration: 30,
+        rotation: 360,
+        duration: 18,
         ease: "none",
         repeat: -1,
-        delay: 4
       });
 
       // ── 1. Animate each headline line individually
@@ -279,17 +281,33 @@ export default function Hero({ preloaderDone = true }: { preloaderDone?: boolean
             
             <div className="flex items-center gap-4 overflow-visible">
               <span ref={ideasRef} className="ideas-text block">Ideas.</span>
-              <svg id="svg-stage" className="w-[1.2em] h-[1.2em] opacity-90 inline-block pointer-events-none overflow-visible" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
-                <rect fill="url(#hero-grad)" clipPath="url(#hero-cp)" width="300" height="300"/>
+              {/*
+                Spin the SVG element itself — GSAP uses the rendered
+                element box (50% 50%) so rotation is always perfectly centred.
+                The path is a direct visible child (no clipPath hack) so GSAP
+                never has to guess a bounding-box from inside <defs>.
+              */}
+              <svg
+                id="svg-stage"
+                className="hero-clover-svg w-[1.2em] h-[1.2em] inline-block pointer-events-none"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 300 300"
+                style={{ overflow: "visible" }}
+              >
                 <defs>
-                  <clipPath id="hero-cp">
-                    <path className="hero-clover" d="M181 121h-.5v-1h.5a60 60 0 1 0-60-60v.5h-1V60a60 60 0 1 0-60 60h.5v1H60a60 60 0 1 0 60 60v-.5h1v.5a60 60 0 1 0 60-60Z"/>
-                  </clipPath>
-                  <linearGradient id="hero-grad" x1="0" y1="0" x2="280" y2="200" gradientUnits="userSpaceOnUse">
-                    <stop offset=".3" stopColor="var(--gsap-green)"/>
-                    <stop offset=".8" stopColor="var(--gsap-purple)"/>
+                  {/* Vivid neon gradient — green → cyan → purple */}
+                  <linearGradient id="hero-grad" x1="0" y1="0" x2="300" y2="300" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%"  stopColor="#00ff88"/>
+                    <stop offset="45%" stopColor="#00e5ff"/>
+                    <stop offset="100%" stopColor="#cc00ff"/>
                   </linearGradient>
                 </defs>
+                <path
+                  className="hero-clover"
+                  d="M181 121h-.5v-1h.5a60 60 0 1 0-60-60v.5h-1V60a60 60 0 1 0-60 60h.5v1H60a60 60 0 1 0 60 60v-.5h1v.5a60 60 0 1 0 60-60Z"
+                  fill="url(#hero-grad)"
+                  style={{ transformBox: "fill-box", transformOrigin: "center center" }}
+                />
               </svg>
             </div>
           </div>

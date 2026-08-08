@@ -31,8 +31,7 @@ import Impact from "@/components/sections/Impact";
 import About from "@/components/sections/About";
 import GSAPPlayground from "@/components/sections/GSAPPlayground";
 import TextMarquee from "@/components/sections/TextMarquee";
-import HorizontalTextReveal from "@/components/sections/HorizontalTextReveal";
-import WordFlowStatement from "@/components/sections/WordFlowStatement";
+import HorizontalScrollJourney from "@/components/sections/HorizontalScrollJourney";
 import Contact from "@/components/sections/Contact";
 
 export default function HomePage() {
@@ -66,11 +65,8 @@ export default function HomePage() {
       <Hero preloaderDone={kineticDone} />
       <TextMarquee />
 
-      {/* ── Horizontal Text Reveal ──────────────────────────────────── */}
-      <HorizontalTextReveal />
-
-      {/* ── Word Flow Statement (brand statement, words slide left→right) ── */}
-      <WordFlowStatement />
+      {/* ── Combined horizontal scroll journey (chars + horizontal scroll) ── */}
+      <HorizontalScrollJourney />
 
       {/* ── Chapter 2: Minimalism ───────────────────────────────────── */}
       <Manifesto />

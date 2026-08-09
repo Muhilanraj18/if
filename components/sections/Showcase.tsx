@@ -166,70 +166,112 @@ export default function Showcase() {
             <article
               key={project.id}
               id={project.id}
-              className="gsap-showcase-card clay-card group w-full md:w-[700px] shrink-0"
-              style={{ borderRadius: 32 }}
+              className="gsap-showcase-card clay-card group w-full md:w-[680px] shrink-0 flex flex-col"
+              style={{ borderRadius: 28 }}
             >
-              <div className="flex flex-col h-full min-h-[400px]">
-                {/* Top frosted color header */}
-                <div 
-                  className="h-32 md:h-48 w-full flex items-center justify-center relative overflow-hidden"
-                  style={{
-                    background: `linear-gradient(145deg, color-mix(in srgb, ${project.color} 22%, rgba(255,255,255,0.06)) 0%, color-mix(in srgb, ${project.color} 10%, rgba(0,0,0,0.2)) 100%)`,
-                    borderBottom: "1px solid rgba(255,255,255,0.1)",
-                    backdropFilter: "blur(10px)",
-                  }}
+              {/* Card header — colour band */}
+              <div
+                className="relative overflow-hidden flex-shrink-0"
+                style={{
+                  height: "200px",
+                  background: `linear-gradient(150deg,
+                    color-mix(in srgb, ${project.color} 18%, rgba(0,0,0,0.4)) 0%,
+                    color-mix(in srgb, ${project.color} 8%, rgba(0,0,0,0.55)) 60%,
+                    rgba(0,0,0,0.65) 100%)`,
+                  borderBottom: "1px solid rgba(255,255,255,0.08)",
+                }}
+              >
+                {/* Top specular line */}
+                <div
+                  className="absolute top-0 left-[8%] w-[84%] h-px pointer-events-none"
+                  style={{ background: `linear-gradient(90deg, transparent, ${project.color}70 50%, transparent)` }}
+                />
+                {/* Giant watermark year */}
+                <span
+                  className="font-mono font-black absolute -right-2 -bottom-6 select-none"
+                  style={{ fontSize: "9rem", lineHeight: 1, color: project.color, opacity: 0.08, letterSpacing: "-0.06em" }}
                 >
-                  {/* Top specular for header */}
-                  <div className="absolute top-0 left-[8%] w-[84%] h-px"
-                    style={{ background: `linear-gradient(90deg, transparent, ${project.color}80 50%, transparent)` }}
-                  />
-                  <span className="font-mono text-8xl md:text-9xl font-black opacity-15 absolute -right-4 -bottom-8 select-none"
-                    style={{ color: project.color }}>
-                    {project.year.slice(-2)}
-                  </span>
+                  {project.year}
+                </span>
+                {/* Label top-left */}
+                <div className="absolute top-5 left-7 flex items-center gap-2">
                   <div
-                    className="font-sans text-4xl md:text-6xl font-black"
+                    className="w-1.5 h-1.5 rounded-full"
+                    style={{ background: project.color, boxShadow: `0 0 8px ${project.color}` }}
+                  />
+                  <span
+                    className="font-mono text-[10px] tracking-[0.28em] uppercase font-black"
+                    style={{ color: project.color }}
+                  >
+                    {project.label}
+                  </span>
+                </div>
+                {/* Year badge top-right */}
+                <span
+                  className="absolute top-5 right-7 font-mono text-xs font-bold tracking-widest"
+                  style={{ color: "rgba(255,255,255,0.35)" }}
+                >
+                  {project.year}
+                </span>
+                {/* Big initials monogram */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span
+                    className="font-sans font-black"
                     style={{
+                      fontSize: "5rem",
                       color: project.color,
-                      textShadow: `0 0 40px ${project.color}60`,
-                      filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.4))",
+                      textShadow: `0 0 60px ${project.color}50, 0 0 120px ${project.color}20`,
+                      letterSpacing: "-0.06em",
+                      opacity: 0.75,
                     }}
                   >
-                    {project.title.substring(0,2).toUpperCase()}
-                  </div>
+                    {project.title.substring(0, 2).toUpperCase()}
+                  </span>
+                </div>
+              </div>
+
+              {/* Card body */}
+              <div className="p-8 md:p-10 flex flex-col flex-grow">
+                {/* Title + description */}
+                <div className="mb-6">
+                  <h3
+                    className="font-sans font-black text-[var(--light)] mb-3"
+                    style={{ fontSize: "clamp(1.6rem, 3.5vw, 2.4rem)", letterSpacing: "-0.03em", lineHeight: 1.05 }}
+                  >
+                    {project.title}
+                  </h3>
+                  <p className="font-mono text-[var(--light)] opacity-55 text-sm leading-relaxed">
+                    {project.description}
+                  </p>
                 </div>
 
-                {/* Content */}
-                <div className="p-8 md:p-10 flex flex-col justify-between flex-grow">
-                  <div>
-                    <p className="font-mono text-xs tracking-[0.2em] uppercase mb-3 font-bold"
-                      style={{ color: project.color, opacity: 0.8 }}>
-                      // {project.label}
-                    </p>
-                    <h3 className="font-sans font-black text-[var(--light)] mb-4 text-3xl md:text-4xl uppercase">
-                      {project.title}
-                    </h3>
-                    <p className="font-mono text-[var(--light)] opacity-70 text-sm leading-relaxed">
-                      {project.description}
-                    </p>
-                  </div>
+                {/* Divider */}
+                <div className="w-full h-px mb-6" style={{ background: "rgba(255,255,255,0.07)" }} />
 
-                  <div className="flex flex-wrap gap-2 mt-8">
+                {/* Tags + CTA */}
+                <div className="flex items-center justify-between gap-4 mt-auto">
+                  <div className="flex flex-wrap gap-2">
                     {project.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="clay-tag font-mono text-xs font-bold tracking-wider uppercase px-3 py-1.5"
+                        className="clay-tag font-mono text-[11px] font-bold tracking-wider uppercase px-3 py-1"
                         style={{
                           color: project.color,
                           background: `linear-gradient(135deg, color-mix(in srgb, ${project.color} 15%, transparent) 0%, color-mix(in srgb, ${project.color} 5%, transparent) 100%)`,
-                          border: `1px solid color-mix(in srgb, ${project.color} 35%, transparent)`,
-                          boxShadow: `inset 0 1px 0 rgba(255,255,255,0.25), 0 2px 8px color-mix(in srgb, ${project.color} 20%, transparent)`,
+                          border: `1px solid color-mix(in srgb, ${project.color} 32%, transparent)`,
+                          boxShadow: `inset 0 1px 0 rgba(255,255,255,0.22), 0 2px 8px color-mix(in srgb, ${project.color} 15%, transparent)`,
                         }}
                       >
                         {tag}
                       </span>
                     ))}
                   </div>
+                  <span
+                    className="font-mono text-xs tracking-widest uppercase font-black flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    style={{ color: project.color }}
+                  >
+                    View →
+                  </span>
                 </div>
               </div>
             </article>

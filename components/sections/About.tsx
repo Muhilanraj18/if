@@ -3,7 +3,7 @@
  *
  * Team cards — all 8 members, names listed as "Soon Revealed".
  * Roles: CEO · CTO · CFO · CMO · CPO · CDO · COO · CHRO
- * Colour theory: orange/amber glass cards, warm ember accents.
+ * Professional clay card design with avatar, role badge, and social footer.
  */
 
 "use client";
@@ -21,7 +21,7 @@ type Member = {
   id: string;
   role: string;
   handle: string;
-  accentVar: string;      // CSS var for card accent colour
+  accentVar: string;
 };
 
 const TEAM: Member[] = [
@@ -79,8 +79,7 @@ export default function About() {
       id="about"
       className="section-container py-28 px-4 sm:px-6"
       style={{
-        background:
-          "linear-gradient(180deg, var(--dark) 0%, var(--dark-surface) 100%)",
+        background: "linear-gradient(180deg, var(--dark) 0%, var(--dark-surface) 100%)",
       }}
       aria-label="About Inan Infinites — The Core Team"
     >
@@ -108,8 +107,7 @@ export default function About() {
             <br className="sm:hidden" />
             <span
               style={{
-                background:
-                  "linear-gradient(110deg, var(--gsap-green) 0%, var(--gsap-teal) 50%, var(--gsap-purple) 100%)",
+                background: "linear-gradient(110deg, var(--gsap-green) 0%, var(--gsap-teal) 50%, var(--gsap-purple) 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
@@ -118,7 +116,6 @@ export default function About() {
               The Machine
             </span>
           </h2>
-
         </div>
 
         {/* ── Team Grid ── */}
@@ -139,18 +136,15 @@ function MemberCard({ member }: { member: Member }) {
 
   return (
     <article
-      className="team-card clay-card group cursor-default w-full max-w-xs mx-auto sm:max-w-none"
-      style={{
-        borderRadius: 28,
-        /* Per-card accent tint overlay handled below */
-      }}
+      className="team-card clay-card group cursor-default w-full max-w-xs mx-auto sm:max-w-none flex flex-col"
+      style={{ borderRadius: 24 }}
     >
       {/* Colored accent specular line at top */}
       <div
         className="absolute top-0 left-[8%] w-[84%] h-[1.5px] pointer-events-none z-10"
         style={{
           background: `linear-gradient(90deg, transparent, ${accent} 30%, ${accent} 70%, transparent)`,
-          opacity: 0.7,
+          opacity: 0.65,
         }}
       />
 
@@ -158,84 +152,95 @@ function MemberCard({ member }: { member: Member }) {
       <div
         className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-500"
         style={{
-          background: `radial-gradient(circle at 30% 20%, ${accent}20 0%, transparent 60%)`,
-          borderRadius: 28,
+          background: `radial-gradient(ellipse at 50% 0%, color-mix(in srgb, ${accent} 18%, transparent) 0%, transparent 65%)`,
+          borderRadius: 24,
         }}
       />
 
-      {/* Window dots */}
+      {/* Card header — role badge + status */}
       <div
-        className="flex items-center gap-1.5 px-4 py-3 relative z-10"
-        style={{ borderBottom: "1px solid rgba(255,255,255,0.08)" }}
+        className="px-5 py-4 flex items-center justify-between relative z-10"
+        style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}
       >
-        <div className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(255,75,43,0.75)", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.3), 0 1px 4px rgba(255,75,43,0.4)" }} />
-        <div className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(255,184,48,0.75)", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.3), 0 1px 4px rgba(255,184,48,0.4)" }} />
-        <div className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(40,200,80,0.7)", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.3), 0 1px 4px rgba(40,200,80,0.4)" }} />
-        <span
-          className="font-mono text-[10px] ml-auto tracking-widest"
-          style={{ color: accent, opacity: 0.7 }}
+        <div
+          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full"
+          style={{
+            background: `linear-gradient(135deg, color-mix(in srgb, ${accent} 18%, transparent) 0%, color-mix(in srgb, ${accent} 6%, transparent) 100%)`,
+            border: `1px solid color-mix(in srgb, ${accent} 45%, transparent)`,
+            boxShadow: `inset 0 1px 0 rgba(255,255,255,0.28), 0 2px 8px color-mix(in srgb, ${accent} 18%, transparent)`,
+          }}
         >
-          {member.handle}
+          <div
+            className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+            style={{ background: accent, boxShadow: `0 0 6px ${accent}` }}
+          />
+          <span
+            className="font-mono text-[10px] font-black tracking-[0.22em] uppercase"
+            style={{ color: accent }}
+          >
+            {member.role}
+          </span>
+        </div>
+        <span className="font-mono text-[9px] tracking-widest uppercase opacity-35 text-[var(--light)]">
+          Active
         </span>
       </div>
 
-      {/* Code content */}
-      <div className="p-5 font-mono text-xs leading-loose relative z-10">
-        {/* Role badge */}
+      {/* Avatar + name body */}
+      <div className="px-5 py-6 flex flex-col items-center text-center gap-4 flex-grow relative z-10">
+        {/* Avatar circle */}
         <div
-          className="clay-tag inline-block px-3 py-1 mb-4 font-bold text-[10px] tracking-[0.22em] uppercase"
+          className="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0"
           style={{
-            background: `linear-gradient(135deg, ${accent}20 0%, ${accent}08 100%)`,
-            border: `1px solid ${accent}50`,
-            color: accent,
-            boxShadow: `inset 0 1px 0 rgba(255,255,255,0.3), 0 2px 8px ${accent}20`,
+            background: `linear-gradient(155deg, color-mix(in srgb, ${accent} 22%, rgba(255,255,255,0.06)) 0%, color-mix(in srgb, ${accent} 8%, rgba(0,0,0,0.3)) 100%)`,
+            border: `1.5px solid color-mix(in srgb, ${accent} 40%, transparent)`,
+            boxShadow: `inset 0 2px 0 rgba(255,255,255,0.28), 0 4px 16px color-mix(in srgb, ${accent} 20%, transparent), 0 8px 24px rgba(0,0,0,0.3)`,
           }}
         >
-          {member.role}
+          <span
+            className="font-sans font-black text-xl"
+            style={{ color: accent, opacity: 0.9 }}
+          >
+            {member.role.substring(0, 1)}
+          </span>
         </div>
 
-        <div style={{ color: "rgba(240,242,239,0.45)" }}>const member = {"{"}</div>
+        {/* Name + handle */}
+        <div>
+          <p
+            className="font-sans font-bold text-[var(--light)] text-base tracking-tight"
+            style={{ opacity: 0.85 }}
+          >
+            Soon Revealed
+          </p>
+          <p
+            className="font-mono text-[10px] tracking-widest mt-1"
+            style={{ color: accent, opacity: 0.55 }}
+          >
+            {member.handle}
+          </p>
+        </div>
+      </div>
 
-        <div className="pl-4 mt-1">
-          <span style={{ color: "rgba(240,242,239,0.45)" }}>name:&nbsp;</span>
+      {/* Footer — social links */}
+      <div
+        className="px-5 py-4 flex items-center gap-2 relative z-10"
+        style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
+      >
+        {["LinkedIn", "X"].map((s) => (
           <span
-            className="italic"
+            key={s}
+            className="flex-1 text-center font-mono text-[10px] tracking-widest uppercase cursor-pointer py-2 rounded-lg transition-all duration-200 hover:opacity-100"
             style={{
               color: accent,
-              opacity: 0.85,
+              opacity: 0.45,
+              background: "linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03))",
+              border: "1px solid rgba(255,255,255,0.08)",
             }}
           >
-            &quot;Soon Revealed&quot;
+            {s}
           </span>
-          ,
-        </div>
-
-        <div className="pl-4">
-          <span style={{ color: "rgba(240,242,239,0.45)" }}>status:&nbsp;</span>
-          <span style={{ color: accent, opacity: 0.75 }}>
-            &quot;Active&quot;
-          </span>
-          ,
-        </div>
-
-        <div style={{ color: "rgba(240,242,239,0.45)" }}>{"};"}</div>
-
-        {/* Social links */}
-        <div className="flex gap-3 mt-4">
-          {["LinkedIn", "X"].map((s) => (
-            <span
-              key={s}
-              className="clay-tag text-[10px] tracking-widest uppercase cursor-pointer px-2.5 py-1 hover:opacity-100 transition-all"
-              style={{
-                color: accent,
-                opacity: 0.6,
-                background: `linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.04))`,
-              }}
-            >
-              {s}
-            </span>
-          ))}
-        </div>
+        ))}
       </div>
     </article>
   );

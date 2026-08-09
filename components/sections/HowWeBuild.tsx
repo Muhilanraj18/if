@@ -155,20 +155,20 @@ export default function HowWeBuild() {
             <div className="mobile-green-line w-full h-full bg-[var(--gsap-green)] origin-top shadow-[0_0_8px_rgba(138,230,20,0.5)]" />
           </div>
 
-          <div className="flex flex-col gap-12 md:gap-32">
+          <div className="flex flex-col gap-10 md:gap-28">
             {PROCESS_STEPS.map((step, idx) => (
-              <div 
+              <div
                 key={step.num}
                 className={`process-node flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-0 ${idx % 2 === 0 ? 'md:pr-[50%]' : 'md:pl-[50%] md:flex-row-reverse'}`}
               >
-                {/* Clay Node Dot / Number */}
+                {/* Node Dot / Number */}
                 <div className={`relative ${idx % 2 === 0 ? 'md:-mr-6' : 'md:-ml-6'} z-10 shrink-0`}>
                   <div
-                    className="w-12 h-12 rounded-full flex items-center justify-center font-mono font-bold text-[var(--gsap-green)]"
+                    className="w-14 h-14 rounded-full flex items-center justify-center font-mono font-black text-[var(--gsap-green)] text-base"
                     style={{
-                      background: "linear-gradient(145deg, rgba(157,255,47,0.18) 0%, rgba(157,255,47,0.06) 100%)",
-                      border: "1.5px solid rgba(157,255,47,0.45)",
-                      boxShadow: "inset 0 1.5px 0 rgba(255,255,255,0.4), inset 0 -1px 0 rgba(0,0,0,0.2), 0 4px 16px rgba(157,255,47,0.2), 0 8px 24px rgba(0,0,0,0.3)",
+                      background: "linear-gradient(145deg, rgba(157,255,47,0.16) 0%, rgba(157,255,47,0.05) 100%)",
+                      border: "1.5px solid rgba(157,255,47,0.4)",
+                      boxShadow: "inset 0 2px 0 rgba(255,255,255,0.45), inset 0 -1px 0 rgba(0,0,0,0.25), 0 4px 16px rgba(157,255,47,0.18), 0 10px 28px rgba(0,0,0,0.35)",
                     }}
                   >
                     {step.num}
@@ -176,13 +176,28 @@ export default function HowWeBuild() {
                 </div>
 
                 {/* Clay Content Panel */}
-                <div className="clay-card process-card p-6 md:p-8 w-full group">
-                  <h3 className="font-sans font-black text-2xl text-[var(--light)] mb-2 uppercase tracking-tight group-hover:text-[var(--gsap-green)] transition-colors duration-300">
-                    {step.title}
-                  </h3>
-                  <p className="font-mono text-sm text-[var(--light)] opacity-70">
-                    {step.desc}
-                  </p>
+                <div className="clay-card process-card w-full group" style={{ borderRadius: 20 }}>
+                  {/* Header strip */}
+                  <div
+                    className="px-6 py-4 flex items-center justify-between"
+                    style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
+                  >
+                    <h3 className="font-sans font-black text-xl text-[var(--light)] uppercase tracking-tight group-hover:text-[var(--gsap-green)] transition-colors duration-300">
+                      {step.title}
+                    </h3>
+                    <span
+                      className="font-mono text-xs tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      style={{ color: "var(--gsap-green)" }}
+                    >
+                      →
+                    </span>
+                  </div>
+                  {/* Body */}
+                  <div className="px-6 py-4">
+                    <p className="font-mono text-sm text-[var(--light)] opacity-55 leading-relaxed">
+                      {step.desc}
+                    </p>
+                  </div>
                 </div>
               </div>
             ))}

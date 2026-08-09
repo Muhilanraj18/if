@@ -111,41 +111,59 @@ export default function Impact() {
         </div>
 
         {/* Stats Grid */}
-        <div className="gsap-stats-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="gsap-stats-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {STATS.map((stat) => (
-            <div 
+            <div
               key={stat.id}
-              className="gsap-stat-block clay-card p-8 flex flex-col items-center justify-center text-center group"
-              style={{ borderRadius: 28 }}
+              className="gsap-stat-block clay-card group flex flex-col"
+              style={{ borderRadius: 24 }}
             >
               {/* Per-stat colored top specular */}
               <div
                 className="absolute top-0 left-[10%] w-[80%] h-[1.5px] pointer-events-none"
                 style={{
                   background: `linear-gradient(90deg, transparent, ${stat.color} 50%, transparent)`,
-                  opacity: 0.6,
+                  opacity: 0.55,
                 }}
               />
               {/* Ambient glow on hover */}
               <div
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-500 rounded-[28px]"
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-500"
                 style={{
-                  background: `radial-gradient(circle at 50% 20%, ${stat.color}18 0%, transparent 65%)`,
+                  background: `radial-gradient(circle at 50% 20%, ${stat.color}14 0%, transparent 70%)`,
+                  borderRadius: 24,
                 }}
               />
 
-              <div 
-                className="font-sans font-black text-6xl md:text-7xl tracking-tighter mb-4 flex items-baseline relative z-10"
-                style={{ color: stat.color }}
+              {/* Top section — icon + label */}
+              <div
+                className="px-6 pt-6 pb-4 flex items-center justify-between relative z-10"
+                style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
               >
-                <span className="gsap-stat-number" data-value={stat.value}>
-                  0
-                </span>
-                <span className="text-4xl md:text-5xl ml-1">{stat.suffix}</span>
+                <p className="font-mono text-[10px] font-black uppercase tracking-[0.26em]" style={{ color: stat.color, opacity: 0.7 }}>
+                  {stat.label}
+                </p>
+                <div
+                  className="w-2 h-2 rounded-full flex-shrink-0"
+                  style={{ background: stat.color, boxShadow: `0 0 8px ${stat.color}` }}
+                />
               </div>
-              <p className="font-mono text-sm text-[var(--light)] font-bold uppercase tracking-wider relative z-10 opacity-80">
-                {stat.label}
-              </p>
+
+              {/* Number display */}
+              <div className="px-6 pt-6 pb-6 flex-grow flex flex-col justify-end relative z-10">
+                <div
+                  className="font-sans font-black leading-none flex items-baseline gap-1 mb-1"
+                  style={{ color: stat.color }}
+                >
+                  <span className="gsap-stat-number" data-value={stat.value} style={{ fontSize: "clamp(3rem, 6vw, 4.5rem)" }}>
+                    0
+                  </span>
+                  <span style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)" }}>{stat.suffix}</span>
+                </div>
+                <p className="font-mono text-[11px] text-[var(--light)] opacity-35 uppercase tracking-widest font-bold">
+                  measured
+                </p>
+              </div>
             </div>
           ))}
         </div>

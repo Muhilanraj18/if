@@ -118,12 +118,7 @@ export default function About() {
               The Machine
             </span>
           </h2>
-          <p
-            className="font-mono text-sm mt-5 max-w-md mx-auto leading-relaxed"
-            style={{ color: "var(--light)", opacity: 0.5 }}
-          >
-            8 roles. Infinite vision. Names reveal as we grow.
-          </p>
+
         </div>
 
         {/* ── Team Grid ── */}

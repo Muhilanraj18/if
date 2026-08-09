@@ -162,7 +162,7 @@ export default function Services() {
                 {service.title}
               </h3>
 
-              <p className="font-mono text-[var(--light)] opacity-70 text-sm md:text-base leading-relaxed mb-8">
+              <p className="font-mono text-[var(--light)] opacity-60 text-sm leading-relaxed mb-8">
                 {service.description}
               </p>
 

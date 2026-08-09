@@ -135,36 +135,81 @@ export default function GSAPPlayground() {
       100% { opacity: 0;   width: 80px; }
     }
     .feature-card {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(24px) saturate(150%);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-      border-radius: 24px;
+      position: relative;
+      border-radius: 28px;
+      background: linear-gradient(
+        155deg,
+        rgba(255, 255, 255, 0.17) 0%,
+        rgba(255, 255, 255, 0.09) 30%,
+        rgba(255, 255, 255, 0.04) 65%,
+        rgba(0, 0, 0, 0.04) 100%
+      );
+      backdrop-filter: blur(40px) saturate(180%) brightness(1.1);
+      -webkit-backdrop-filter: blur(40px) saturate(180%) brightness(1.1);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      box-shadow:
+        inset 0 2px 0 rgba(255, 255, 255, 0.62),
+        inset 2px 0 0 rgba(255, 255, 255, 0.22),
+        inset -1px 0 0 rgba(0, 0, 0, 0.08),
+        inset 0 -2px 6px rgba(0, 0, 0, 0.22),
+        0 2px 4px rgba(0, 0, 0, 0.35),
+        0 6px 16px rgba(0, 0, 0, 0.28),
+        0 16px 40px rgba(0, 0, 0, 0.2),
+        0 36px 72px rgba(0, 0, 0, 0.14),
+        0 0 0 1px rgba(255, 255, 255, 0.07),
+        0 4px 0 rgba(0, 0, 0, 0.45);
       padding: 2rem;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       min-height: 450px;
-      position: relative;
       overflow: hidden;
-      transition: border-color 0.4s ease, box-shadow 0.4s ease;
-    }
-    .feature-card:hover {
-      border-color: rgba(157, 255, 47, 0.8);
-      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
-      background: rgba(255, 255, 255, 0.15);
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease, border-color 0.35s ease;
     }
     .feature-card::before {
       content: "";
       position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at center, rgba(255,255,255,0.03) 0%, transparent 70%);
-      opacity: 0;
-      transition: opacity 0.4s ease;
+      top: 0;
+      left: 0;
+      width: 55%;
+      height: 100%;
+      background: linear-gradient(110deg, transparent 0%, rgba(255,255,255,0.06) 40%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.04) 60%, transparent 100%);
+      transform: translateX(-130%) skewX(-20deg);
+      pointer-events: none;
+      z-index: 1;
+      transition: none;
     }
     .feature-card:hover::before {
-      opacity: 1;
+      animation: clay-sheen 0.75s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    }
+    .feature-card::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 6%;
+      width: 88%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.45) 20%, rgba(255,255,255,0.85) 50%, rgba(255,255,255,0.45) 80%, transparent 100%);
+      border-radius: 0 0 50% 50%;
+      pointer-events: none;
+      z-index: 2;
+      filter: blur(0.5px);
+    }
+    .feature-card:hover {
+      transform: translateY(-8px) scale(1.015);
+      box-shadow:
+        inset 0 2px 0 rgba(255, 255, 255, 0.7),
+        inset 2px 0 0 rgba(255, 255, 255, 0.28),
+        inset -1px 0 0 rgba(0, 0, 0, 0.06),
+        inset 0 -2px 6px rgba(0, 0, 0, 0.18),
+        0 4px 8px rgba(0, 0, 0, 0.4),
+        0 12px 28px rgba(0, 0, 0, 0.32),
+        0 28px 60px rgba(0, 0, 0, 0.24),
+        0 56px 96px rgba(0, 0, 0, 0.16),
+        0 0 0 1px rgba(255, 255, 255, 0.12),
+        0 6px 0 rgba(0, 0, 0, 0.5);
+      border-color: rgba(255, 255, 255, 0.32);
     }
     .paper-plane-trail {
       position: absolute;
@@ -209,11 +254,6 @@ export default function GSAPPlayground() {
               POSSIBILITIES
             </span>
           </h2>
-          <p className="font-mono text-[var(--light)] opacity-55 text-sm max-w-xl leading-relaxed mt-4">
-            Fluid. Expressive. Scalable.{" "}
-            <span className="text-[var(--gsap-purple)]">Every pixel moves</span> with
-            intent — organized and engineered for maximum performance.
-          </p>
         </div>
       </div>
 
@@ -255,9 +295,9 @@ export default function GSAPPlayground() {
                 </svg>
               </div>
             </div>
-            <div className="mt-8 text-center px-4">
-              <h3 className="font-mono text-sm font-bold text-[var(--light)] uppercase tracking-widest mb-3">Organic Motion</h3>
-              <p className="font-mono text-sm text-[var(--light)] opacity-60 leading-relaxed">Complex SVG paths combined with lifelike physics and fluid easing curves.</p>
+            <div className="mt-8 text-center px-4 relative z-10">
+              <h3 className="font-mono text-sm font-bold text-[var(--light)] uppercase tracking-widest mb-2">Organic Motion</h3>
+              <p className="font-mono text-xs text-[var(--light)] opacity-50 leading-relaxed">Lifelike physics. Fluid easing curves.</p>
             </div>
           </article>
 
@@ -277,9 +317,9 @@ export default function GSAPPlayground() {
                 <div style={{ width: "100px", height: "10px", background: "radial-gradient(ellipse at center, rgba(192,38,255,0.55) 0%, transparent 75%)", marginTop: "6px" }} />
               </div>
             </div>
-            <div className="mt-8 text-center px-4">
-              <h3 className="font-mono text-sm font-bold text-[var(--light)] uppercase tracking-widest mb-3">Kinetic Flow</h3>
-              <p className="font-mono text-sm text-[var(--light)] opacity-60 leading-relaxed">Scroll-driven translations mapping precise pixel space to viewport time.</p>
+            <div className="mt-8 text-center px-4 relative z-10">
+              <h3 className="font-mono text-sm font-bold text-[var(--light)] uppercase tracking-widest mb-2">Kinetic Flow</h3>
+              <p className="font-mono text-xs text-[var(--light)] opacity-50 leading-relaxed">Scroll-driven translations at 60fps.</p>
             </div>
           </article>
 
@@ -308,9 +348,9 @@ export default function GSAPPlayground() {
                 </svg>
               </div>
             </div>
-            <div className="mt-8 text-center px-4">
-              <h3 className="font-mono text-sm font-bold text-[var(--light)] uppercase tracking-widest mb-3">Sustainable Power</h3>
-              <p className="font-mono text-sm text-[var(--light)] opacity-60 leading-relaxed">Robust, infinitely optimized loop components running at a steady 60fps.</p>
+            <div className="mt-8 text-center px-4 relative z-10">
+              <h3 className="font-mono text-sm font-bold text-[var(--light)] uppercase tracking-widest mb-2">Sustainable Power</h3>
+              <p className="font-mono text-xs text-[var(--light)] opacity-50 leading-relaxed">Infinite loops at a steady 60fps.</p>
             </div>
           </article>
 
@@ -334,9 +374,9 @@ export default function GSAPPlayground() {
                 </svg>
               </div>
             </div>
-            <div className="mt-8 text-center px-4">
-              <h3 className="font-mono text-sm font-bold text-[var(--light)] uppercase tracking-widest mb-3">Elevated Design</h3>
-              <p className="font-mono text-sm text-[var(--light)] opacity-60 leading-relaxed">Lifting brand experiences and engineering beyond the standard static page.</p>
+            <div className="mt-8 text-center px-4 relative z-10">
+              <h3 className="font-mono text-sm font-bold text-[var(--light)] uppercase tracking-widest mb-2">Elevated Design</h3>
+              <p className="font-mono text-xs text-[var(--light)] opacity-50 leading-relaxed">Brand experiences beyond the static page.</p>
             </div>
           </article>
 

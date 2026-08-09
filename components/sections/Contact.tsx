@@ -93,13 +93,8 @@ export default function Contact() {
         </div>
 
         <div 
-          className="gsap-contact-grid grid grid-cols-1 lg:grid-cols-5 gap-8 md:gap-12 p-8 md:p-12 rounded-[2rem] relative overflow-hidden"
-          style={{
-            background: "linear-gradient(145deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%)",
-            border: "1px solid rgba(255,255,255,0.08)",
-            backdropFilter: "blur(24px) saturate(150%)",
-            boxShadow: "0 24px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1)",
-          }}
+          className="gsap-contact-grid clay-card grid grid-cols-1 lg:grid-cols-5 gap-8 md:gap-12 p-8 md:p-12 relative overflow-hidden"
+          style={{ borderRadius: 32 }}
         >
           {/* Subtle top edge highlight */}
           <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[var(--gsap-green)] to-transparent opacity-30" />
@@ -129,7 +124,7 @@ export default function Contact() {
                       required
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full px-5 py-4 rounded-xl font-mono text-sm bg-white/5 border border-white/10 text-[var(--light)] focus:outline-none focus:border-[var(--gsap-teal)]/50 focus:bg-white/10 transition-all placeholder-white/20"
+                      className="clay-input w-full px-5 py-4 font-mono text-sm"
                       placeholder="John Doe"
                     />
                   </div>
@@ -141,7 +136,7 @@ export default function Contact() {
                       required
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full px-5 py-4 rounded-xl font-mono text-sm bg-white/5 border border-white/10 text-[var(--light)] focus:outline-none focus:border-[var(--gsap-teal)]/50 focus:bg-white/10 transition-all placeholder-white/20"
+                      className="clay-input w-full px-5 py-4 font-mono text-sm"
                       placeholder="john@example.com"
                     />
                   </div>
@@ -154,19 +149,15 @@ export default function Contact() {
                     rows={5}
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    className="w-full px-5 py-4 rounded-xl font-mono text-sm bg-white/5 border border-white/10 text-[var(--light)] focus:outline-none focus:border-[var(--gsap-teal)]/50 focus:bg-white/10 transition-all placeholder-white/20 resize-none h-full min-h-[140px]"
+                    className="clay-input w-full px-5 py-4 font-mono text-sm resize-none h-full min-h-[140px]"
                     placeholder="Tell us about your project..."
                   />
                 </div>
                 <button 
                   type="submit" 
-                  className="w-full py-4 rounded-xl font-sans font-bold text-sm uppercase tracking-widest text-[var(--dark)] transition-all transform hover:scale-[1.02] active:scale-95"
-                  style={{
-                    background: "linear-gradient(90deg, var(--gsap-green) 0%, var(--gsap-teal) 100%)",
-                    boxShadow: "0 10px 30px -10px rgba(157,255,47,0.4)"
-                  }}
+                  className="clay-btn w-full py-4 text-sm"
                 >
-                  Send Message
+                  <span>Send Message</span>
                 </button>
               </form>
             )}

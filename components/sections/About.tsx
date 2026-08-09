@@ -144,57 +144,56 @@ function MemberCard({ member }: { member: Member }) {
 
   return (
     <article
-      className="team-card group relative rounded-2xl overflow-hidden cursor-default w-full max-w-xs mx-auto sm:max-w-none"
+      className="team-card clay-card group cursor-default w-full max-w-xs mx-auto sm:max-w-none"
       style={{
-        background:
-          `linear-gradient(145deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.03) 100%)`,
-        border: `1px solid rgba(157,255,47,0.12)`,
-        backdropFilter: "blur(20px) saturate(140%)",
-        boxShadow: "0 4px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.06)",
-        willChange: "transform",
+        borderRadius: 28,
+        /* Per-card accent tint overlay handled below */
       }}
     >
-      {/* Top accent bar */}
+      {/* Colored accent specular line at top */}
       <div
-        className="h-[3px] w-full"
+        className="absolute top-0 left-[8%] w-[84%] h-[1.5px] pointer-events-none z-10"
         style={{
-          background: `linear-gradient(90deg, ${accent} 0%, transparent 100%)`,
+          background: `linear-gradient(90deg, transparent, ${accent} 30%, ${accent} 70%, transparent)`,
+          opacity: 0.7,
         }}
       />
 
-      {/* Glow on hover */}
+      {/* Ambient accent glow on hover */}
       <div
-        className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none rounded-2xl transition-opacity duration-500"
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-500"
         style={{
-          background: `radial-gradient(circle at 30% 30%, ${accent}18 0%, transparent 65%)`,
+          background: `radial-gradient(circle at 30% 20%, ${accent}20 0%, transparent 60%)`,
+          borderRadius: 28,
         }}
       />
 
       {/* Window dots */}
       <div
-        className="flex items-center gap-1.5 px-4 py-3"
-        style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
+        className="flex items-center gap-1.5 px-4 py-3 relative z-10"
+        style={{ borderBottom: "1px solid rgba(255,255,255,0.08)" }}
       >
-        <div className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(255,75,43,0.7)" }} />
-        <div className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(255,184,48,0.7)" }} />
-        <div className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(40,200,80,0.6)" }} />
+        <div className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(255,75,43,0.75)", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.3), 0 1px 4px rgba(255,75,43,0.4)" }} />
+        <div className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(255,184,48,0.75)", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.3), 0 1px 4px rgba(255,184,48,0.4)" }} />
+        <div className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(40,200,80,0.7)", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.3), 0 1px 4px rgba(40,200,80,0.4)" }} />
         <span
           className="font-mono text-[10px] ml-auto tracking-widest"
-          style={{ color: accent, opacity: 0.65 }}
+          style={{ color: accent, opacity: 0.7 }}
         >
           {member.handle}
         </span>
       </div>
 
       {/* Code content */}
-      <div className="p-5 font-mono text-xs leading-loose">
+      <div className="p-5 font-mono text-xs leading-loose relative z-10">
         {/* Role badge */}
         <div
-          className="inline-block px-3 py-1 rounded-full mb-4 font-bold text-[10px] tracking-[0.22em] uppercase"
+          className="clay-tag inline-block px-3 py-1 mb-4 font-bold text-[10px] tracking-[0.22em] uppercase"
           style={{
-            background: `${accent}18`,
-            border: `1px solid ${accent}40`,
+            background: `linear-gradient(135deg, ${accent}20 0%, ${accent}08 100%)`,
+            border: `1px solid ${accent}50`,
             color: accent,
+            boxShadow: `inset 0 1px 0 rgba(255,255,255,0.3), 0 2px 8px ${accent}20`,
           }}
         >
           {member.role}
@@ -208,8 +207,7 @@ function MemberCard({ member }: { member: Member }) {
             className="italic"
             style={{
               color: accent,
-              opacity: 0.8,
-              fontStyle: "italic",
+              opacity: 0.85,
             }}
           >
             &quot;Soon Revealed&quot;
@@ -217,10 +215,9 @@ function MemberCard({ member }: { member: Member }) {
           ,
         </div>
 
-
         <div className="pl-4">
           <span style={{ color: "rgba(240,242,239,0.45)" }}>status:&nbsp;</span>
-          <span style={{ color: accent, opacity: 0.7 }}>
+          <span style={{ color: accent, opacity: 0.75 }}>
             &quot;Active&quot;
           </span>
           ,
@@ -233,8 +230,12 @@ function MemberCard({ member }: { member: Member }) {
           {["LinkedIn", "X"].map((s) => (
             <span
               key={s}
-              className="text-[10px] tracking-widest uppercase cursor-pointer transition-opacity duration-200 hover:opacity-100"
-              style={{ color: accent, opacity: 0.5 }}
+              className="clay-tag text-[10px] tracking-widest uppercase cursor-pointer px-2.5 py-1 hover:opacity-100 transition-all"
+              style={{
+                color: accent,
+                opacity: 0.6,
+                background: `linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.04))`,
+              }}
             >
               {s}
             </span>

@@ -102,88 +102,113 @@ export default function Navbar({ visible }: NavbarProps) {
       <nav
         ref={navRef}
         id="navbar"
-        className="w-full flex items-center justify-between px-6 md:px-8 py-3 rounded-full border border-[var(--gsap-green)] border-opacity-30 bg-[rgba(8,10,9,0.4)] backdrop-blur-md"
-        style={{
-          visibility: "hidden", // autoAlpha starts hidden
-          boxShadow: "0 0 30px rgba(157,255,47,0.05) inset",
-        }}
+        className="clay-navbar w-full flex items-center justify-between px-6 md:px-8 py-3 rounded-full relative"
+        style={{ visibility: "hidden" }}
         aria-label="Main navigation"
       >
-      {/* Logo */}
-      <a href="#top" onClick={(e) => handleNavClick(e, "#hero")} className="shrink-0">
-        <Logo size={34} variant="cream" markOnly />
-      </a>
+        {/* Top specular glint bar for navbar */}
+        <div
+          className="absolute top-0 left-[8%] w-[84%] h-px pointer-events-none"
+          style={{
+            background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.6) 30%, rgba(255,255,255,0.9) 50%, rgba(255,255,255,0.6) 70%, transparent)",
+          }}
+        />
 
-      {/* Desktop nav links */}
-      <ul className="hidden md:flex items-center gap-7" role="list">
-        {navLinks.map((link) => (
-          <li key={link.href}>
-            <a
-              href={link.href}
-              onClick={(e) => handleNavClick(e, link.href)}
-              className="font-sans text-xs tracking-[0.18em] uppercase text-[var(--light)] opacity-60 hover:opacity-100 transition-opacity duration-300"
-              data-cursor="magnetic"
-            >
-              {link.label}
-            </a>
-          </li>
-        ))}
-      </ul>
-
-      {/* Right cluster: CTA */}
-      <div className="hidden md:flex items-center gap-4">
-        <a
-          href="#contact"
-          onClick={(e) => handleNavClick(e, "#contact")}
-          className="liquid-btn px-5 py-2 text-xs tracking-widest uppercase"
-          data-cursor="magnetic"
-        >
-          <span>Get in touch</span>
+        {/* Logo */}
+        <a href="#top" onClick={(e) => handleNavClick(e, "#hero")} className="shrink-0 relative z-10">
+          <Logo size={34} variant="cream" markOnly />
         </a>
-      </div>
 
-      {/* Mobile: hamburger */}
-      <div className="md:hidden flex items-center gap-3">
-        <button
-          className="flex flex-col gap-1.5 p-2"
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
-          aria-expanded={menuOpen}
-        >
-          {[0, 1, 2].map((i) => (
-            <span
-              key={i}
-              className="block w-5 h-px bg-[var(--light)] opacity-70 transition-all duration-300"
-              style={{
-                transform: menuOpen
-                  ? i === 0 ? "rotate(45deg) translate(2px, 2px)"
-                  : i === 2 ? "rotate(-45deg) translate(2px, -2px)"
-                  : "scaleX(0)"
-                  : "none",
-              }}
-            />
+        {/* Desktop nav links */}
+        <ul className="hidden md:flex items-center gap-7 relative z-10" role="list">
+          {navLinks.map((link) => (
+            <li key={link.href}>
+              <a
+                href={link.href}
+                onClick={(e) => handleNavClick(e, link.href)}
+                className="font-sans text-xs tracking-[0.18em] uppercase text-[var(--light)] opacity-60 hover:opacity-100 transition-all duration-300 hover:drop-shadow-[0_0_8px_rgba(157,255,47,0.5)]"
+                data-cursor="magnetic"
+              >
+                {link.label}
+              </a>
+            </li>
           ))}
-        </button>
-      </div>
+        </ul>
 
-      {/* Mobile menu */}
-      {menuOpen && (
-        <div className="absolute top-full left-0 right-0 glass-panel py-6 md:hidden rounded-3xl mt-4 border border-[var(--gsap-green)] border-opacity-30">
-          <ul className="flex flex-col items-center gap-6" role="list">
-            {navLinks.map((link) => (
-              <li key={link.href}>
+        {/* Right cluster: CTA */}
+        <div className="hidden md:flex items-center gap-4 relative z-10">
+          <a
+            href="#contact"
+            onClick={(e) => handleNavClick(e, "#contact")}
+            className="clay-btn px-5 py-2 text-xs"
+            data-cursor="magnetic"
+          >
+            <span>Get in touch</span>
+          </a>
+        </div>
+
+        {/* Mobile: hamburger */}
+        <div className="md:hidden flex items-center gap-3 relative z-10">
+          <button
+            className="flex flex-col gap-[5px] p-2.5 rounded-full clay-card clay-card-dark"
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            style={{ minWidth: 40, minHeight: 40, alignItems: "center", justifyContent: "center" }}
+          >
+            {[0, 1, 2].map((i) => (
+              <span
+                key={i}
+                className="block rounded-full bg-[var(--light)] transition-all duration-300"
+                style={{
+                  width: menuOpen && i === 1 ? 0 : 18,
+                  height: 2,
+                  opacity: menuOpen && i === 1 ? 0 : 0.85,
+                  transform: menuOpen
+                    ? i === 0 ? "rotate(45deg) translate(5px, 5px)"
+                    : i === 2 ? "rotate(-45deg) translate(5px, -5px)"
+                    : "none"
+                    : "none",
+                }}
+              />
+            ))}
+          </button>
+        </div>
+
+        {/* Mobile menu */}
+        {menuOpen && (
+          <div
+            className="clay-card absolute top-full left-0 right-0 py-8 md:hidden mt-4"
+            style={{ borderRadius: 28, zIndex: 100 }}
+          >
+            {/* Accent line at top */}
+            <div className="absolute top-0 left-[10%] w-[80%] h-px"
+              style={{ background: "linear-gradient(90deg, transparent, rgba(157,255,47,0.4) 50%, transparent)" }}
+            />
+            <ul className="flex flex-col items-center gap-6 relative z-10" role="list">
+              {navLinks.map((link) => (
+                <li key={link.href}>
+                  <a
+                    href={link.href}
+                    onClick={(e) => handleNavClick(e, link.href)}
+                    className="font-sans text-sm tracking-widest uppercase text-[var(--light)] opacity-80 hover:opacity-100 hover:text-[var(--gsap-green)] transition-all duration-300"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+              <li>
                 <a
-                  href={link.href}
-                  onClick={(e) => handleNavClick(e, link.href)}
-                  className="font-sans text-sm tracking-widest uppercase text-[var(--light)] opacity-80"
+                  href="#contact"
+                  onClick={(e) => handleNavClick(e, "#contact")}
+                  className="clay-btn px-6 py-2.5 text-xs"
                 >
-                  {link.label}
+                  <span>Get in touch</span>
                 </a>
               </li>
-            ))}
-          </ul>
-        </div>
-      )}
+            </ul>
+          </div>
+        )}
       </nav>
     </div>
   );

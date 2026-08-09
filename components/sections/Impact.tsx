@@ -115,11 +115,27 @@ export default function Impact() {
           {STATS.map((stat) => (
             <div 
               key={stat.id}
-              className="gsap-stat-block bg-[var(--dark-surface)] border-2 border-[var(--dark-border)] p-8 rounded-2xl flex flex-col items-center justify-center text-center hover:border-[var(--gsap-green)] hover:-translate-y-2 transition-all duration-300"
-              style={{ boxShadow: "8px 8px 0px rgba(0,0,0,1)" }}
+              className="gsap-stat-block clay-card p-8 flex flex-col items-center justify-center text-center group"
+              style={{ borderRadius: 28 }}
             >
+              {/* Per-stat colored top specular */}
+              <div
+                className="absolute top-0 left-[10%] w-[80%] h-[1.5px] pointer-events-none"
+                style={{
+                  background: `linear-gradient(90deg, transparent, ${stat.color} 50%, transparent)`,
+                  opacity: 0.6,
+                }}
+              />
+              {/* Ambient glow on hover */}
+              <div
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-500 rounded-[28px]"
+                style={{
+                  background: `radial-gradient(circle at 50% 20%, ${stat.color}18 0%, transparent 65%)`,
+                }}
+              />
+
               <div 
-                className="font-sans font-black text-6xl md:text-7xl tracking-tighter mb-4 flex items-baseline"
+                className="font-sans font-black text-6xl md:text-7xl tracking-tighter mb-4 flex items-baseline relative z-10"
                 style={{ color: stat.color }}
               >
                 <span className="gsap-stat-number" data-value={stat.value}>
@@ -127,7 +143,7 @@ export default function Impact() {
                 </span>
                 <span className="text-4xl md:text-5xl ml-1">{stat.suffix}</span>
               </div>
-              <p className="font-mono text-sm text-[var(--light)] font-bold uppercase tracking-wider">
+              <p className="font-mono text-sm text-[var(--light)] font-bold uppercase tracking-wider relative z-10 opacity-80">
                 {stat.label}
               </p>
             </div>
@@ -138,3 +154,4 @@ export default function Impact() {
     </section>
   );
 }
+

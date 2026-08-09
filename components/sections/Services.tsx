@@ -134,14 +134,25 @@ export default function Services() {
             <article
               key={service.id}
               id={service.id}
-              className={`gsap-service-card p-8 md:p-10 group bg-glass-gradient bg-white/10 backdrop-blur-2xl border border-white/20 rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.3)] hover:shadow-[0_16px_48px_rgba(0,0,0,0.5)] hover:border-[var(--gsap-green)] hover:bg-white/20 hover:-translate-y-2 hover:-translate-x-2 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${index % 2 !== 0 ? 'md:mt-16' : ''}`}
+              className={`gsap-service-card clay-card group p-8 md:p-10 ${index % 2 !== 0 ? 'md:mt-16' : ''}`}
             >
               {/* Icon */}
               <div
-                className="font-mono text-4xl mb-6 text-[var(--gsap-green)] font-bold group-hover:scale-110 transition-transform duration-300"
+                className="font-mono text-4xl mb-6 font-bold"
                 aria-hidden="true"
               >
-                {service.icon}
+                <span
+                  className="clay-tag px-4 py-2 text-[var(--gsap-green)]"
+                  style={{
+                    background: "linear-gradient(135deg, rgba(157,255,47,0.15) 0%, rgba(157,255,47,0.05) 100%)",
+                    border: "1px solid rgba(157,255,47,0.3)",
+                    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.3), 0 4px 16px rgba(157,255,47,0.15)",
+                    display: "inline-block",
+                    transition: "transform 0.3s cubic-bezier(0.34,1.56,0.64,1)",
+                  }}
+                >
+                  {service.icon}
+                </span>
               </div>
 
               <h3
@@ -160,7 +171,13 @@ export default function Services() {
                 {service.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="font-mono text-xs text-[var(--dark)] font-bold uppercase px-3 py-1 bg-[var(--gsap-green)] rounded-sm"
+                    className="clay-tag font-mono text-xs font-bold uppercase tracking-wider px-3 py-1.5"
+                    style={{
+                      color: "var(--gsap-green)",
+                      background: "linear-gradient(135deg, rgba(157,255,47,0.14) 0%, rgba(157,255,47,0.06) 100%)",
+                      border: "1px solid rgba(157,255,47,0.28)",
+                      boxShadow: "inset 0 1px 0 rgba(255,255,255,0.25), 0 2px 8px rgba(157,255,47,0.1)",
+                    }}
                   >
                     {tag}
                   </span>
@@ -173,3 +190,4 @@ export default function Services() {
     </section>
   );
 }
+

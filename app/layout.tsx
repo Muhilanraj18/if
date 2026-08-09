@@ -87,7 +87,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${playfair.variable} ${inter.variable}`}>
-      <body className="antialiased">
+      {/* suppressHydrationWarning: silences mismatches caused by browser extensions
+           injecting attrs (bis_skin_checked, __processed_*, bis_register) before React hydrates */}
+      <body className="antialiased" suppressHydrationWarning>
         {/* GSAP + Lenis initialisation (client-only) */}
         <GSAPProvider />
         {/* Custom diamond cursor (hidden on touch devices) */}

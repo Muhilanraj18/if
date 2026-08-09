@@ -161,16 +161,23 @@ export default function HowWeBuild() {
                 key={step.num}
                 className={`process-node flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-0 ${idx % 2 === 0 ? 'md:pr-[50%]' : 'md:pl-[50%] md:flex-row-reverse'}`}
               >
-                {/* Node Dot / Number */}
+                {/* Clay Node Dot / Number */}
                 <div className={`relative ${idx % 2 === 0 ? 'md:-mr-6' : 'md:-ml-6'} z-10 shrink-0`}>
-                  <div className="w-12 h-12 rounded-full bg-[var(--dark)] border-2 border-[var(--gsap-green)] flex items-center justify-center font-mono font-bold text-[var(--gsap-green)] shadow-[0_0_15px_rgba(138,230,20,0.3)]">
+                  <div
+                    className="w-12 h-12 rounded-full flex items-center justify-center font-mono font-bold text-[var(--gsap-green)]"
+                    style={{
+                      background: "linear-gradient(145deg, rgba(157,255,47,0.18) 0%, rgba(157,255,47,0.06) 100%)",
+                      border: "1.5px solid rgba(157,255,47,0.45)",
+                      boxShadow: "inset 0 1.5px 0 rgba(255,255,255,0.4), inset 0 -1px 0 rgba(0,0,0,0.2), 0 4px 16px rgba(157,255,47,0.2), 0 8px 24px rgba(0,0,0,0.3)",
+                    }}
+                  >
                     {step.num}
                   </div>
                 </div>
 
-                {/* Content Panel */}
-                <div className="process-card bg-white/10 backdrop-blur-2xl border border-[var(--gsap-green)] shadow-[0_0_20px_rgba(138,230,20,0.2)] p-6 md:p-8 rounded-3xl w-full hover:shadow-[0_0_30px_rgba(138,230,20,0.4)] hover:bg-white/20 transition-all duration-300 group">
-                  <h3 className="font-sans font-black text-2xl text-[var(--light)] mb-2 uppercase tracking-tight group-hover:text-[var(--gsap-green)] transition-colors">
+                {/* Clay Content Panel */}
+                <div className="clay-card process-card p-6 md:p-8 w-full group">
+                  <h3 className="font-sans font-black text-2xl text-[var(--light)] mb-2 uppercase tracking-tight group-hover:text-[var(--gsap-green)] transition-colors duration-300">
                     {step.title}
                   </h3>
                   <p className="font-mono text-sm text-[var(--light)] opacity-70">
@@ -186,3 +193,4 @@ export default function HowWeBuild() {
     </section>
   );
 }
+

@@ -166,18 +166,35 @@ export default function Showcase() {
             <article
               key={project.id}
               id={project.id}
-              className="gsap-showcase-card group rounded-3xl overflow-hidden w-full md:w-[700px] shrink-0 bg-white/10 backdrop-blur-2xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3)] hover:shadow-[0_16px_48px_rgba(0,0,0,0.5)] hover:border-[var(--gsap-green)] hover:bg-white/20 transition-all duration-300"
+              className="gsap-showcase-card clay-card group w-full md:w-[700px] shrink-0"
+              style={{ borderRadius: 32 }}
             >
               <div className="flex flex-col h-full min-h-[400px]">
-                {/* Top heavy color bar */}
+                {/* Top frosted color header */}
                 <div 
-                  className="h-32 md:h-48 w-full border-b border-white/10 flex items-center justify-center relative overflow-hidden"
-                  style={{ backgroundColor: `color-mix(in srgb, ${project.color} 20%, transparent)` }}
+                  className="h-32 md:h-48 w-full flex items-center justify-center relative overflow-hidden"
+                  style={{
+                    background: `linear-gradient(145deg, color-mix(in srgb, ${project.color} 22%, rgba(255,255,255,0.06)) 0%, color-mix(in srgb, ${project.color} 10%, rgba(0,0,0,0.2)) 100%)`,
+                    borderBottom: "1px solid rgba(255,255,255,0.1)",
+                    backdropFilter: "blur(10px)",
+                  }}
                 >
-                  <span className="font-mono text-8xl md:text-9xl font-black text-[var(--dark)] opacity-20 absolute -right-4 -bottom-8">
+                  {/* Top specular for header */}
+                  <div className="absolute top-0 left-[8%] w-[84%] h-px"
+                    style={{ background: `linear-gradient(90deg, transparent, ${project.color}80 50%, transparent)` }}
+                  />
+                  <span className="font-mono text-8xl md:text-9xl font-black opacity-15 absolute -right-4 -bottom-8 select-none"
+                    style={{ color: project.color }}>
                     {project.year.slice(-2)}
                   </span>
-                  <div className="font-sans text-4xl md:text-6xl font-black text-[var(--dark)] mix-blend-overlay">
+                  <div
+                    className="font-sans text-4xl md:text-6xl font-black"
+                    style={{
+                      color: project.color,
+                      textShadow: `0 0 40px ${project.color}60`,
+                      filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.4))",
+                    }}
+                  >
                     {project.title.substring(0,2).toUpperCase()}
                   </div>
                 </div>
@@ -185,7 +202,8 @@ export default function Showcase() {
                 {/* Content */}
                 <div className="p-8 md:p-10 flex flex-col justify-between flex-grow">
                   <div>
-                    <p className="font-mono text-[var(--gsap-green)] text-xs tracking-[0.2em] uppercase mb-3 font-bold">
+                    <p className="font-mono text-xs tracking-[0.2em] uppercase mb-3 font-bold"
+                      style={{ color: project.color, opacity: 0.8 }}>
                       // {project.label}
                     </p>
                     <h3 className="font-sans font-black text-[var(--light)] mb-4 text-3xl md:text-4xl uppercase">
@@ -200,7 +218,13 @@ export default function Showcase() {
                     {project.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="font-mono text-xs text-[var(--dark)] font-bold tracking-wider uppercase px-3 py-1 bg-[var(--light)] rounded-sm"
+                        className="clay-tag font-mono text-xs font-bold tracking-wider uppercase px-3 py-1.5"
+                        style={{
+                          color: project.color,
+                          background: `linear-gradient(135deg, color-mix(in srgb, ${project.color} 15%, transparent) 0%, color-mix(in srgb, ${project.color} 5%, transparent) 100%)`,
+                          border: `1px solid color-mix(in srgb, ${project.color} 35%, transparent)`,
+                          boxShadow: `inset 0 1px 0 rgba(255,255,255,0.25), 0 2px 8px color-mix(in srgb, ${project.color} 20%, transparent)`,
+                        }}
                       >
                         {tag}
                       </span>
@@ -215,3 +239,4 @@ export default function Showcase() {
     </section>
   );
 }
+

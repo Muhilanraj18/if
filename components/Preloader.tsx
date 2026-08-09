@@ -104,8 +104,9 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       style={{ backgroundColor: "var(--dark)" }}
       aria-label="Loading Inan Infinites"
       role="status"
+      suppressHydrationWarning
     >
-      <div ref={containerRef} className="flex flex-col items-center gap-6">
+      <div ref={containerRef} className="flex flex-col items-center gap-6" suppressHydrationWarning>
         {/* SVG monogram — stroke-only paths for DrawSVG */}
         <svg
           viewBox="0 0 90 90"

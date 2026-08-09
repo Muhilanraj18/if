@@ -115,7 +115,7 @@ export default function Impact() {
           {STATS.map((stat) => (
             <div
               key={stat.id}
-              className="gsap-stat-block clay-card group flex flex-col"
+              className="gsap-stat-block clay-card group flex flex-col w-full max-w-sm mx-auto sm:max-w-none"
               style={{ borderRadius: 24 }}
             >
               {/* Per-stat colored top specular */}
@@ -155,10 +155,10 @@ export default function Impact() {
                   className="font-sans font-black leading-none flex items-baseline gap-1 mb-1"
                   style={{ color: stat.color }}
                 >
-                  <span className="gsap-stat-number" data-value={stat.value} style={{ fontSize: "clamp(3rem, 6vw, 4.5rem)" }}>
+                  <span className="gsap-stat-number" data-value={stat.value} style={{ fontSize: "clamp(2.5rem, 8vw, 4.5rem)" }}>
                     0
                   </span>
-                  <span style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)" }}>{stat.suffix}</span>
+                  <span style={{ fontSize: "clamp(1.5rem, 5vw, 2.8rem)" }}>{stat.suffix}</span>
                 </div>
                 <p className="font-mono text-[11px] text-[var(--light)] opacity-35 uppercase tracking-widest font-bold">
                   measured

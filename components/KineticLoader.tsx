@@ -111,10 +111,12 @@ export default function KineticLoader({ onComplete, preloaderDone = true }: Kine
       className="fixed inset-0 z-[95] flex items-center justify-center overflow-hidden pointer-events-none"
       style={{ backgroundColor: "var(--dark)" }}
       aria-hidden="true"
+      suppressHydrationWarning
     >
       <div
         ref={typeRef}
         className="kinetic-type flex flex-col justify-center items-center text-center uppercase"
+        suppressHydrationWarning
         style={{
           width: "100vmax",
           height: "100vmax",
@@ -128,7 +130,7 @@ export default function KineticLoader({ onComplete, preloaderDone = true }: Kine
               i % 2 === 0 ? "even" : "odd"
             } whitespace-nowrap font-bold text-[var(--gsap-green)]`}
             style={{
-              fontSize: "clamp(7rem, 18.75vh, 15rem)",
+              fontSize: "clamp(2rem, 8vh, 12rem)",
               lineHeight: 0.75,
               opacity: 0.015,
               zIndex: i % 2 === 0 ? 150 : 50,

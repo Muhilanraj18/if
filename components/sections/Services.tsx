@@ -159,7 +159,7 @@ export default function Services() {
             <article
               key={service.id}
               id={service.id}
-              className={`gsap-service-card clay-card group flex flex-col ${index % 2 !== 0 ? 'md:mt-12' : ''}`}
+              className={`gsap-service-card clay-card group flex flex-col mx-auto max-w-md w-full sm:max-w-none ${index % 2 !== 0 ? 'md:mt-12' : ''}`}
               style={{ borderRadius: 24 }}
             >
               {/* Card header stripe */}

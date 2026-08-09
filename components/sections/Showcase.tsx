@@ -159,14 +159,14 @@ export default function Showcase() {
         {/* Horizontal Scroll Container */}
         <div 
           ref={horizontalContainerRef} 
-          className="flex flex-col md:flex-row gap-6 md:gap-16 md:w-max perspective-[1200px]"
-          style={{ willChange: "transform", paddingRight: "10vw" }}
+          className="flex flex-col items-center md:items-start md:flex-row gap-6 md:gap-16 md:w-max perspective-[1200px] md:pr-[10vw]"
+          style={{ willChange: "transform" }}
         >
           {PROJECTS.map((project) => (
             <article
               key={project.id}
               id={project.id}
-              className="gsap-showcase-card clay-card group w-full md:w-[680px] shrink-0 flex flex-col"
+              className="gsap-showcase-card clay-card group w-full max-w-lg md:max-w-none md:w-[680px] shrink-0 flex flex-col mx-auto md:mx-0"
               style={{ borderRadius: 28 }}
             >
               {/* Card header — colour band */}

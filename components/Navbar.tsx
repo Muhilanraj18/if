@@ -98,7 +98,7 @@ export default function Navbar({ visible }: NavbarProps) {
   };
 
   return (
-    <div className="fixed top-6 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl z-50 flex justify-center">
+    <div className="fixed top-6 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl z-50">
       <nav
         ref={navRef}
         id="navbar"
@@ -150,35 +150,37 @@ export default function Navbar({ visible }: NavbarProps) {
         {/* Mobile: hamburger */}
         <div className="md:hidden flex items-center gap-3 relative z-10">
           <button
-            className="flex flex-col gap-[5px] p-2.5 rounded-full clay-card clay-card-dark"
+            className="rounded-full clay-card clay-card-dark relative"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
-            style={{ minWidth: 40, minHeight: 40, alignItems: "center", justifyContent: "center" }}
+            style={{ width: 40, height: 40 }}
           >
-            {[0, 1, 2].map((i) => (
-              <span
-                key={i}
-                className="block rounded-full bg-[var(--light)] transition-all duration-300"
-                style={{
-                  width: menuOpen && i === 1 ? 0 : 18,
-                  height: 2,
-                  opacity: menuOpen && i === 1 ? 0 : 0.85,
-                  transform: menuOpen
-                    ? i === 0 ? "rotate(45deg) translate(5px, 5px)"
-                    : i === 2 ? "rotate(-45deg) translate(5px, -5px)"
-                    : "none"
-                    : "none",
-                }}
-              />
-            ))}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[18px] h-[16px]">
+              {[0, 1, 2].map((i) => (
+                <span
+                  key={i}
+                  className="absolute left-0 w-full rounded-full bg-[var(--light)] transition-all duration-300 origin-center"
+                  style={{
+                    height: 2,
+                    top: i === 0 ? 0 : i === 1 ? 7 : 14,
+                    opacity: menuOpen && i === 1 ? 0 : 0.85,
+                    transform: menuOpen
+                      ? i === 0 ? "translateY(7px) rotate(45deg)"
+                      : i === 2 ? "translateY(-7px) rotate(-45deg)"
+                      : "none"
+                      : "none",
+                  }}
+                />
+              ))}
+            </div>
           </button>
         </div>
 
         {/* Mobile menu */}
         {menuOpen && (
           <div
-            className="clay-card absolute top-full left-0 right-0 py-8 md:hidden mt-4"
+            className="clay-card absolute top-full left-0 right-0 w-full py-8 md:hidden mt-4 shadow-2xl"
             style={{ borderRadius: 28, zIndex: 100 }}
           >
             {/* Accent line at top */}

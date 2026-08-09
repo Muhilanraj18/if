@@ -271,7 +271,7 @@ export default function Hero({ preloaderDone = true }: { preloaderDone?: boolean
           ref={headlineRef}
           className="font-sans font-black uppercase mb-8 leading-none pointer-events-auto"
           style={{
-            fontSize: "clamp(3.5rem, 11vw, 10rem)",
+            fontSize: "clamp(2.5rem, 11vw, 10rem)",
             letterSpacing: "-0.04em",
           }}
         >

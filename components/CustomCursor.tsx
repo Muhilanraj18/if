@@ -37,6 +37,7 @@ export default function CustomCursor() {
         ref={cursorRef}
         id="custom-cursor"
         aria-hidden="true"
+        suppressHydrationWarning
         style={{
           position: "fixed",
           top: 0,
@@ -58,6 +59,7 @@ export default function CustomCursor() {
         ref={dotRef}
         id="cursor-dot"
         aria-hidden="true"
+        suppressHydrationWarning
         style={{
           position: "fixed",
           top: 0,

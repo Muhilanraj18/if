@@ -261,12 +261,12 @@ export default function GSAPPlayground() {
         {/* ── HORIZONTAL SCROLL CARDS ── */}
         <div 
           ref={horizontalContainerRef} 
-          className="flex flex-col lg:flex-row gap-6 lg:gap-12 lg:w-max"
-          style={{ willChange: "transform", paddingRight: "10vw" }}
+          className="flex flex-col items-center lg:items-start lg:flex-row gap-6 lg:gap-12 lg:w-max lg:pr-[10vw]"
+          style={{ willChange: "transform" }}
         >
           
           {/* Card 1: Butterfly */}
-          <article className="feature-card w-full lg:w-[480px] shrink-0">
+          <article className="feature-card w-full max-w-md lg:max-w-none lg:w-[480px] shrink-0">
             <div className="flex-grow flex items-center justify-center w-full relative">
               <div ref={butterflyRef} className="will-change-transform z-10">
                 <svg viewBox="-72 -58 144 114" width="120" height="96" xmlns="http://www.w3.org/2000/svg">
@@ -302,7 +302,7 @@ export default function GSAPPlayground() {
           </article>
 
           {/* Card 2: Ball */}
-          <article className="feature-card w-full lg:w-[480px] shrink-0">
+          <article className="feature-card w-full max-w-md lg:max-w-none lg:w-[480px] shrink-0">
             <div className="flex-grow flex items-center justify-center w-full relative">
               <div ref={ballRef} className="will-change-transform z-10" style={{ transform: "translateX(-20px)" }}>
                 <svg viewBox="-46 -46 92 92" width="100" height="100" xmlns="http://www.w3.org/2000/svg">
@@ -324,7 +324,7 @@ export default function GSAPPlayground() {
           </article>
 
           {/* Card 3: Windmill */}
-          <article className="feature-card w-full lg:w-[480px] shrink-0">
+          <article className="feature-card w-full max-w-md lg:max-w-none lg:w-[480px] shrink-0">
             <div className="flex-grow flex items-end justify-center w-full relative pt-12">
               <div style={{ position: "relative", width: "90px" }}>
                 <div ref={windmillBladesRef} style={{ position: "absolute", top: "-55px", left: "-15px", width: "120px", height: "120px", zIndex: 2 }}>
@@ -355,7 +355,7 @@ export default function GSAPPlayground() {
           </article>
 
           {/* Card 4: Kite */}
-          <article className="feature-card w-full lg:w-[480px] shrink-0">
+          <article className="feature-card w-full max-w-md lg:max-w-none lg:w-[480px] shrink-0">
             <div className="flex-grow flex items-center justify-center w-full relative">
               <div ref={kiteRef} className="will-change-transform z-10">
                 <svg viewBox="-68 -92 136 390" width="100" height="280" xmlns="http://www.w3.org/2000/svg">

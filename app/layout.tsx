@@ -86,7 +86,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${playfair.variable} ${inter.variable}`}>
+    <html lang="en" className={`${playfair.variable} ${inter.variable}`} suppressHydrationWarning>
       {/* suppressHydrationWarning: silences mismatches caused by browser extensions
            injecting attrs (bis_skin_checked, __processed_*, bis_register) before React hydrates */}
       <body className="antialiased" suppressHydrationWarning>

@@ -258,127 +258,119 @@ export default function GSAPPlayground() {
       </div>
 
       <div className="max-w-6xl mx-auto px-6 relative z-10 w-full overflow-visible">
-        {/* ── HORIZONTAL SCROLL CARDS ── */}
-        <div 
-          ref={horizontalContainerRef} 
-          className="flex flex-col items-center lg:items-start lg:flex-row gap-6 lg:gap-12 lg:w-max lg:pr-[10vw]"
+        {/* ── BENTO METRICS GRID ── */}
+        <div
+          ref={horizontalContainerRef}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 w-full"
           style={{ willChange: "transform" }}
         >
-          
-          {/* Card 1: Butterfly */}
-          <article className="feature-card w-full max-w-md lg:max-w-none lg:w-[480px] shrink-0">
-            <div className="flex-grow flex items-center justify-center w-full relative">
-              <div ref={butterflyRef} className="will-change-transform z-10">
-                <svg viewBox="-72 -58 144 114" width="120" height="96" xmlns="http://www.w3.org/2000/svg">
-                  <g ref={leftWingRef}>
-                    <ellipse cx="-33" cy="-18" rx="37" ry="23" fill="#FF7A2F" opacity="0.96" />
-                    <circle  cx="-29" cy="-14" r="6.5" fill="rgba(255,255,255,0.2)" />
-                    <circle  cx="-48" cy="-27" r="4.5" fill="rgba(0,0,0,0.15)" />
-                    <ellipse cx="-26" cy="-10" rx="10" ry="5" fill="rgba(255,200,80,0.4)" />
-                    <ellipse cx="-25" cy="15"  rx="24" ry="17" fill="#FFB347" opacity="0.88" />
-                    <circle  cx="-22" cy="12"  r="4.5" fill="rgba(255,255,255,0.18)" />
-                  </g>
-                  <g ref={rightWingRef}>
-                    <ellipse cx="33"  cy="-18" rx="37" ry="23" fill="#FF7A2F" opacity="0.96" />
-                    <circle  cx="29"  cy="-14" r="6.5" fill="rgba(255,255,255,0.2)" />
-                    <circle  cx="48"  cy="-27" r="4.5" fill="rgba(0,0,0,0.15)" />
-                    <ellipse cx="26"  cy="-10" rx="10" ry="5" fill="rgba(255,200,80,0.4)" />
-                    <ellipse cx="25"  cy="15"  rx="24" ry="17" fill="#FFB347" opacity="0.88" />
-                    <circle  cx="22"  cy="12"  r="4.5" fill="rgba(255,255,255,0.18)" />
-                  </g>
-                  <ellipse cx="0" cy="2"   rx="4.5" ry="25" fill="#9dff2f" />
-                  <ellipse cx="0" cy="-18" rx="5.5" ry="7"  fill="#b8ff5a" />
-                  <path d="M-3,-23 Q-15,-40 -11,-52" stroke="#9dff2f" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-                  <path d=" M3,-23 Q 15,-40  11,-52" stroke="#9dff2f" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-                  <circle cx="-11" cy="-52" r="3" fill="#9dff2f" />
-                  <circle cx=" 11" cy="-52" r="3" fill="#9dff2f" />
-                </svg>
-              </div>
+          {/* Stat Card — Projects */}
+          <div className="feature-card col-span-1 !min-h-[220px] !items-start !justify-between !p-8">
+            <div>
+              <p className="font-mono text-[10px] tracking-[0.3em] uppercase mb-3" style={{ color: "var(--gsap-green)" }}># Delivered</p>
+              <p className="font-sans font-black text-[var(--light)]" style={{ fontSize: "5rem", lineHeight: 1, letterSpacing: "-0.06em" }}>
+                120<span className="text-[var(--gsap-green)]" style={{ fontSize: "3rem" }}>+</span>
+              </p>
+              <p className="font-mono text-xs text-[var(--light)] opacity-45 mt-2">Projects shipped worldwide</p>
             </div>
-            <div className="mt-8 text-center px-4 relative z-10">
-              <h3 className="font-mono text-sm font-bold text-[var(--light)] uppercase tracking-widest mb-2">Organic Motion</h3>
-              <p className="font-mono text-xs text-[var(--light)] opacity-50 leading-relaxed">Lifelike physics. Fluid easing curves.</p>
+            <div ref={butterflyRef} className="absolute bottom-4 right-6 opacity-30 will-change-transform z-0 pointer-events-none">
+              <svg viewBox="-72 -58 144 114" width="70" height="56" xmlns="http://www.w3.org/2000/svg">
+                <g ref={leftWingRef}>
+                  <ellipse cx="-33" cy="-18" rx="37" ry="23" fill="#FF7A2F" opacity="0.96" />
+                  <ellipse cx="-25" cy="15"  rx="24" ry="17" fill="#FFB347" opacity="0.88" />
+                </g>
+                <g ref={rightWingRef}>
+                  <ellipse cx="33"  cy="-18" rx="37" ry="23" fill="#FF7A2F" opacity="0.96" />
+                  <ellipse cx="25"  cy="15"  rx="24" ry="17" fill="#FFB347" opacity="0.88" />
+                </g>
+                <ellipse cx="0" cy="2" rx="4.5" ry="25" fill="#9dff2f" />
+              </svg>
             </div>
-          </article>
+          </div>
 
-          {/* Card 2: Ball */}
-          <article className="feature-card w-full max-w-md lg:max-w-none lg:w-[480px] shrink-0">
-            <div className="flex-grow flex items-center justify-center w-full relative">
-              <div ref={ballRef} className="will-change-transform z-10" style={{ transform: "translateX(-20px)" }}>
-                <svg viewBox="-46 -46 92 92" width="100" height="100" xmlns="http://www.w3.org/2000/svg">
-                  <circle r="44" fill="#c026ff" />
-                  <path d="M-44,0 Q0,-22 44,0" fill="none" stroke="rgba(255,255,255,0.28)" strokeWidth="3" />
-                  <path d="M-44,12 Q0,-10 44,12" fill="none" stroke="rgba(255,255,255,0.13)" strokeWidth="2" />
-                  <path d="M-40,-20 Q0,-42 40,-20" fill="none" stroke="rgba(255,255,255,0.13)" strokeWidth="2" />
-                  <ellipse rx="44" ry="17" fill="none" stroke="rgba(192,38,255,0.35)" strokeWidth="2.5" />
-                  <circle cx="-13" cy="-15" r="12" fill="rgba(255,255,255,0.22)" />
-                  <circle cx="-8" cy="-10" r="5" fill="rgba(255,255,255,0.18)" />
-                </svg>
-                <div style={{ width: "100px", height: "10px", background: "radial-gradient(ellipse at center, rgba(192,38,255,0.55) 0%, transparent 75%)", marginTop: "6px" }} />
-              </div>
+          {/* Stat Card — Clients */}
+          <div className="feature-card col-span-1 !min-h-[220px] !items-start !justify-between !p-8">
+            <div>
+              <p className="font-mono text-[10px] tracking-[0.3em] uppercase mb-3" style={{ color: "var(--gsap-teal)" }}># Global Reach</p>
+              <p className="font-sans font-black text-[var(--light)]" style={{ fontSize: "5rem", lineHeight: 1, letterSpacing: "-0.06em" }}>
+                18<span className="text-[var(--gsap-teal)]" style={{ fontSize: "3rem" }}>+</span>
+              </p>
+              <p className="font-mono text-xs text-[var(--light)] opacity-45 mt-2">Countries served</p>
             </div>
-            <div className="mt-8 text-center px-4 relative z-10">
-              <h3 className="font-mono text-sm font-bold text-[var(--light)] uppercase tracking-widest mb-2">Kinetic Flow</h3>
-              <p className="font-mono text-xs text-[var(--light)] opacity-50 leading-relaxed">Scroll-driven translations at 60fps.</p>
+            <div ref={kiteRef} className="absolute bottom-4 right-6 opacity-25 will-change-transform z-0 pointer-events-none">
+              <svg viewBox="-68 -92 136 200" width="50" height="120" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0,-88 L62,0 L0,88 L-62,0 Z" fill="#2aabff" />
+                <path d="M0,-88 L62,0 L0,0 Z" fill="rgba(255,255,255,0.12)" />
+                <line x1="-62" y1="0" x2="62" y2="0" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
+                <line x1="0" y1="-88" x2="0" y2="88" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
+              </svg>
             </div>
-          </article>
+          </div>
 
-          {/* Card 3: Windmill */}
-          <article className="feature-card w-full max-w-md lg:max-w-none lg:w-[480px] shrink-0">
-            <div className="flex-grow flex items-end justify-center w-full relative pt-12">
-              <div style={{ position: "relative", width: "90px" }}>
-                <div ref={windmillBladesRef} style={{ position: "absolute", top: "-55px", left: "-15px", width: "120px", height: "120px", zIndex: 2 }}>
-                  <svg viewBox="-60 -60 120 120" width="120" height="120" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="-7" y="-58" width="14" height="60" rx="7" fill="#9dff2f" />
-                    <rect x="2" y="-7" width="58" height="14" rx="7" fill="#9dff2f" />
-                    <rect x="-7" y="-2" width="14" height="60" rx="7" fill="rgba(157,255,47,0.6)" />
-                    <rect x="-60" y="-7" width="58" height="14" rx="7" fill="rgba(157,255,47,0.6)" />
-                    <circle r="16" fill="none" stroke="rgba(157,255,47,0.25)" strokeWidth="8" style={{ animation: "hub-pulse 2s ease-in-out infinite" }} />
-                    <circle r="12" fill="#1a1c1a" stroke="#9dff2f" strokeWidth="2.5" />
-                    <circle r="5" fill="#9dff2f" />
-                  </svg>
-                </div>
-                <svg viewBox="0 0 100 238" width="90" height="180" xmlns="http://www.w3.org/2000/svg" style={{ display: "block" }}>
-                  <polygon points="42,0 58,0 65,238 35,238" fill="#1a1c1a" />
-                  <polygon points="42,0 58,0 65,238 35,238" fill="none" stroke="var(--dark-border)" strokeWidth="1.5" />
-                  <ellipse cx="50" cy="115" rx="7" ry="9" fill="var(--dark)" stroke="var(--dark-border)" strokeWidth="1" />
-                  <ellipse cx="50" cy="158" rx="7" ry="9" fill="var(--dark)" stroke="var(--dark-border)" strokeWidth="1" />
-                  <path d="M43,207 L43,238 L57,238 L57,207 Q57,199 50,199 Q43,207 43,207Z" fill="var(--dark)" stroke="var(--dark-border)" strokeWidth="1" />
-                  <rect x="25" y="232" width="50" height="6" rx="3" fill="#2a2c2a" />
-                </svg>
-              </div>
+          {/* Stat Card — Uptime */}
+          <div className="feature-card col-span-1 !min-h-[220px] !items-start !justify-between !p-8">
+            <div>
+              <p className="font-mono text-[10px] tracking-[0.3em] uppercase mb-3" style={{ color: "var(--gsap-purple)" }}># Reliability</p>
+              <p className="font-sans font-black text-[var(--light)]" style={{ fontSize: "5rem", lineHeight: 1, letterSpacing: "-0.06em" }}>
+                99.<span className="text-[var(--gsap-purple)]" style={{ fontSize: "2.5rem" }}>9%</span>
+              </p>
+              <p className="font-mono text-xs text-[var(--light)] opacity-45 mt-2">Average platform uptime</p>
             </div>
-            <div className="mt-8 text-center px-4 relative z-10">
-              <h3 className="font-mono text-sm font-bold text-[var(--light)] uppercase tracking-widest mb-2">Sustainable Power</h3>
-              <p className="font-mono text-xs text-[var(--light)] opacity-50 leading-relaxed">Infinite loops at a steady 60fps.</p>
+            <div ref={ballRef} className="absolute bottom-4 right-6 opacity-20 will-change-transform z-0 pointer-events-none">
+              <svg viewBox="-46 -46 92 92" width="64" height="64" xmlns="http://www.w3.org/2000/svg">
+                <circle r="44" fill="#c026ff" />
+                <path d="M-44,0 Q0,-22 44,0" fill="none" stroke="rgba(255,255,255,0.28)" strokeWidth="3" />
+                <circle cx="-13" cy="-15" r="12" fill="rgba(255,255,255,0.22)" />
+              </svg>
             </div>
-          </article>
+          </div>
 
-          {/* Card 4: Kite */}
-          <article className="feature-card w-full max-w-md lg:max-w-none lg:w-[480px] shrink-0">
-            <div className="flex-grow flex items-center justify-center w-full relative">
-              <div ref={kiteRef} className="will-change-transform z-10">
-                <svg viewBox="-68 -92 136 390" width="100" height="280" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M0,-88 L62,0 L0,88 L-62,0 Z" fill="#2aabff" />
-                  <path d="M0,-88 L62,0 L0,0 Z" fill="rgba(255,255,255,0.12)" />
-                  <path d="M0,0 L0,88 L-62,0 Z" fill="rgba(0,0,0,0.10)" />
-                  <line x1="-62" y1="0" x2="62" y2="0" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
-                  <line x1="0" y1="-88" x2="0" y2="88" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
-                  <path d="M0,-88 L62,0 L0,88 L-62,0 Z" fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="2" />
-                  <circle r="6" fill="rgba(255,255,255,0.7)" />
-                  <path d="M0,88 Q30,120 18,160 Q6,196 32,222 Q50,244 24,272 Q10,288 34,308" fill="none" stroke="rgba(255,255,255,0.48)" strokeWidth="1.5" strokeLinecap="round" />
-                  <ellipse cx="35" cy="310" rx="14" ry="6" fill="#c026ff" transform="rotate(22, 35, 310)" />
-                  <ellipse cx="22" cy="278" rx="14" ry="6" fill="#FF7A2F" transform="rotate(-14,22, 278)" />
-                  <ellipse cx="33" cy="247" rx="14" ry="6" fill="#9dff2f" transform="rotate(20, 33, 247)" />
-                  <ellipse cx="14" cy="216" rx="14" ry="6" fill="#2aabff" transform="rotate(-9, 14, 216)" opacity="0.85" />
-                </svg>
-              </div>
+          {/* Wide card — Capabilities */}
+          <div className="feature-card col-span-1 sm:col-span-2 !min-h-[200px] !items-start !p-8">
+            <p className="font-mono text-[10px] tracking-[0.3em] uppercase mb-5" style={{ color: "var(--gsap-amber)" }}># What We Master</p>
+            <div className="flex flex-wrap gap-2.5">
+              {[
+                "Product Engineering", "AI & LLM Integration", "Cloud Infrastructure",
+                "Real-time Systems", "Mobile Apps", "API Design",
+                "Data Pipelines", "DevOps & CI/CD", "UX Engineering",
+                "Security Hardening",
+              ].map((cap) => (
+                <span
+                  key={cap}
+                  className="font-mono text-[11px] font-bold tracking-wider uppercase px-3 py-1.5 rounded-full"
+                  style={{
+                    background: "linear-gradient(135deg, rgba(255,255,255,0.09) 0%, rgba(255,255,255,0.04) 100%)",
+                    border: "1px solid rgba(255,255,255,0.14)",
+                    color: "rgba(240,242,239,0.8)",
+                    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.2)",
+                  }}
+                >
+                  {cap}
+                </span>
+              ))}
             </div>
-            <div className="mt-8 text-center px-4 relative z-10">
-              <h3 className="font-mono text-sm font-bold text-[var(--light)] uppercase tracking-widest mb-2">Elevated Design</h3>
-              <p className="font-mono text-xs text-[var(--light)] opacity-50 leading-relaxed">Brand experiences beyond the static page.</p>
+          </div>
+
+          {/* Windmill card — Speed stat */}
+          <div className="feature-card col-span-1 !min-h-[200px] !items-start !justify-between !p-8">
+            <div>
+              <p className="font-mono text-[10px] tracking-[0.3em] uppercase mb-3" style={{ color: "var(--gsap-blue)" }}># Ship Speed</p>
+              <p className="font-sans font-black text-[var(--light)]" style={{ fontSize: "5rem", lineHeight: 1, letterSpacing: "-0.06em" }}>
+                2<span className="text-[var(--gsap-blue)]" style={{ fontSize: "2.2rem" }}>wks</span>
+              </p>
+              <p className="font-mono text-xs text-[var(--light)] opacity-45 mt-2">Average MVP to production</p>
             </div>
-          </article>
+            <div ref={windmillBladesRef} className="absolute bottom-4 right-4 opacity-20 z-0 pointer-events-none" style={{ width: 60, height: 60 }}>
+              <svg viewBox="-60 -60 120 120" width="60" height="60" xmlns="http://www.w3.org/2000/svg">
+                <rect x="-7" y="-58" width="14" height="60" rx="7" fill="#9dff2f" />
+                <rect x="2" y="-7" width="58" height="14" rx="7" fill="#9dff2f" />
+                <rect x="-7" y="-2" width="14" height="60" rx="7" fill="rgba(157,255,47,0.6)" />
+                <rect x="-60" y="-7" width="58" height="14" rx="7" fill="rgba(157,255,47,0.6)" />
+                <circle r="12" fill="#1a1c1a" stroke="#9dff2f" strokeWidth="2.5" />
+                <circle r="5" fill="#9dff2f" />
+              </svg>
+            </div>
+          </div>
 
         </div>
       </div>

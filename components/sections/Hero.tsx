@@ -16,6 +16,23 @@ import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
 
 gsap.registerPlugin(SplitText, ScrollTrigger, DrawSVGPlugin);
 
+// Seeded particle field — deterministic so no SSR hydration mismatch
+const COLORS = ["var(--gsap-green)", "var(--gsap-teal)", "var(--gsap-purple)", "var(--gsap-blue)", "var(--gsap-amber)"];
+const PARTICLES = Array.from({ length: 50 }, (_, i) => {
+  const seed = (i * 2654435761) >>> 0;
+  const rand = (n: number) => ((seed * (n + 1) * 1664525 + 1013904223) >>> 0) / 4294967296;
+  return {
+    x:        rand(0) * 100,
+    y:        rand(1) * 100,
+    size:     Math.floor(rand(2) * 5) + 2,
+    color:    COLORS[Math.floor(rand(3) * COLORS.length)],
+    opacity:  rand(4) * 0.25 + 0.15,
+    blur:     rand(5) > 0.5 ? 1 : 0,
+    duration: rand(6) * 4 + 2,
+    delay:    rand(7) * 4,
+  };
+});
+
 export default function Hero({ preloaderDone = true }: { preloaderDone?: boolean }) {
   const sectionRef     = useRef<HTMLElement>(null);
   const headlineRef    = useRef<HTMLHeadingElement>(null);
@@ -27,6 +44,7 @@ export default function Hero({ preloaderDone = true }: { preloaderDone?: boolean
   const shapesRef      = useRef<HTMLDivElement>(null);
   const watermarkRef   = useRef<HTMLDivElement>(null);
   const cursorGlowRef  = useRef<HTMLDivElement>(null);
+  const cursorGlow2Ref = useRef<HTMLDivElement>(null);
   const engineeredRef  = useRef<HTMLSpanElement>(null);
 
   useGSAP(
@@ -147,27 +165,52 @@ export default function Hero({ preloaderDone = true }: { preloaderDone?: boolean
         });
       }
 
-      // ── 5. Mouse Interactive Glow ──
+      // ── 5. Enhanced cursor-reactive background system ──
       const heroEl = sectionRef.current;
-      if (heroEl && cursorGlowRef.current) {
-        const xTo = gsap.quickTo(cursorGlowRef.current, "x", { duration: 0.6, ease: "power3" });
-        const yTo = gsap.quickTo(cursorGlowRef.current, "y", { duration: 0.6, ease: "power3" });
-        
+      if (heroEl) {
+        // Primary bright glow follows cursor closely
+        const xTo  = gsap.quickTo(cursorGlowRef.current,  "x", { duration: 0.4, ease: "power3" });
+        const yTo  = gsap.quickTo(cursorGlowRef.current,  "y", { duration: 0.4, ease: "power3" });
+        // Secondary slower glow for trail effect
+        const x2To = gsap.quickTo(cursorGlow2Ref.current, "x", { duration: 0.9, ease: "power2" });
+        const y2To = gsap.quickTo(cursorGlow2Ref.current, "y", { duration: 0.9, ease: "power2" });
+
         const waterXTo = gsap.quickTo(watermarkRef.current, "x", { duration: 1.2, ease: "power2.out" });
         const waterYTo = gsap.quickTo(watermarkRef.current, "y", { duration: 1.2, ease: "power2.out" });
+
+        // Animate individual particles on mouse proximity
+        const particles = heroEl.querySelectorAll<HTMLDivElement>(".hero-particle");
 
         const handleMouseMove = (e: MouseEvent) => {
           const rect = heroEl.getBoundingClientRect();
           const relX = e.clientX - rect.left;
           const relY = e.clientY - rect.top;
-          
+
           xTo(relX);
           yTo(relY);
+          x2To(relX);
+          y2To(relY);
 
           const cx = window.innerWidth / 2;
           const cy = window.innerHeight / 2;
           waterXTo((e.clientX - cx) * -0.05);
           waterYTo((e.clientY - cy) * -0.05);
+
+          // Particles near cursor react with subtle scale/brightness
+          particles.forEach((p) => {
+            const pr = p.getBoundingClientRect();
+            const dx = relX - (pr.left - rect.left + pr.width / 2);
+            const dy = relY - (pr.top  - rect.top  + pr.height / 2);
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            const proximity = Math.max(0, 1 - dist / 220);
+            gsap.to(p, {
+              scale: 1 + proximity * 2.5,
+              opacity: parseFloat(p.dataset.baseOpacity || "0.35") + proximity * 0.5,
+              duration: 0.4,
+              ease: "power2.out",
+              overwrite: "auto",
+            });
+          });
         };
 
         heroEl.addEventListener("mousemove", handleMouseMove);
@@ -216,14 +259,57 @@ export default function Hero({ preloaderDone = true }: { preloaderDone?: boolean
           pointer-events: none;
           overflow: visible;
         }
+        @keyframes heroParticlePulse {
+          from { transform: scale(1);   opacity: var(--p-op, 0.2); }
+          to   { transform: scale(1.6); opacity: calc(var(--p-op, 0.2) * 1.8); }
+        }
       `}</style>
 
-      {/* ── INTERACTIVE MOUSE GLOW ── */}
-      <div 
-        ref={cursorGlowRef} 
-        className="absolute top-0 left-0 w-[700px] h-[700px] rounded-full mix-blend-screen pointer-events-none z-0"
-        style={{ transform: "translate(-50%, -50%)", opacity: 0.07, filter: "blur(130px)", background: "radial-gradient(circle, var(--gsap-green) 0%, var(--gsap-teal) 60%, transparent 100%)" }}
+      {/* ── PRIMARY CURSOR GLOW (bright, tight) ── */}
+      <div
+        ref={cursorGlowRef}
+        className="absolute top-0 left-0 pointer-events-none z-0"
+        style={{
+          width: 500,
+          height: 500,
+          transform: "translate(-50%, -50%)",
+          borderRadius: "50%",
+          opacity: 0.18,
+          filter: "blur(90px)",
+          background: "radial-gradient(circle, var(--gsap-green) 0%, var(--gsap-teal) 50%, transparent 100%)",
+        }}
       />
+
+      {/* ── SECONDARY TRAILING GLOW (slower, wider, purple) ── */}
+      <div
+        ref={cursorGlow2Ref}
+        className="absolute top-0 left-0 pointer-events-none z-0"
+        style={{
+          width: 800,
+          height: 800,
+          transform: "translate(-50%, -50%)",
+          borderRadius: "50%",
+          opacity: 0.09,
+          filter: "blur(140px)",
+          background: "radial-gradient(circle, var(--gsap-purple) 0%, var(--gsap-blue) 60%, transparent 100%)",
+        }}
+      />
+
+      {/* ── SCANLINE TEXTURE OVERLAY ── */}
+      <div
+        className="absolute inset-0 pointer-events-none z-1"
+        style={{
+          backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px)",
+          backgroundSize: "100% 4px",
+        }}
+      />
+
+
+
+      {/* ── AMBIENT GLOW BLOBS (static) ── */}
+      <div className="absolute top-[10%] left-[5%]  w-[360px] h-[360px] rounded-full pointer-events-none z-0" style={{ background: "radial-gradient(circle, rgba(157,255,47,0.12) 0%, transparent 70%)", filter: "blur(80px)" }} />
+      <div className="absolute bottom-[10%] right-[5%] w-[420px] h-[420px] rounded-full pointer-events-none z-0" style={{ background: "radial-gradient(circle, rgba(192,38,255,0.12) 0%, transparent 70%)", filter: "blur(100px)" }} />
+      <div className="absolute top-[40%] right-[20%]  w-[300px] h-[300px] rounded-full pointer-events-none z-0" style={{ background: "radial-gradient(circle, rgba(42,171,255,0.10) 0%, transparent 70%)", filter: "blur(70px)" }} />
 
       {/* ── MASSIVE WATERMARK ── */}
       <div 

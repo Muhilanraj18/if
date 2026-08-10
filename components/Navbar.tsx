@@ -149,68 +149,112 @@ export default function Navbar({ visible }: NavbarProps) {
 
         {/* Mobile: hamburger */}
         <div className="md:hidden flex items-center gap-3 relative z-10">
-          <button
-            className="rounded-full clay-card clay-card-dark relative"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
-            aria-expanded={menuOpen}
-            style={{ width: 40, height: 40 }}
-          >
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[18px] h-[16px]">
-              {[0, 1, 2].map((i) => (
-                <span
-                  key={i}
-                  className="absolute left-0 w-full rounded-full bg-[var(--light)] transition-all duration-300 origin-center"
-                  style={{
-                    height: 2,
-                    top: i === 0 ? 0 : i === 1 ? 7 : 14,
-                    opacity: menuOpen && i === 1 ? 0 : 0.85,
-                    transform: menuOpen
-                      ? i === 0 ? "translateY(7px) rotate(45deg)"
-                      : i === 2 ? "translateY(-7px) rotate(-45deg)"
-                      : "none"
-                      : "none",
-                  }}
-                />
-              ))}
-            </div>
-          </button>
+          {/* Pulsing circle ring behind burger */}
+          <div className="relative">
+            {/* Outer glow ring */}
+            <div
+              className="absolute inset-0 rounded-full pointer-events-none transition-all duration-500"
+              style={{
+                boxShadow: menuOpen
+                  ? "0 0 0 2px var(--gsap-green), 0 0 20px rgba(157,255,47,0.5), 0 0 40px rgba(157,255,47,0.2)"
+                  : "0 0 0 1px rgba(255,255,255,0.15), 0 0 12px rgba(157,255,47,0.1)",
+                borderRadius: "50%",
+                width: 40,
+                height: 40,
+                animation: menuOpen ? "none" : "navCirclePulse 3s ease-in-out infinite",
+              }}
+            />
+            <style>{`
+              @keyframes navCirclePulse {
+                0%, 100% { box-shadow: 0 0 0 1px rgba(255,255,255,0.12), 0 0 8px rgba(157,255,47,0.08); }
+                50%       { box-shadow: 0 0 0 2px rgba(157,255,47,0.35), 0 0 18px rgba(157,255,47,0.25); }
+              }
+            `}</style>
+            <button
+              className="rounded-full clay-card clay-card-dark relative"
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={menuOpen}
+              style={{ width: 40, height: 40 }}
+            >
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[18px] h-[16px]">
+                {[0, 1, 2].map((i) => (
+                  <span
+                    key={i}
+                    className="absolute left-0 w-full rounded-full bg-[var(--light)] transition-all duration-300 origin-center"
+                    style={{
+                      height: 2,
+                      top: i === 0 ? 0 : i === 1 ? 7 : 14,
+                      opacity: menuOpen && i === 1 ? 0 : 0.85,
+                      transform: menuOpen
+                        ? i === 0 ? "translateY(7px) rotate(45deg)"
+                        : i === 2 ? "translateY(-7px) rotate(-45deg)"
+                        : "none"
+                        : "none",
+                    }}
+                  />
+                ))}
+              </div>
+            </button>
+          </div>
         </div>
 
-        {/* Mobile menu */}
-        {menuOpen && (
+        {/* Mobile menu — animated slide-down */}
+        <div
+          className="clay-card absolute top-full left-0 right-0 w-full py-8 md:hidden mt-3 shadow-2xl overflow-hidden"
+          style={{
+            borderRadius: 28,
+            zIndex: 100,
+            maxHeight: menuOpen ? "500px" : "0px",
+            opacity: menuOpen ? 1 : 0,
+            paddingTop: menuOpen ? undefined : 0,
+            paddingBottom: menuOpen ? undefined : 0,
+            pointerEvents: menuOpen ? "auto" : "none",
+            transition: "max-height 0.4s cubic-bezier(0.16,1,0.3,1), opacity 0.3s ease, padding 0.3s ease",
+          }}
+          aria-hidden={!menuOpen}
+        >
+          {/* Top accent glow line */}
           <div
-            className="clay-card absolute top-full left-0 right-0 w-full py-8 md:hidden mt-4 shadow-2xl"
-            style={{ borderRadius: 28, zIndex: 100 }}
-          >
-            {/* Accent line at top */}
-            <div className="absolute top-0 left-[10%] w-[80%] h-px"
-              style={{ background: "linear-gradient(90deg, transparent, rgba(157,255,47,0.4) 50%, transparent)" }}
-            />
-            <ul className="flex flex-col items-center gap-6 relative z-10" role="list">
-              {navLinks.map((link) => (
-                <li key={link.href}>
-                  <a
-                    href={link.href}
-                    onClick={(e) => handleNavClick(e, link.href)}
-                    className="font-sans text-sm tracking-widest uppercase text-[var(--light)] opacity-80 hover:opacity-100 hover:text-[var(--gsap-green)] transition-all duration-300"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-              <li>
+            className="absolute top-0 left-[10%] w-[80%] h-[1.5px] pointer-events-none"
+            style={{
+              background: "linear-gradient(90deg, transparent, rgba(157,255,47,0.6) 30%, rgba(157,255,47,0.9) 50%, rgba(157,255,47,0.6) 70%, transparent)",
+            }}
+          />
+          {/* Ambient green glow inside panel */}
+          <div
+            className="absolute top-0 left-1/2 -translate-x-1/2 w-[200px] h-[80px] pointer-events-none"
+            style={{
+              background: "radial-gradient(ellipse, rgba(157,255,47,0.12) 0%, transparent 70%)",
+              filter: "blur(20px)",
+            }}
+          />
+          <ul className="flex flex-col items-center gap-5 relative z-10 px-6" role="list">
+            {navLinks.map((link, i) => (
+              <li key={link.href} style={{ transitionDelay: menuOpen ? `${i * 50}ms` : "0ms" }}>
                 <a
-                  href="#contact"
-                  onClick={(e) => handleNavClick(e, "#contact")}
-                  className="clay-btn px-6 py-2.5 text-xs"
+                  href={link.href}
+                  onClick={(e) => handleNavClick(e, link.href)}
+                  className="font-sans text-sm tracking-widest uppercase text-[var(--light)] opacity-70 hover:opacity-100 hover:text-[var(--gsap-green)] transition-all duration-300 flex items-center gap-2 group"
                 >
-                  <span>Get in touch</span>
+                  <span
+                    className="w-1 h-1 rounded-full bg-[var(--gsap-green)] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  />
+                  {link.label}
                 </a>
               </li>
-            </ul>
-          </div>
-        )}
+            ))}
+            <li className="mt-2">
+              <a
+                href="#contact"
+                onClick={(e) => handleNavClick(e, "#contact")}
+                className="clay-btn px-6 py-2.5 text-xs"
+              >
+                <span>Get in touch</span>
+              </a>
+            </li>
+          </ul>
+        </div>
       </nav>
     </div>
   );

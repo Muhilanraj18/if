@@ -130,7 +130,7 @@ export default function KineticLoader({ onComplete, preloaderDone = true }: Kine
               i % 2 === 0 ? "even" : "odd"
             } whitespace-nowrap font-bold text-[var(--gsap-green)]`}
             style={{
-              fontSize: "clamp(2rem, 8vh, 12rem)",
+              fontSize: "clamp(3.5rem, 10vw, 14rem)",
               lineHeight: 0.75,
               opacity: 0.015,
               zIndex: i % 2 === 0 ? 150 : 50,

@@ -52,12 +52,13 @@ export default function KineticLoader({ onComplete, preloaderDone = true }: Kine
 
         const customEase = "expo.inOut";
 
-        // Main scaling and rotation
+        // Main scaling and rotation — uses translateZ to stay on GPU compositor
         tl.to(kineticType, {
           duration: 1.6,
           ease: customEase,
-          scale: 2.7,
+          scale: 2.2,
           rotation: -90,
+          z: 0.01, // force GPU layer
         });
 
         // Odd lines slide left
@@ -121,6 +122,9 @@ export default function KineticLoader({ onComplete, preloaderDone = true }: Kine
           width: "100vmax",
           height: "100vmax",
           transformStyle: "preserve-3d",
+          perspective: 1000,
+          backfaceVisibility: "hidden",
+          WebkitBackfaceVisibility: "hidden",
         }}
       >
         {Array.from({ length: 12 }).map((_, i) => (
@@ -135,6 +139,10 @@ export default function KineticLoader({ onComplete, preloaderDone = true }: Kine
               opacity: 0.015,
               zIndex: i % 2 === 0 ? 150 : 50,
               willChange: "transform, opacity",
+              backfaceVisibility: "hidden",
+              WebkitBackfaceVisibility: "hidden",
+              transform: "translateZ(0)",
+              WebkitFontSmoothing: "subpixel-antialiased",
             }}
           >
             INAN INFINITES INAN INFINITES INAN INFINITES

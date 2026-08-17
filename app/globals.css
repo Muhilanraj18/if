@@ -402,37 +402,44 @@ body {
 .clay-card {
   position: relative;
   border-radius: 28px;
+  /* Richer gradient: bright upper-left corner, dark lower-right — sells the dome */
   background: linear-gradient(
-    155deg,
-    rgba(255, 255, 255, 0.17) 0%,
-    rgba(255, 255, 255, 0.09) 30%,
-    rgba(255, 255, 255, 0.04) 65%,
-    rgba(0, 0, 0, 0.04) 100%
+    145deg,
+    rgba(255, 255, 255, 0.22) 0%,
+    rgba(255, 255, 255, 0.13) 25%,
+    rgba(255, 255, 255, 0.06) 55%,
+    rgba(0, 0, 0, 0.08) 100%
   );
-  backdrop-filter: blur(40px) saturate(180%) brightness(1.1);
-  -webkit-backdrop-filter: blur(40px) saturate(180%) brightness(1.1);
-  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(40px) saturate(200%) brightness(1.15);
+  -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(1.15);
+  border: 1.5px solid rgba(255, 255, 255, 0.28);
   box-shadow:
-    /* Top specular — bright ridge catches virtual light */
-    inset 0 2px 0 rgba(255, 255, 255, 0.62),
-    /* Left edge subtle specular */
-    inset 2px 0 0 rgba(255, 255, 255, 0.22),
-    /* Right edge shadow — opposite face in shade */
-    inset -1px 0 0 rgba(0, 0, 0, 0.08),
-    /* Bottom inner shadow — concave feel */
-    inset 0 -2px 6px rgba(0, 0, 0, 0.22),
-    /* Contact shadow — immediately below card */
-    0 2px 4px rgba(0, 0, 0, 0.35),
-    /* Tight drop shadow */
-    0 6px 16px rgba(0, 0, 0, 0.28),
-    /* Mid-range soft shadow */
-    0 16px 40px rgba(0, 0, 0, 0.2),
+    /* ── INNER (inset) — surface curvature lighting ── */
+    /* Blazing top specular ridge — the crown of the bulge */
+    inset 0 3px 0 rgba(255, 255, 255, 0.75),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    /* Left face catching side-light */
+    inset 3px 0 0 rgba(255, 255, 255, 0.3),
+    /* Right face in shadow */
+    inset -2px 0 4px rgba(0, 0, 0, 0.12),
+    /* Bottom concave — surface curves away from viewer */
+    inset 0 -4px 12px rgba(0, 0, 0, 0.3),
+    /* ── OUTER (drop) — physical elevation shadows ── */
+    /* Immediate contact shadow */
+    0 2px 4px rgba(0, 0, 0, 0.5),
+    /* Tight shadow — height ≈ 6px above surface */
+    0 6px 12px rgba(0, 0, 0, 0.38),
+    /* Mid diffuse shadow */
+    0 18px 40px rgba(0, 0, 0, 0.26),
     /* Deep atmospheric blur */
-    0 36px 72px rgba(0, 0, 0, 0.14),
-    /* Very subtle outer glow rim */
-    0 0 0 1px rgba(255, 255, 255, 0.07),
-    /* Extrusion edge bottom — the "thickness" of clay */
-    0 4px 0 rgba(0, 0, 0, 0.45);
+    0 40px 80px rgba(0, 0, 0, 0.18),
+    /* Outer white rim — separates card from bg */
+    0 0 0 1px rgba(255, 255, 255, 0.09),
+    /* ── EXTRUSION — the clay thickness/bottom face ── */
+    /* Primary thickness edge — visible bottom face of the slab */
+    0 8px 0 rgba(0, 0, 0, 0.55),
+    /* Soft penumbra just below the edge */
+    0 10px 6px rgba(0, 0, 0, 0.35);
   overflow: hidden;
   transition:
     transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
@@ -448,14 +455,14 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  width: 55%;
+  width: 60%;
   height: 100%;
   background: linear-gradient(
-    110deg,
+    115deg,
     transparent 0%,
-    rgba(255, 255, 255, 0.06) 40%,
-    rgba(255, 255, 255, 0.12) 50%,
-    rgba(255, 255, 255, 0.04) 60%,
+    rgba(255, 255, 255, 0.07) 38%,
+    rgba(255, 255, 255, 0.16) 50%,
+    rgba(255, 255, 255, 0.05) 62%,
     transparent 100%
   );
   transform: translateX(-130%) skewX(-20deg);
@@ -468,55 +475,58 @@ body {
   animation: clay-sheen 0.75s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
-/* Top specular glint bar + bottom rim shadow */
+/* Top specular glint bar — sharp bright ridge at very crown */
 .clay-card::after {
   content: '';
   position: absolute;
   top: 0;
-  left: 6%;
-  width: 88%;
-  height: 2px;
+  left: 5%;
+  width: 90%;
+  height: 3px;
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(255, 255, 255, 0.45) 20%,
-    rgba(255, 255, 255, 0.85) 50%,
-    rgba(255, 255, 255, 0.45) 80%,
+    rgba(255, 255, 255, 0.5) 15%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(255, 255, 255, 0.5) 85%,
     transparent 100%
   );
-  border-radius: 0 0 50% 50%;
+  border-radius: 0 0 60% 60%;
   pointer-events: none;
   z-index: 2;
-  filter: blur(0.5px);
+  filter: blur(0.8px);
 }
 
 .clay-card:hover {
-  transform: translateY(-8px) scale(1.015);
+  transform: translateY(-10px) scale(1.018);
   box-shadow:
-    inset 0 2px 0 rgba(255, 255, 255, 0.7),
-    inset 2px 0 0 rgba(255, 255, 255, 0.28),
-    inset -1px 0 0 rgba(0, 0, 0, 0.06),
-    inset 0 -2px 6px rgba(0, 0, 0, 0.18),
-    0 4px 8px rgba(0, 0, 0, 0.4),
-    0 12px 28px rgba(0, 0, 0, 0.32),
-    0 28px 60px rgba(0, 0, 0, 0.24),
-    0 56px 96px rgba(0, 0, 0, 0.16),
-    0 0 0 1px rgba(255, 255, 255, 0.12),
-    0 6px 0 rgba(0, 0, 0, 0.5);
-  border-color: rgba(255, 255, 255, 0.32);
+    inset 0 3px 0 rgba(255, 255, 255, 0.85),
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    inset 3px 0 0 rgba(255, 255, 255, 0.35),
+    inset -2px 0 4px rgba(0, 0, 0, 0.1),
+    inset 0 -4px 12px rgba(0, 0, 0, 0.22),
+    0 4px 8px rgba(0, 0, 0, 0.55),
+    0 14px 32px rgba(0, 0, 0, 0.42),
+    0 36px 72px rgba(0, 0, 0, 0.3),
+    0 64px 110px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(255, 255, 255, 0.14),
+    0 10px 0 rgba(0, 0, 0, 0.6),
+    0 13px 8px rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.38);
 }
 
 .clay-card:active {
-  transform: translateY(-1px) scale(1.005);
+  transform: translateY(-2px) scale(1.005);
   box-shadow:
-    inset 0 2px 0 rgba(255, 255, 255, 0.5),
-    inset 2px 0 0 rgba(255, 255, 255, 0.18),
+    inset 0 2px 0 rgba(255, 255, 255, 0.6),
+    inset 2px 0 0 rgba(255, 255, 255, 0.22),
     inset 0 -2px 6px rgba(0, 0, 0, 0.28),
-    inset 0 4px 12px rgba(0, 0, 0, 0.18),
-    0 1px 4px rgba(0, 0, 0, 0.4),
-    0 4px 12px rgba(0, 0, 0, 0.25),
-    0 0 0 1px rgba(255, 255, 255, 0.06),
-    0 1px 0 rgba(0, 0, 0, 0.5);
+    inset 0 5px 16px rgba(0, 0, 0, 0.22),
+    0 1px 4px rgba(0, 0, 0, 0.5),
+    0 4px 12px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.07),
+    0 3px 0 rgba(0, 0, 0, 0.55),
+    0 5px 4px rgba(0, 0, 0, 0.3);
 }
 
 /* Clay card — accent variant for dark bg */
@@ -796,84 +806,110 @@ body {
     0 0 24px rgba(157, 255, 47, 0.12);
 }
 
+/* ── Clay Input Error State ───────────────────────────────────────────────── */
+.clay-input-error {
+  border-color: rgba(255, 80, 80, 0.6) !important;
+  background: linear-gradient(
+    155deg,
+    rgba(60, 0, 0, 0.22) 0%,
+    rgba(255, 80, 80, 0.04) 60%,
+    rgba(255, 255, 255, 0.03) 100%
+  ) !important;
+  box-shadow:
+    inset 0 3px 8px rgba(0, 0, 0, 0.38),
+    inset 0 1px 3px rgba(0, 0, 0, 0.25),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.08),
+    0 1px 0 rgba(255, 255, 255, 0.1),
+    0 0 0 2.5px rgba(255, 80, 80, 0.22),
+    0 0 20px rgba(255, 80, 80, 0.1) !important;
+}
+
 /* ── Clay Form 3D Container ───────────────────────────────────────────────── */
 .clay-form-3d {
   position: relative;
   border-radius: 36px;
+  /* Strong top-left highlight → deep bottom-right shadow = convincing dome */
   background: linear-gradient(
-    160deg,
-    rgba(255, 255, 255, 0.16) 0%,
-    rgba(255, 255, 255, 0.08) 25%,
-    rgba(255, 255, 255, 0.04) 55%,
-    rgba(0, 0, 0, 0.06) 100%
+    148deg,
+    rgba(255, 255, 255, 0.22) 0%,
+    rgba(255, 255, 255, 0.12) 22%,
+    rgba(255, 255, 255, 0.055) 48%,
+    rgba(0, 0, 0, 0.07) 75%,
+    rgba(0, 0, 0, 0.12) 100%
   );
-  backdrop-filter: blur(60px) saturate(200%) brightness(1.12);
-  -webkit-backdrop-filter: blur(60px) saturate(200%) brightness(1.12);
-  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(72px) saturate(220%) brightness(1.18);
+  -webkit-backdrop-filter: blur(72px) saturate(220%) brightness(1.18);
+  border: 1.5px solid rgba(255, 255, 255, 0.32);
   box-shadow:
-    /* Very bright top rim — the dominant light source hits the top edge */
-    inset 0 3px 0 rgba(255, 255, 255, 0.72),
-    inset 0 1px 0 rgba(255, 255, 255, 0.95),
-    /* Left face highlight */
-    inset 3px 0 0 rgba(255, 255, 255, 0.28),
-    /* Right face shadow */
-    inset -2px 0 4px rgba(0, 0, 0, 0.12),
-    /* Bottom concave shadow */
-    inset 0 -3px 10px rgba(0, 0, 0, 0.28),
-    /* Contact shadow */
-    0 4px 8px rgba(0, 0, 0, 0.45),
-    /* Mid drop shadow */
-    0 12px 32px rgba(0, 0, 0, 0.32),
+    /* ── INNER (inset) — surface curvature ── */
+    /* Blazing top specular — the very crown of the bulge */
+    inset 0 4px 0 rgba(255, 255, 255, 0.82),
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    /* Left edge side-light */
+    inset 4px 0 0 rgba(255, 255, 255, 0.35),
+    /* Right face in shadow */
+    inset -3px 0 6px rgba(0, 0, 0, 0.16),
+    /* Bottom concave depth */
+    inset 0 -5px 16px rgba(0, 0, 0, 0.35),
+    /* ── OUTER — elevation shadows ── */
+    /* Immediate contact shadow (tightest) */
+    0 3px 6px rgba(0, 0, 0, 0.55),
+    /* Sharp near-field shadow */
+    0 10px 24px rgba(0, 0, 0, 0.42),
+    /* Mid diffuse */
+    0 28px 60px rgba(0, 0, 0, 0.3),
     /* Deep atmospheric */
-    0 32px 80px rgba(0, 0, 0, 0.22),
-    /* Far atmospheric */
-    0 64px 120px rgba(0, 0, 0, 0.14),
-    /* Bottom clay extrusion — visible thickness */
-    0 6px 0 rgba(0, 0, 0, 0.6),
-    /* Outer rim glow */
-    0 0 0 1px rgba(255, 255, 255, 0.09),
-    /* Soft green accent glow */
-    0 0 80px rgba(157, 255, 47, 0.06);
+    0 60px 110px rgba(0, 0, 0, 0.2),
+    /* Far bloom */
+    0 100px 160px rgba(0, 0, 0, 0.12),
+    /* ── EXTRUSION — the visible clay thickness ── */
+    /* Primary bottom face — this is what makes it look 3D */
+    0 10px 0 rgba(0, 0, 0, 0.65),
+    /* Soft penumbra under the extruded face */
+    0 14px 10px rgba(0, 0, 0, 0.45),
+    /* ── GLOW ── */
+    /* Outer rim white halo — separates from bg */
+    0 0 0 1px rgba(255, 255, 255, 0.11),
+    /* Subtle green ambient glow */
+    0 0 100px rgba(157, 255, 47, 0.07);
   overflow: hidden;
 }
 
-/* Top specular on 3d form */
+/* Top specular highlight bar — the sharpest brightest point on the dome */
 .clay-form-3d::after {
   content: '';
   position: absolute;
   top: 0;
-  left: 5%;
-  width: 90%;
-  height: 3px;
+  left: 4%;
+  width: 92%;
+  height: 4px;
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(255, 255, 255, 0.5) 20%,
-    rgba(255, 255, 255, 0.95) 50%,
-    rgba(255, 255, 255, 0.5) 80%,
+    rgba(255, 255, 255, 0.55) 15%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(255, 255, 255, 0.55) 85%,
     transparent 100%
   );
-  border-radius: 50%;
+  border-radius: 0 0 65% 65%;
   pointer-events: none;
-  z-index: 2;
-  filter: blur(1px);
+  z-index: 3;
+  filter: blur(1.5px);
 }
 
-/* Sheen sweep on 3d form */
+/* Dome sheen — wide soft highlight across upper-half of form */
 .clay-form-3d::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
-  width: 55%;
-  height: 100%;
-  background: linear-gradient(
-    110deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.05) 40%,
-    rgba(255, 255, 255, 0.09) 50%,
-    rgba(255, 255, 255, 0.03) 60%,
-    transparent 100%
+  width: 65%;
+  height: 60%;
+  background: radial-gradient(
+    ellipse at 30% 0%,
+    rgba(255, 255, 255, 0.14) 0%,
+    rgba(255, 255, 255, 0.06) 40%,
+    transparent 70%
   );
   pointer-events: none;
   z-index: 1;

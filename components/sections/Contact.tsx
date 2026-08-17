@@ -20,6 +20,8 @@ export default function Contact() {
   const headingRef = useRef<HTMLHeadingElement>(null);
   const [submitted, setSubmitted] = useState(false);
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [errors, setErrors] = useState<{ name?: string; email?: string; message?: string }>({});
+  const [touched, setTouched] = useState<{ name?: boolean; email?: boolean; message?: boolean }>({});
 
   useGSAP(
     () => {
@@ -45,9 +47,31 @@ export default function Contact() {
     { scope: sectionRef }
   );
 
+  const validate = (data: typeof formData) => {
+    const errs: typeof errors = {};
+    if (!data.name.trim()) errs.name = "Name is required.";
+    if (!data.email.trim()) {
+      errs.email = "Email is required.";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+      errs.email = "Please enter a valid email address.";
+    }
+    if (!data.message.trim()) errs.message = "Message is required.";
+    return errs;
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    // Mark all fields as touched to show any errors
+    setTouched({ name: true, email: true, message: true });
+    const errs = validate(formData);
+    setErrors(errs);
+    if (Object.keys(errs).length > 0) return;
     setSubmitted(true);
+  };
+
+  const handleBlur = (field: keyof typeof formData) => {
+    setTouched((prev) => ({ ...prev, [field]: true }));
+    setErrors(validate({ ...formData }));
   };
 
   return (
@@ -142,11 +166,24 @@ export default function Contact() {
                     <input
                       id="contact-name"
                       type="text"
-                      required
                       value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="clay-input w-full px-5 py-4 font-mono text-sm"
+                      onChange={(e) => {
+                        const updated = { ...formData, name: e.target.value };
+                        setFormData(updated);
+                        if (touched.name) setErrors(validate(updated));
+                      }}
+                      onBlur={() => handleBlur("name")}
+                      className={`clay-input w-full px-5 py-4 font-mono text-sm${
+                        touched.name && errors.name ? " clay-input-error" : ""
+                      }`}
+                      aria-describedby={errors.name ? "contact-name-error" : undefined}
+                      aria-invalid={touched.name && !!errors.name}
                     />
+                    {touched.name && errors.name && (
+                      <p id="contact-name-error" className="font-mono text-[10px] tracking-wider ml-1 mt-0.5" style={{ color: "#ff5a5a" }}>
+                        ⚠ {errors.name}
+                      </p>
+                    )}
                   </div>
                   {/* Email Field */}
                   <div className="flex flex-col gap-2">
@@ -160,11 +197,24 @@ export default function Contact() {
                     <input
                       id="contact-email"
                       type="email"
-                      required
                       value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="clay-input w-full px-5 py-4 font-mono text-sm"
+                      onChange={(e) => {
+                        const updated = { ...formData, email: e.target.value };
+                        setFormData(updated);
+                        if (touched.email) setErrors(validate(updated));
+                      }}
+                      onBlur={() => handleBlur("email")}
+                      className={`clay-input w-full px-5 py-4 font-mono text-sm${
+                        touched.email && errors.email ? " clay-input-error" : ""
+                      }`}
+                      aria-describedby={errors.email ? "contact-email-error" : undefined}
+                      aria-invalid={touched.email && !!errors.email}
                     />
+                    {touched.email && errors.email && (
+                      <p id="contact-email-error" className="font-mono text-[10px] tracking-wider ml-1 mt-0.5" style={{ color: "#ff5a5a" }}>
+                        ⚠ {errors.email}
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -179,12 +229,25 @@ export default function Contact() {
                   </label>
                   <textarea
                     id="contact-message"
-                    required
                     rows={5}
                     value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    className="clay-input w-full px-5 py-4 font-mono text-sm resize-none flex-grow min-h-[140px]"
+                    onChange={(e) => {
+                      const updated = { ...formData, message: e.target.value };
+                      setFormData(updated);
+                      if (touched.message) setErrors(validate(updated));
+                    }}
+                    onBlur={() => handleBlur("message")}
+                    className={`clay-input w-full px-5 py-4 font-mono text-sm resize-none flex-grow min-h-[140px]${
+                      touched.message && errors.message ? " clay-input-error" : ""
+                    }`}
+                    aria-describedby={errors.message ? "contact-message-error" : undefined}
+                    aria-invalid={touched.message && !!errors.message}
                   />
+                  {touched.message && errors.message && (
+                    <p id="contact-message-error" className="font-mono text-[10px] tracking-wider ml-1 mt-0.5" style={{ color: "#ff5a5a" }}>
+                      ⚠ {errors.message}
+                    </p>
+                  )}
                 </div>
 
                 {/* Submit Button */}

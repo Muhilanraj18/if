@@ -15,10 +15,10 @@ import SectionDivider from "@/components/ui/SectionDivider";
 gsap.registerPlugin(ScrollTrigger);
 
 const PROCESS_STEPS = [
-  { num: "01", title: "DISCOVERY", desc: "We map the territory. Deep dives into architecture, goals, and constraints." },
-  { num: "02", title: "PROTOTYPING", desc: "Rapid iteration. We build disposable prototypes to validate assumptions fast." },
-  { num: "03", title: "ENGINEERING", desc: "Writing code that scales. Clean, modular, and production-ready." },
-  { num: "04", title: "DEPLOYMENT", desc: "Zero-downtime shipping. CI/CD pipelines that let you deploy on Fridays." },
+  { num: "01", title: "DISCOVERY",    desc: "We map the territory. Deep dives into architecture, goals, and constraints.",       side: "left"  },
+  { num: "02", title: "PROTOTYPING",  desc: "Rapid iteration. We build disposable prototypes to validate assumptions fast.",      side: "right" },
+  { num: "03", title: "ENGINEERING",  desc: "Writing code that scales. Clean, modular, and production-ready.",                   side: "left"  },
+  { num: "04", title: "DEPLOYMENT",   desc: "Zero-downtime shipping. CI/CD pipelines that let you deploy on Fridays.",           side: "right" },
 ];
 
 export default function HowWeBuild() {
@@ -68,8 +68,9 @@ export default function HowWeBuild() {
       mm.add("(min-width: 768px)", () => {
         const nodes = gsap.utils.toArray(".process-node") as HTMLElement[];
         nodes.forEach((node, i) => {
+          const step = PROCESS_STEPS[i];
           gsap.from(node, {
-            x: i % 2 === 0 ? -50 : 50,
+            x: step.side === "left" ? -50 : 50,
             opacity: 0,
             duration: 0.8,
             ease: "back.out(1.5)",
@@ -126,24 +127,24 @@ export default function HowWeBuild() {
         {/* Process Flow */}
         <div className="process-container relative mt-16 pb-16">
           
-          {/* Background SVG Line (Desktop) */}
-          <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-[300px] hidden md:block -z-10">
-            <svg width="100%" height="100%" viewBox="0 0 300 800" preserveAspectRatio="none">
-              {/* Dim background line */}
-              <path 
-                d="M150,0 C150,150 50,200 50,300 C50,400 250,500 250,600 C250,700 150,750 150,800" 
-                fill="none" 
-                stroke="var(--dark-border)" 
-                strokeWidth="4" 
+          {/* Background SVG Line (Desktop) — path stays tightly centered, cards push outward */}
+          <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-[120px] hidden md:block -z-10">
+            <svg width="100%" height="100%" viewBox="0 0 120 800" preserveAspectRatio="none">
+              {/* Dim background line — simple straight vertical */}
+              <path
+                d="M60,0 C60,100 30,180 30,300 C30,420 90,500 90,600 C90,700 60,750 60,800"
+                fill="none"
+                stroke="var(--dark-border)"
+                strokeWidth="4"
                 strokeLinecap="round"
               />
               {/* Highlight active line */}
-              <path 
+              <path
                 ref={pathRef}
-                d="M150,0 C150,150 50,200 50,300 C50,400 250,500 250,600 C250,700 150,750 150,800" 
-                fill="none" 
-                stroke="var(--gsap-green)" 
-                strokeWidth="4" 
+                d="M60,0 C60,100 30,180 30,300 C30,420 90,500 90,600 C90,700 60,750 60,800"
+                fill="none"
+                stroke="var(--gsap-green)"
+                strokeWidth="4"
                 strokeLinecap="round"
                 style={{ filter: "drop-shadow(0 0 8px rgba(138,230,20,0.5))" }}
               />
@@ -159,10 +160,14 @@ export default function HowWeBuild() {
             {PROCESS_STEPS.map((step, idx) => (
               <div
                 key={step.num}
-                className={`process-node flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-0 ${idx % 2 === 0 ? 'md:pr-[50%]' : 'md:pl-[50%] md:flex-row-reverse'}`}
+                className={`process-node flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-0 ${
+                  step.side === "left"
+                    ? "md:pr-[52%]"
+                    : "md:pl-[52%] md:flex-row-reverse"
+                }`}
               >
                 {/* Node Dot / Number */}
-                <div className={`relative ${idx % 2 === 0 ? 'md:-mr-6' : 'md:-ml-6'} z-10 shrink-0`}>
+                <div className={`relative ${step.side === "left" ? 'md:-mr-5' : 'md:-ml-5'} z-10 shrink-0`}>
                   <div
                     className="w-14 h-14 rounded-full flex items-center justify-center font-mono font-black text-[var(--gsap-green)] text-base"
                     style={{

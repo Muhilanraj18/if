@@ -149,54 +149,32 @@ export default function Navbar({ visible }: NavbarProps) {
 
         {/* Mobile: hamburger */}
         <div className="md:hidden flex items-center gap-3 relative z-10">
-          {/* Pulsing circle ring behind burger */}
-          <div className="relative">
-            {/* Outer glow ring */}
-            <div
-              className="absolute inset-0 rounded-full pointer-events-none transition-all duration-500"
-              style={{
-                boxShadow: menuOpen
-                  ? "0 0 0 2px var(--gsap-green), 0 0 20px rgba(157,255,47,0.5), 0 0 40px rgba(157,255,47,0.2)"
-                  : "0 0 0 1px rgba(255,255,255,0.15), 0 0 12px rgba(157,255,47,0.1)",
-                borderRadius: "50%",
-                width: 40,
-                height: 40,
-                animation: menuOpen ? "none" : "navCirclePulse 3s ease-in-out infinite",
-              }}
-            />
-            <style>{`
-              @keyframes navCirclePulse {
-                0%, 100% { box-shadow: 0 0 0 1px rgba(255,255,255,0.12), 0 0 8px rgba(157,255,47,0.08); }
-                50%       { box-shadow: 0 0 0 2px rgba(157,255,47,0.35), 0 0 18px rgba(157,255,47,0.25); }
-              }
-            `}</style>
-            <button
-              className="rounded-full clay-card clay-card-dark relative"
-              onClick={() => setMenuOpen(!menuOpen)}
-              aria-label={menuOpen ? "Close menu" : "Open menu"}
-              aria-expanded={menuOpen}
-              style={{ width: 40, height: 40 }}
-            >
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[18px] h-[16px]">
-                {[0, 1, 2].map((i) => (
-                  <span
-                    key={i}
-                    className="absolute left-0 w-full rounded-full bg-[var(--light)] transition-all duration-300 origin-center"
-                    style={{
-                      height: 2,
-                      top: i === 0 ? 0 : i === 1 ? 7 : 14,
-                      opacity: menuOpen && i === 1 ? 0 : 0.85,
-                      transform: menuOpen
-                        ? i === 0 ? "translateY(7px) rotate(45deg)"
-                        : i === 2 ? "translateY(-7px) rotate(-45deg)"
-                        : "none"
-                        : "none",
-                    }}
-                  />
-                ))}
-              </div>
-            </button>
-          </div>
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            className="relative flex items-center justify-center"
+            style={{ width: 40, height: 40, background: "none", border: "none", padding: 0 }}
+          >
+            <div className="w-[18px] h-[16px] relative">
+              {[0, 1, 2].map((i) => (
+                <span
+                  key={i}
+                  className="absolute left-0 w-full rounded-full bg-[var(--light)] transition-all duration-300 origin-center"
+                  style={{
+                    height: 2,
+                    top: i === 0 ? 0 : i === 1 ? 7 : 14,
+                    opacity: menuOpen && i === 1 ? 0 : 0.85,
+                    transform: menuOpen
+                      ? i === 0 ? "translateY(7px) rotate(45deg)"
+                      : i === 2 ? "translateY(-7px) rotate(-45deg)"
+                      : "none"
+                      : "none",
+                  }}
+                />
+              ))}
+            </div>
+          </button>
         </div>
 
         {/* Mobile menu — animated slide-down */}

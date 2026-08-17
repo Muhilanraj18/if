@@ -31,7 +31,6 @@ import Impact from "@/components/sections/Impact";
 import About from "@/components/sections/About";
 import GSAPPlayground from "@/components/sections/GSAPPlayground";
 import TextMarquee from "@/components/sections/TextMarquee";
-import TechMarquee from "@/components/sections/TechMarquee";
 import HorizontalScrollJourney from "@/components/sections/HorizontalScrollJourney";
 import Contact from "@/components/sections/Contact";
 
@@ -81,16 +80,13 @@ export default function HomePage() {
       {/* ── Chapter 5: Skeuomorphism / HUD ─────────────────────────────────── */}
       <HowWeBuild />
 
-      {/* ── Tech Stack SVG Path Marquee ─────────────────────────────────────── */}
-      <TechMarquee />
-
       {/* ── Chapter 6: Maximalism + Pentagrid ──────────────────────────────────── */}
       <Impact />
 
       {/* ── Chapter 7: Neumorphism ──────────────────────────────────── */}
       <About />
 
-      {/* ── GSAP Playground ─────────────────────────────────────────── */}
+      {/* ── Infinite Possibilities / GSAP Playground ─────────────────── */}
       <GSAPPlayground />
 
       {/* ── Chapter 8: Liquid Glass (bookend) ──────────────────────── */}

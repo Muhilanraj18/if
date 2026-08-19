@@ -4,6 +4,7 @@ import React, {
   RefObject,
   useCallback,
   useEffect,
+  useId,
   useRef,
 } from "react";
 import {
@@ -93,7 +94,6 @@ interface MarqueeItemProps {
   easing?: (value: number) => number;
   enableRollingZIndex: boolean;
   calculateZIndex: (offset: number) => number | undefined;
-  cssVariableInterpolation: CSSVariableInterpolation[];
   draggable: boolean;
   grabCursor: boolean;
   isHoveredRef: React.MutableRefObject<boolean>;
@@ -111,7 +111,6 @@ function MarqueeItem({
   easing,
   enableRollingZIndex,
   calculateZIndex,
-  cssVariableInterpolation,
   draggable,
   grabCursor,
   isHoveredRef,
@@ -198,7 +197,9 @@ const MarqueeAlongSvgPath = ({
   enableRollingZIndex = true,
   zIndexBase = 1,
   zIndexRange = 10,
-  cssVariableInterpolation = [],
+  // cssVariableInterpolation accepted for API compatibility; not applied to children.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  cssVariableInterpolation: _cssVarInterp = [],
   responsive = false,
 }: MarqueeAlongSvgPathProps) => {
   const container = useRef<HTMLDivElement>(null);
@@ -263,8 +264,8 @@ const MarqueeAlongSvgPath = ({
     [enableRollingZIndex, zIndexBase, zIndexRange]
   );
 
-  const id =
-    pathId || `marquee-path-${Math.random().toString(36).substring(7)}`;
+  const generatedId = useId();
+  const id = pathId || generatedId;
 
   const { scrollY } = useScroll({
     container:
@@ -404,7 +405,6 @@ const MarqueeAlongSvgPath = ({
             easing={easing}
             enableRollingZIndex={enableRollingZIndex}
             calculateZIndex={calculateZIndex}
-            cssVariableInterpolation={cssVariableInterpolation}
             draggable={draggable}
             grabCursor={grabCursor}
             isHoveredRef={isHovered}

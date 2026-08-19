@@ -8,7 +8,7 @@
  */
 
 import type { Metadata, Viewport } from "next";
-import { Playfair_Display, Inter } from "next/font/google";
+import { Playfair_Display, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import GSAPProvider from "@/components/GSAPProvider";
 import CustomCursor from "@/components/CustomCursor";
@@ -27,6 +27,13 @@ const inter = Inter({
   variable: "--font-inter",
   display: "swap",
   weight: ["300", "400", "500", "600"],
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-geist-mono",
+  display: "swap",
+  weight: ["400", "500", "600", "700"],
 });
 
 export const viewport: Viewport = {
@@ -86,7 +93,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${playfair.variable} ${inter.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${playfair.variable} ${inter.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
       {/* suppressHydrationWarning: silences mismatches caused by browser extensions
            injecting attrs (bis_skin_checked, __processed_*, bis_register) before React hydrates */}
       <body className="antialiased" suppressHydrationWarning>

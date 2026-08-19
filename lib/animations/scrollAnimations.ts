@@ -99,8 +99,7 @@ export function createCountUp(
  * Each element becomes its own trigger; callbacks receive arrays of elements.
  */
 export function createBatchEntrance(
-  selector: string,
-  containerRef?: Element
+  selector: string
 ) {
   ScrollTrigger.batch(selector, {
     start: "top 88%",

@@ -8,7 +8,6 @@
 
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export interface TextRevealOptions {
   /** ScrollTrigger trigger element (defaults to the text element itself) */

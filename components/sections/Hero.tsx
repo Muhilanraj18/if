@@ -1,8 +1,11 @@
 /**
- * Hero Section — Chapter 1: GSAP Aesthetic
- * 
- * Dark background, neon accents, massive bouncy typography,
- * floating geometric shapes, DrawSVG animated CTA ring, and a massive watermark.
+ * Hero Section — Inan Infinites
+ *
+ * Interactive FOCUS / PRESENCE / FEEL home page.
+ * - Background images crossfade on row hover
+ * - Floating typography watermark across the viewport
+ * - SplitText char animations expand/collapse per row
+ * - Parallax mouse tracking on bg layers
  */
 
 "use client";
@@ -11,463 +14,476 @@ import React, { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
+import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
+import { CustomEase } from "gsap/CustomEase";
 
-gsap.registerPlugin(SplitText, ScrollTrigger, DrawSVGPlugin);
+gsap.registerPlugin(SplitText, ScrambleTextPlugin, CustomEase);
 
-// Seeded particle field — deterministic so no SSR hydration mismatch
-const COLORS = ["var(--gsap-green)", "var(--gsap-teal)", "var(--gsap-purple)", "var(--gsap-blue)", "var(--gsap-amber)"];
-const PARTICLES = Array.from({ length: 50 }, (_, i) => {
-  const seed = (i * 2654435761) >>> 0;
-  const rand = (n: number) => ((seed * (n + 1) * 1664525 + 1013904223) >>> 0) / 4294967296;
-  return {
-    x:        rand(0) * 100,
-    y:        rand(1) * 100,
-    size:     Math.floor(rand(2) * 5) + 2,
-    color:    COLORS[Math.floor(rand(3) * COLORS.length)],
-    opacity:  rand(4) * 0.25 + 0.15,
-    blur:     rand(5) > 0.5 ? 1 : 0,
-    duration: rand(6) * 4 + 2,
-    delay:    rand(7) * 4,
-  };
-});
+// ── Background images per state ──────────────────────────────────────────────
+const BG_IMAGES: Record<string, string> = {
+  default:  "https://assets.codepen.io/7558/wave-bg-001.webp",
+  focus:    "https://assets.codepen.io/7558/wave-bg-002.webp",
+  presence: "https://assets.codepen.io/7558/wave-bg-003.webp",
+  feel:     "https://assets.codepen.io/7558/wave-bg-004.webp",
+};
+
+// ── Scattered background text ─────────────────────────────────────────────────
+const TEXT_ITEMS: Array<{ text: string; top: string; left?: string; right?: string }> = [
+  { text: "BE",              top: "5%",  left: "8%" },
+  { text: "PRESENT",         top: "5%",  left: "15%" },
+  { text: "LISTEN",          top: "5%",  left: "28%" },
+  { text: "DEEPLY",          top: "5%",  left: "42%" },
+  { text: "OBSERVE",         top: "5%",  left: "55%" },
+  { text: "&",               top: "5%",  left: "75%" },
+  { text: "FEEL",            top: "5%",  left: "85%" },
+  { text: "MAKE",            top: "10%", left: "12%" },
+  { text: "BETTER",          top: "10%", left: "45%" },
+  { text: "DECISIONS",       top: "10%", right: "20%" },
+  { text: "THE",             top: "15%", left: "8%" },
+  { text: "CREATIVE",        top: "15%", left: "30%" },
+  { text: "PROCESS",         top: "15%", left: "55%" },
+  { text: "IS",              top: "15%", right: "20%" },
+  { text: "MYSTERIOUS",      top: "15%", right: "5%" },
+  { text: "S",               top: "25%", left: "5%" },
+  { text: "I",               top: "25%", left: "10%" },
+  { text: "M",               top: "25%", left: "15%" },
+  { text: "P",               top: "25%", left: "20%" },
+  { text: "L",               top: "25%", left: "25%" },
+  { text: "I",               top: "25%", left: "30%" },
+  { text: "C",               top: "25%", left: "35%" },
+  { text: "I",               top: "25%", left: "40%" },
+  { text: "T",               top: "25%", left: "45%" },
+  { text: "Y",               top: "25%", left: "50%" },
+  { text: "IS THE KEY",      top: "25%", right: "5%" },
+  { text: "FIND YOUR VOICE", top: "35%", left: "25%" },
+  { text: "TRUST INTUITION", top: "35%", left: "65%" },
+  { text: "EMBRACE SILENCE", top: "50%", left: "5%" },
+  { text: "QUESTION EVERYTHING", top: "50%", right: "5%" },
+  { text: "TRUTH",           top: "75%", left: "20%" },
+  { text: "WISDOM",          top: "75%", right: "20%" },
+  { text: "FOCUS",           top: "80%", left: "10%" },
+  { text: "ATTENTION",       top: "80%", left: "35%" },
+  { text: "AWARENESS",       top: "80%", left: "65%" },
+  { text: "PRESENCE",        top: "80%", right: "10%" },
+  { text: "SIMPLIFY",        top: "85%", left: "25%" },
+  { text: "REFINE",          top: "85%", right: "25%" },
+];
+
+// ── Rows ──────────────────────────────────────────────────────────────────────
+const ROWS = [
+  { id: "focus",    label: "FOCUS" },
+  { id: "presence", label: "PRESENCE" },
+  { id: "feel",     label: "FEEL" },
+];
 
 export default function Hero({ preloaderDone = true }: { preloaderDone?: boolean }) {
-  const sectionRef     = useRef<HTMLElement>(null);
-  const headlineRef    = useRef<HTMLHeadingElement>(null);
-  const infiniteRef    = useRef<HTMLSpanElement>(null);
-  const ideasRef       = useRef<HTMLSpanElement>(null);
-  const subRef         = useRef<HTMLParagraphElement>(null);
-  const ctaRef         = useRef<HTMLAnchorElement>(null);
-  const ctaRingRef     = useRef<SVGRectElement>(null);
-  const shapesRef      = useRef<HTMLDivElement>(null);
-  const watermarkRef   = useRef<HTMLDivElement>(null);
-  const cursorGlowRef  = useRef<HTMLDivElement>(null);
-  const cursorGlow2Ref = useRef<HTMLDivElement>(null);
-  const engineeredRef  = useRef<HTMLSpanElement>(null);
+  const sectionRef   = useRef<HTMLElement>(null);
+  const bgDefaultRef = useRef<HTMLDivElement>(null);
+  const bgFocusRef   = useRef<HTMLDivElement>(null);
+  const bgPresRef    = useRef<HTMLDivElement>(null);
+  const bgFeelRef    = useRef<HTMLDivElement>(null);
+
+  // State refs — avoid React re-renders inside GSAP callbacks
+  const activeRowRef   = useRef<string | null>(null);
+  const inTransition   = useRef(false);
+  const splitTexts     = useRef<Record<string, SplitText>>({});
+  const charWidths     = useRef<Record<string, { normal: number[]; wide: number[] }>>({});
+
+  // Refs for scramble interval
+  const scrambleTimer  = useRef<NodeJS.Timeout | null>(null);
+
+  const setupChars = () => {
+    ROWS.forEach((row, idx) => {
+      const el = document.getElementById(`hero-text-${row.id}`) as HTMLElement | null;
+      if (!el) return;
+
+      if (splitTexts.current[row.id]) {
+        splitTexts.current[row.id].revert();
+      }
+
+      const split = new SplitText(el, {
+        type: "chars" as const,
+        charsClass: `hero-char hero-char-${row.id}`,
+        reduceWhiteSpace: false,
+      });
+
+      splitTexts.current[row.id] = split;
+
+      // Measure natural + wide widths
+      const natural: number[] = [];
+      const wide: number[] = [];
+      const fontSize = parseFloat(window.getComputedStyle(el).fontSize || "40");
+      const ratio = fontSize / 160;
+      const isMobile = window.innerWidth < 768;
+
+      split.chars.forEach((char) => {
+        const cEl = char as HTMLElement;
+        const w = Math.ceil(cEl.offsetWidth);
+        natural.push(w);
+        // On mobile keep expansion safe to prevent overflow
+        const wideW = isMobile ? Math.ceil(w * 1.25) : Math.max(Math.ceil(w * 1.8), Math.ceil(85 * ratio));
+        wide.push(wideW);
+      });
+      charWidths.current[row.id] = { normal: natural, wide };
+
+      // Make inner span for translateX effect
+      split.chars.forEach((char, ci) => {
+        const hEl = char as HTMLElement;
+        const txt = hEl.textContent || "";
+        hEl.textContent = "";
+        const inner = document.createElement("span");
+        inner.className = "hero-char-inner";
+        inner.textContent = txt;
+        inner.style.cssText = "display:inline-block;transform:translate3d(0,0,0);";
+        hEl.appendChild(inner);
+        hEl.style.width = `${natural[ci]}px`;
+        hEl.style.maxWidth = `${natural[ci]}px`;
+      });
+
+      el.style.visibility = "visible";
+
+      // Initial blur-in stagger - delayed until after kinetic loader completes
+      gsap.fromTo(
+        split.chars,
+        { opacity: 0, filter: "blur(15px)", willChange: "opacity, filter, transform" },
+        {
+          opacity: 1,
+          filter: "blur(0px)",
+          duration: 0.8,
+          stagger: 0.08,
+          ease: "customEase",
+          delay: 0.2 + 0.12 * idx,
+        }
+      );
+    });
+  };
 
   useGSAP(
     () => {
-      if (!headlineRef.current) return;
+      if (!preloaderDone) return;
 
-      if (!preloaderDone) {
-        gsap.set([headlineRef.current, subRef.current, ctaRef.current, watermarkRef.current], { opacity: 0 });
-        if (shapesRef.current) {
-          gsap.set(shapesRef.current.querySelectorAll(".gsap-shape"), { opacity: 0 });
-        }
-        return;
-      }
+      CustomEase.create("customEase", "0.86, 0, 0.07, 1");
+      CustomEase.create("mouseEase", "0.25, 0.1, 0.25, 1");
 
-      // Make visible for animation
-      gsap.set([headlineRef.current, subRef.current, ctaRef.current, watermarkRef.current], { opacity: 1 });
+      /* ── 1. Register SplitText for each row ── */
+      setupChars();
 
-      // ── 0. Watermark text fade in
-      gsap.fromTo(watermarkRef.current, 
-        { opacity: 0, scale: 1.2 },
-        { opacity: 0.03, scale: 1, duration: 2, ease: "power2.out" }
-      );
-
-      // ── 0.5. Clover Spin
-      // CSS transform-box:fill-box makes transform-origin:center use the
-      // path's OWN bounding box centre — not the SVG viewport origin.
-      // This guarantees the clover always spins around its visual centre.
-      gsap.set(".hero-clover", {
-        transformBox: "fill-box",
-        transformOrigin: "center center",
-      });
-      gsap.to(".hero-clover", {
-        rotation: 360,
-        duration: 18,
-        ease: "none",
-        repeat: -1,
-      });
-
-      // ── 1. Animate each headline line individually
-      const tl = gsap.timeline();
-
-      tl.from([infiniteRef.current, ideasRef.current], {
-        y: 100,
-        opacity: 0,
-        rotationZ: 5,
-        scale: 0.8,
-        duration: 0.8,
-        stagger: 0.18,
-        ease: "back.out(1.7)",
-        clearProps: "all",
-      });
-
-      // ── 2. Subtitle + CTA reveal
-      tl.from(subRef.current, { opacity: 0, y: 25, duration: 0.7, ease: "power2.out" }, "-=0.6");
-      tl.from(ctaRef.current, { scale: 0, opacity: 0, duration: 0.7, ease: "back.out(2)" }, "-=0.4");
-
-      // ── 2b. DrawSVG: animate ring around CTA button
-      if (ctaRingRef.current) {
-        tl.fromTo(
-          ctaRingRef.current,
-          { drawSVG: "0% 0%" },
-          { drawSVG: "0% 100%", duration: 1.0, ease: "power2.inOut" },
-          "-=0.5"
-        );
-        // After drawing, make it pulse
-        gsap.to(ctaRingRef.current, {
-          opacity: 0.4,
-          duration: 1.5,
+      /* ── 2. Background text pulse ── */
+      const bgItems = document.querySelectorAll<HTMLElement>(".hero-bg-text-item");
+      bgItems.forEach((item, i) => {
+        gsap.to(item, {
+          opacity: 0.85,
+          duration: 2 + (i % 3),
           repeat: -1,
           yoyo: true,
           ease: "sine.inOut",
-          delay: tl.duration(),
+          delay: 1.5 + i * 0.1, // Delay start
         });
-      }
+      });
 
-      // ── 3. Floating geometric shapes animation
-      const shapes = shapesRef.current?.querySelectorAll(".gsap-shape");
-      if (shapes) {
-        shapes.forEach((shape, i) => {
-          gsap.to(shape, {
-            y: `random(-60, 60)`,
-            x: `random(-60, 60)`,
-            rotation: `random(-90, 90)`,
-            duration: `random(4, 8)`,
-            repeat: -1,
-            yoyo: true,
-            ease: "sine.inOut",
-            delay: i * 0.2,
-          });
-          
-          gsap.from(shape, {
-             scale: 0,
-             opacity: 0,
-             duration: 1.5,
-             ease: "elastic.out(1, 0.4)",
-             delay: 0.5 + (i * 0.1)
-          });
+      /* ── 3. Scramble random bg text words ── */
+      const scramble = () => {
+        const items = document.querySelectorAll<HTMLElement>(".hero-bg-text-item");
+        if (!items.length) return;
+        const pick = items[Math.floor(Math.random() * items.length)];
+        const orig = pick.dataset.text ?? pick.textContent ?? "";
+        gsap.to(pick, {
+          duration: 1,
+          scrambleText: { text: orig, chars: "■▪▌▐▬", revealDelay: 0.5, speed: 0.3 },
+          ease: "none",
         });
-      }
+        scrambleTimer.current = setTimeout(scramble, (0.5 + Math.random() * 2) * 1000);
+      };
+      scrambleTimer.current = setTimeout(scramble, 3000);
 
-      // ── 4. Engineered scroll visibility ──
-      if (engineeredRef.current) {
-        gsap.set(engineeredRef.current, { opacity: 0 });
-        let scrollTimeout: NodeJS.Timeout;
-        
-        ScrollTrigger.create({
-          trigger: document.body,
-          start: "top top",
-          end: "bottom bottom",
-          onUpdate: () => {
-            gsap.to(engineeredRef.current, { opacity: 1, duration: 0.2 });
-            
-            clearTimeout(scrollTimeout);
-            scrollTimeout = setTimeout(() => {
-              gsap.to(engineeredRef.current, { opacity: 0, duration: 0.5 });
-            }, 150);
-          }
+      /* ── 4. Parallax on mouse move (desktop only) ── */
+      const parallaxEls = sectionRef.current?.querySelectorAll<HTMLElement>("[data-parallax]");
+      const onMove = (e: MouseEvent) => {
+        if (window.innerWidth < 768) return;
+        const cx = window.innerWidth / 2;
+        const cy = window.innerHeight / 2;
+        const ox = (e.clientX - cx) / cx;
+        const oy = (e.clientY - cy) / cy;
+        parallaxEls?.forEach((el) => {
+          const s = parseFloat(el.dataset.parallax ?? "0.02");
+          gsap.to(el, { x: ox * 100 * s, y: oy * 50 * s, duration: 1.0, ease: "mouseEase", overwrite: "auto" });
         });
-      }
+      };
+      const onLeave = () => {
+        parallaxEls?.forEach((el) => gsap.to(el, { x: 0, y: 0, duration: 1.5, ease: "customEase" }));
+      };
+      sectionRef.current?.addEventListener("mousemove", onMove);
+      sectionRef.current?.addEventListener("mouseleave", onLeave);
 
-      // ── 5. Enhanced cursor-reactive background system ──
-      const heroEl = sectionRef.current;
-      if (heroEl) {
-        // Primary bright glow follows cursor closely
-        const xTo  = gsap.quickTo(cursorGlowRef.current,  "x", { duration: 0.4, ease: "power3" });
-        const yTo  = gsap.quickTo(cursorGlowRef.current,  "y", { duration: 0.4, ease: "power3" });
-        // Secondary slower glow for trail effect
-        const x2To = gsap.quickTo(cursorGlow2Ref.current, "x", { duration: 0.9, ease: "power2" });
-        const y2To = gsap.quickTo(cursorGlow2Ref.current, "y", { duration: 0.9, ease: "power2" });
+      // Handle window resize with debouncing
+      let resizeTimeout: NodeJS.Timeout;
+      const onResize = () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+          setupChars();
+        }, 200);
+      };
+      window.addEventListener("resize", onResize);
 
-        const waterXTo = gsap.quickTo(watermarkRef.current, "x", { duration: 1.2, ease: "power2.out" });
-        const waterYTo = gsap.quickTo(watermarkRef.current, "y", { duration: 1.2, ease: "power2.out" });
-
-        // Animate individual particles on mouse proximity
-        const particles = heroEl.querySelectorAll<HTMLDivElement>(".hero-particle");
-
-        const handleMouseMove = (e: MouseEvent) => {
-          const rect = heroEl.getBoundingClientRect();
-          const relX = e.clientX - rect.left;
-          const relY = e.clientY - rect.top;
-
-          xTo(relX);
-          yTo(relY);
-          x2To(relX);
-          y2To(relY);
-
-          const cx = window.innerWidth / 2;
-          const cy = window.innerHeight / 2;
-          waterXTo((e.clientX - cx) * -0.05);
-          waterYTo((e.clientY - cy) * -0.05);
-
-          // Particles near cursor react with subtle scale/brightness
-          particles.forEach((p) => {
-            const pr = p.getBoundingClientRect();
-            const dx = relX - (pr.left - rect.left + pr.width / 2);
-            const dy = relY - (pr.top  - rect.top  + pr.height / 2);
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            const proximity = Math.max(0, 1 - dist / 220);
-            gsap.to(p, {
-              scale: 1 + proximity * 2.5,
-              opacity: parseFloat(p.dataset.baseOpacity || "0.35") + proximity * 0.5,
-              duration: 0.4,
-              ease: "power2.out",
-              overwrite: "auto",
-            });
-          });
-        };
-
-        heroEl.addEventListener("mousemove", handleMouseMove);
-        return () => heroEl.removeEventListener("mousemove", handleMouseMove);
-      }
+      return () => {
+        sectionRef.current?.removeEventListener("mousemove", onMove);
+        sectionRef.current?.removeEventListener("mouseleave", onLeave);
+        window.removeEventListener("resize", onResize);
+        clearTimeout(resizeTimeout);
+        if (scrambleTimer.current) clearTimeout(scrambleTimer.current);
+      };
     },
     { scope: sectionRef, dependencies: [preloaderDone] }
   );
+
+  /* ── Background switcher (outside useGSAP so we can call freely) ── */
+  function switchBg(id: string) {
+    const map: Record<string, React.RefObject<HTMLDivElement | null>> = {
+      default:  bgDefaultRef,
+      focus:    bgFocusRef,
+      presence: bgPresRef,
+      feel:     bgFeelRef,
+    };
+    Object.entries(map).forEach(([key, ref]) => {
+      gsap.to(ref.current, { opacity: key === id ? 1 : 0, duration: 0.8, ease: "power2.inOut" });
+    });
+  }
+
+  /* ── Activate row ── */
+  function activateRow(rowId: string) {
+    if (activeRowRef.current === rowId || inTransition.current) return;
+    inTransition.current = true;
+
+    const prev = activeRowRef.current;
+    activeRowRef.current = rowId;
+
+    // Deactivate prev chars
+    if (prev && splitTexts.current[prev]) {
+      const prevChars  = splitTexts.current[prev].chars;
+      const prevInners = prevChars.map((c: Element) => c.querySelector(".hero-char-inner")).filter(Boolean);
+      const w = charWidths.current[prev];
+      gsap.to(prevChars, { width: (i: number) => w?.normal[i] ?? 40, maxWidth: (i: number) => w?.normal[i] ?? 40, duration: 0.5, stagger: 0.02, ease: "customEase", overwrite: "auto" });
+      gsap.to(prevInners, { x: 0, duration: 0.5, stagger: 0.02, ease: "customEase", overwrite: "auto" });
+    }
+
+    // Activate new chars
+    const chars  = splitTexts.current[rowId]?.chars ?? [];
+    const inners = chars.map((c: Element) => c.querySelector(".hero-char-inner")).filter(Boolean);
+    const w2     = charWidths.current[rowId];
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+    const el     = document.getElementById(`hero-text-${rowId}`);
+    const fontSize = parseFloat(el ? window.getComputedStyle(el).fontSize : "160");
+    const ratio  = fontSize / 160;
+    // On mobile, zero xShift prevents characters from shifting off-screen
+    const xShift = isMobile ? 0 : -35 * ratio;
+
+    const tl = gsap.timeline({
+      onComplete: () => { inTransition.current = false; },
+    });
+    tl.to(chars,  { width: (i: number) => w2?.wide[i] ?? 60, maxWidth: (i: number) => w2?.wide[i] ?? 60, duration: 0.6, stagger: 0.03, ease: "customEase", overwrite: "auto" }, 0);
+    tl.to(inners, { x: xShift, duration: 0.6, stagger: 0.03, ease: "customEase", overwrite: "auto" }, 0.04);
+
+    switchBg(rowId);
+  }
+
+  /* ── Deactivate row ── */
+  function deactivateRow(rowId: string) {
+    if (activeRowRef.current !== rowId || inTransition.current) return;
+    activeRowRef.current = null;
+
+    const chars  = splitTexts.current[rowId]?.chars ?? [];
+    const inners = chars.map((c: Element) => c.querySelector(".hero-char-inner")).filter(Boolean);
+    const w      = charWidths.current[rowId];
+    gsap.to(inners, { x: 0, duration: 0.5, stagger: 0.02, ease: "customEase", overwrite: "auto" });
+    gsap.to(chars,  { width: (i: number) => w?.normal[i] ?? 40, maxWidth: (i: number) => w?.normal[i] ?? 40, duration: 0.5, stagger: 0.02, ease: "customEase", overwrite: "auto" });
+
+    switchBg("default");
+  }
+
+  const handleRowClick = (rowId: string) => {
+    if (activeRowRef.current === rowId) {
+      deactivateRow(rowId);
+    } else {
+      activateRow(rowId);
+    }
+  };
 
   return (
     <section
       ref={sectionRef}
       id="hero"
-      className="section-container relative min-h-[100vh] flex items-center justify-center overflow-hidden gsap-grid-bg"
-      style={{ backgroundColor: "var(--dark)" }}
+      className="section-container relative"
+      style={{ minHeight: "100vh", overflow: "hidden", background: "#000" }}
     >
+      {/* ── Frame bg ── */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: "url(https://assets.codepen.io/7558/web03.webp)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          zIndex: 0,
+        }}
+        data-parallax="0.015"
+      />
+
+      {/* ── Crossfading background images ── */}
+      {Object.entries(BG_IMAGES).map(([key, src]) => (
+        <div
+          key={key}
+          ref={
+            key === "default"  ? bgDefaultRef :
+            key === "focus"    ? bgFocusRef   :
+            key === "presence" ? bgPresRef    :
+            bgFeelRef
+          }
+          data-parallax="0.025"
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage: `url(${src})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            opacity: key === "default" ? 1 : 0,
+            zIndex: 1,
+            mixBlendMode: "multiply",
+            transition: undefined,
+          }}
+        />
+      ))}
+
+      {/* ── Bottom gradient ── */}
+      <div
+        className="absolute bottom-0 left-0 w-full pointer-events-none"
+        style={{
+          height: "40vh",
+          background: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)",
+          zIndex: 2,
+        }}
+      />
+
+      {/* ── Scattered bg text ── */}
+      <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 2 }}>
+        {TEXT_ITEMS.map((item, i) => (
+          <div
+            key={i}
+            className="hero-bg-text-item"
+            data-text={item.text}
+            style={{
+              position: "absolute",
+              top: item.top,
+              ...(item.left  ? { left:  item.left  } : {}),
+              ...(item.right ? { right: item.right } : {}),
+              color: "#ffcc00",
+              fontSize: "0.75rem",
+              fontFamily: "monospace",
+              fontWeight: 600,
+              textTransform: "uppercase",
+              letterSpacing: "0.05em",
+              opacity: 0.6,
+              whiteSpace: "nowrap",
+              userSelect: "none",
+            }}
+          >
+            {item.text}
+          </div>
+        ))}
+      </div>
+
+      {/* ── Main interactive rows ── */}
+      <div
+        className="relative flex flex-col items-center justify-center w-full min-h-screen px-4 sm:px-6"
+        style={{ zIndex: 10 }}
+      >
+        <div className="relative w-full max-w-4xl mx-auto flex flex-col items-center justify-center">
+          {ROWS.map((row) => (
+            <div
+              key={row.id}
+              className="hero-row w-full flex items-center justify-center relative cursor-pointer select-none"
+              data-row-id={row.id}
+              style={{
+                position: "relative",
+                height: "clamp(60px, 12vw, 150px)",
+                margin: "clamp(4px, 1vw, 12px) 0",
+                overflow: "visible",
+                zIndex: 100,
+              }}
+              onMouseEnter={() => activateRow(row.id)}
+              onMouseLeave={() => deactivateRow(row.id)}
+              onClick={() => handleRowClick(row.id)}
+            >
+              {/* Text content */}
+              <div
+                id={`hero-text-${row.id}`}
+                className="hero-text-content"
+                data-text={row.label}
+                style={{
+                  fontWeight: "normal",
+                  fontFamily: "'PP Neue Montreal', system-ui, sans-serif",
+                  textTransform: "uppercase",
+                  color: "#ffcc00",
+                  letterSpacing: 0,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  height: "100%",
+                  visibility: "hidden",
+                  WebkitFontSmoothing: "antialiased",
+                  userSelect: "none",
+                }}
+              >
+                {row.label}
+              </div>
+
+              {/* Invisible interactive hit area on top */}
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  zIndex: 10,
+                  cursor: "pointer",
+                }}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ── Inline styles for char animation ── */}
       <style>{`
-        /* Default states */
-        .infinite-text {
-          color: transparent !important;
-          -webkit-text-stroke: 3px rgba(240, 242, 239, 0.9);
-          transition: color 0.15s ease, -webkit-text-stroke 0.15s ease;
-          display: block;
+        .hero-char {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          position: relative;
+          overflow: hidden;
+          transition: max-width 0.6s cubic-bezier(0.86, 0, 0.07, 1), width 0.6s cubic-bezier(0.86, 0, 0.07, 1);
+          flex-shrink: 0;
         }
-        .ideas-text {
-          color: var(--light) !important;
-          -webkit-text-stroke: 3px transparent;
-          transition: color 0.15s ease, -webkit-text-stroke 0.15s ease;
-          display: block;
+        .hero-char-inner {
+          display: inline-block;
+          will-change: transform;
+          transform: translate3d(0,0,0);
+          -webkit-font-smoothing: antialiased;
+          backface-visibility: hidden;
         }
-        /* When hovering the group — BOTH change simultaneously */
-        .headline-group:hover .infinite-text {
-          color: var(--light) !important;
-          -webkit-text-stroke: 3px transparent;
+        .hero-text-content {
+          font-size: clamp(3.8rem, 9.5vw, 9.5rem);
+          line-height: 1;
         }
-        .headline-group:hover .ideas-text {
-          color: transparent !important;
-          -webkit-text-stroke: 3px rgba(240, 242, 239, 0.9);
+        @media (max-width: 768px) {
+          .hero-row { height: clamp(52px, 11vw, 84px) !important; margin: 3px 0 !important; }
+          .hero-text-content { font-size: clamp(2.3rem, 8vw, 3.6rem); }
+          .hero-bg-text-item { display: none !important; } /* Hide scattered text on mobile to prevent overlap & lag */
         }
-        /* CTA ring */
-        .cta-ring-svg {
-          position: absolute;
-          inset: -10px;
-          width: calc(100% + 20px);
-          height: calc(100% + 20px);
-          pointer-events: none;
-          overflow: visible;
+        @media (max-width: 480px) {
+          .hero-row { height: clamp(44px, 10vw, 68px) !important; margin: 2px 0 !important; }
+          .hero-text-content { font-size: clamp(1.8rem, 8vw, 2.45rem); }
         }
-        @keyframes heroParticlePulse {
-          from { transform: scale(1);   opacity: var(--p-op, 0.2); }
-          to   { transform: scale(1.6); opacity: calc(var(--p-op, 0.2) * 1.8); }
+        @media (max-width: 360px) {
+          .hero-row { height: 42px !important; margin: 2px 0 !important; }
+          .hero-text-content { font-size: 1.6rem; }
         }
       `}</style>
-
-      {/* ── PRIMARY CURSOR GLOW (bright, tight) ── */}
-      <div
-        ref={cursorGlowRef}
-        className="absolute top-0 left-0 pointer-events-none z-0"
-        style={{
-          width: 500,
-          height: 500,
-          transform: "translate(-50%, -50%)",
-          borderRadius: "50%",
-          opacity: 0.18,
-          filter: "blur(90px)",
-          background: "radial-gradient(circle, var(--gsap-green) 0%, var(--gsap-teal) 50%, transparent 100%)",
-        }}
-      />
-
-      {/* ── SECONDARY TRAILING GLOW (slower, wider, purple) ── */}
-      <div
-        ref={cursorGlow2Ref}
-        className="absolute top-0 left-0 pointer-events-none z-0"
-        style={{
-          width: 800,
-          height: 800,
-          transform: "translate(-50%, -50%)",
-          borderRadius: "50%",
-          opacity: 0.09,
-          filter: "blur(140px)",
-          background: "radial-gradient(circle, var(--gsap-purple) 0%, var(--gsap-blue) 60%, transparent 100%)",
-        }}
-      />
-
-      {/* ── SCANLINE TEXTURE OVERLAY ── */}
-      <div
-        className="absolute inset-0 pointer-events-none z-1"
-        style={{
-          backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px)",
-          backgroundSize: "100% 4px",
-        }}
-      />
-
-
-
-      {/* ── AMBIENT GLOW BLOBS (static) ── */}
-      <div className="absolute top-[10%] left-[5%]  w-[360px] h-[360px] rounded-full pointer-events-none z-0" style={{ background: "radial-gradient(circle, rgba(157,255,47,0.12) 0%, transparent 70%)", filter: "blur(80px)" }} />
-      <div className="absolute bottom-[10%] right-[5%] w-[420px] h-[420px] rounded-full pointer-events-none z-0" style={{ background: "radial-gradient(circle, rgba(192,38,255,0.12) 0%, transparent 70%)", filter: "blur(100px)" }} />
-      <div className="absolute top-[40%] right-[20%]  w-[300px] h-[300px] rounded-full pointer-events-none z-0" style={{ background: "radial-gradient(circle, rgba(42,171,255,0.10) 0%, transparent 70%)", filter: "blur(70px)" }} />
-
-      {/* ── MASSIVE WATERMARK ── */}
-      <div 
-        ref={watermarkRef}
-        className="absolute inset-0 flex items-center justify-center pointer-events-none z-0 overflow-hidden"
-      >
-        <span 
-          className="font-sans font-black text-[var(--light)] uppercase whitespace-nowrap will-change-transform"
-          style={{ fontSize: "28vw", letterSpacing: "-0.08em", userSelect: "none" }}
-        >
-          INAN
-        </span>
-      </div>
-
-      {/* Floating Shapes Background */}
-      <div ref={shapesRef} className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-        {/* Glass Panels */}
-        <div className="gsap-shape absolute top-[15%] left-[20%] w-32 h-32 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-glass" style={{ transform: 'rotate(15deg)' }} />
-        <div className="gsap-shape absolute top-[70%] left-[10%] w-24 h-24 bg-white/5 backdrop-blur-md border border-white/20 rounded-full shadow-glass" />
-        
-        {/* Purple/Blue Glow Orbs */}
-        <div className="gsap-shape absolute bottom-[25%] right-[15%] w-64 h-64 bg-[var(--gsap-purple)] rounded-full opacity-25 blur-[80px]" />
-        <div className="gsap-shape absolute top-[25%] right-[30%] w-48 h-48 bg-[var(--gsap-teal)] rounded-full opacity-15 blur-[60px]" />
-
-        {/* More Glass Panels */}
-        <div className="gsap-shape absolute top-[40%] right-[15%] w-40 h-64 bg-white/5 backdrop-blur-lg border border-white/10 rounded-3xl shadow-glass" style={{ transform: 'rotate(-15deg)' }} />
-        <div className="gsap-shape absolute bottom-[15%] right-[35%] w-16 h-16 bg-white/10 backdrop-blur-2xl border border-white/30 rounded-xl shadow-glass" style={{ transform: 'rotate(12deg)' }} />
-
-        {/* Ambient Gradient Lines */}
-        <div className="gsap-shape absolute top-[50%] left-[5%] w-32 h-[1px] bg-gradient-to-r from-white/40 to-transparent opacity-60" />
-        <div className="gsap-shape absolute top-[60%] right-[5%] w-48 h-[1px] bg-gradient-to-l from-white/40 to-transparent opacity-60" />
-
-        {/* Extra green accent dot */}
-        <div className="gsap-shape absolute top-[30%] left-[8%] w-3 h-3 bg-[var(--gsap-green)] rounded-full opacity-80 blur-[2px]" />
-        <div className="gsap-shape absolute bottom-[35%] right-[8%] w-2 h-2 bg-[var(--gsap-teal)] rounded-full opacity-70 blur-[2px]" />
-      </div>
-
-      {/* Main Content */}
-      <div className="relative z-10 max-w-5xl w-full mx-6 md:mx-auto pt-24 md:pt-32 text-center flex flex-col items-center pointer-events-none">
-        
-
-
-        {/* Headline */}
-        <h1
-          ref={headlineRef}
-          className="font-sans font-black uppercase mb-8 leading-none pointer-events-auto"
-          style={{
-            fontSize: "clamp(2.5rem, 11vw, 10rem)",
-            letterSpacing: "-0.04em",
-          }}
-        >
-          {/* Linked hover group — hovering anywhere flips both words */}
-          <div className="headline-group relative cursor-pointer flex flex-col md:flex-row items-center justify-center gap-2 md:gap-6 w-max mx-auto overflow-visible">
-            <span ref={infiniteRef} className="infinite-text block">Infinite</span>
-            
-            <div className="flex items-center gap-4 overflow-visible">
-              <span ref={ideasRef} className="ideas-text block">Ideas.</span>
-              {/*
-                Spin the SVG element itself — GSAP uses the rendered
-                element box (50% 50%) so rotation is always perfectly centred.
-                The path is a direct visible child (no clipPath hack) so GSAP
-                never has to guess a bounding-box from inside <defs>.
-              */}
-              <svg
-                id="svg-stage"
-                className="hero-clover-svg w-[1.2em] h-[1.2em] inline-block pointer-events-none"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 300 300"
-                style={{ overflow: "visible" }}
-              >
-                <defs>
-                  {/* Vivid neon gradient — green → cyan → purple */}
-                  <linearGradient id="hero-grad" x1="0" y1="0" x2="300" y2="300" gradientUnits="userSpaceOnUse">
-                    <stop offset="0%"  stopColor="#00ff88"/>
-                    <stop offset="45%" stopColor="#00e5ff"/>
-                    <stop offset="100%" stopColor="#cc00ff"/>
-                  </linearGradient>
-                </defs>
-                <path
-                  className="hero-clover"
-                  d="M181 121h-.5v-1h.5a60 60 0 1 0-60-60v.5h-1V60a60 60 0 1 0-60 60h.5v1H60a60 60 0 1 0 60 60v-.5h1v.5a60 60 0 1 0 60-60Z"
-                  fill="url(#hero-grad)"
-                  style={{ transformBox: "fill-box", transformOrigin: "center center" }}
-                />
-              </svg>
-            </div>
-          </div>
-          {/* Engineered — shows while scrolling */}
-          <span
-            ref={engineeredRef}
-            className="gsap-text-gradient drop-shadow-[0_0_30px_rgba(157,255,47,0.4)] inline-block opacity-0"
-            style={{ marginTop: "-1.2rem" }}
-          >Engineered.</span>
-        </h1>
-
-        {/* Subtitle */}
-        <div className="relative pointer-events-auto">
-          <div className="absolute inset-0 bg-[var(--gsap-purple)] opacity-15 blur-[60px] rounded-full"></div>
-          <p
-            ref={subRef}
-            className="relative font-mono text-[var(--light)] opacity-75 text-sm md:text-base leading-relaxed mb-12 max-w-2xl mx-auto"
-          >
-            We build technology products and services that push boundaries —
-            from AI automation to fluid, high-performance cloud platforms.
-          </p>
-        </div>
-
-        {/* CTA with DrawSVG ring */}
-        <div className="flex gap-6 mt-4 pointer-events-auto">
-          <a
-            ref={ctaRef}
-            href="#services"
-            onClick={(e) => {
-              e.preventDefault();
-              import("@/lib/animations/gsapSetup").then(({ getLenis }) => {
-                getLenis()?.scrollTo("#services", { offset: -80 });
-              });
-            }}
-            className="gsap-button relative group overflow-visible"
-            style={{ position: "relative" }}
-          >
-            <span className="relative z-10">Explore Work</span>
-            <div className="absolute inset-0 bg-[var(--gsap-teal)] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-0 rounded-full"></div>
-
-            {/* DrawSVG animated ring around button */}
-            <svg
-              className="cta-ring-svg"
-              viewBox="0 0 100 100"
-              fill="none"
-              aria-hidden="true"
-              style={{
-                position: "absolute",
-                inset: "-12px",
-                width: "calc(100% + 24px)",
-                height: "calc(100% + 24px)",
-                pointerEvents: "none",
-                overflow: "visible",
-              }}
-            >
-              <rect
-                ref={ctaRingRef}
-                x="1" y="1" width="98" height="98"
-                rx="49"
-                stroke="var(--gsap-green)"
-                strokeWidth="2"
-                fill="none"
-                vectorEffect="non-scaling-stroke"
-              />
-            </svg>
-          </a>
-        </div>
-      </div>
-
-      {/* Decorative corners */}
-      <div className="absolute top-6 left-6 w-8 h-8 border-t-2 border-l-2 border-[var(--dark-border)] opacity-50 z-0 pointer-events-none"></div>
-      <div className="absolute top-6 right-6 w-8 h-8 border-t-2 border-r-2 border-[var(--dark-border)] opacity-50 z-0 pointer-events-none"></div>
-      <div className="absolute bottom-6 left-6 w-8 h-8 border-b-2 border-l-2 border-[var(--dark-border)] opacity-50 z-0 pointer-events-none"></div>
-      <div className="absolute bottom-6 right-6 w-8 h-8 border-b-2 border-r-2 border-[var(--dark-border)] opacity-50 z-0 pointer-events-none"></div>
     </section>
   );
 }

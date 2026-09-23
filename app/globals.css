@@ -48,6 +48,13 @@
   --z-cursor:     99;
   --z-nav:        50;
   --z-modal:      80;
+
+  /* ── Island Navbar tokens (mapped to project palette) ── */
+  --island-bg:          #1a1c1b;   /* slightly lighter than --dark for contrast */
+  --island-border:      rgba(255,255,255,0.12);
+  --surface-50:         rgba(240, 242, 239, 0.5);
+  --surface-75:         rgba(240, 242, 239, 0.75);
+  --surface-25:         rgba(240, 242, 239, 0.25);
 }
 
 /* ── Light Theme Override ─────────────────────────────────────────────────── */
@@ -1035,3 +1042,223 @@ body {
     0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
+/* ══════════════════════════════════════════════════════════════════════════════
+   ISLAND NAVBAR
+   Floating pill that expands on open; GSAP animates every tween.
+══════════════════════════════════════════════════════════════════════════════ */
+
+.island {
+  position: fixed;
+  top: 0.875rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.45rem 0.85rem;
+  background: rgba(18, 21, 19, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 9999px;
+  width: calc(100% - 1.5rem);
+  max-width: 440px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+}
+
+.island.island-scrolled {
+  background: rgba(13, 15, 14, 0.94);
+  border-color: rgba(157, 255, 47, 0.3);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7), 0 0 20px rgba(157, 255, 47, 0.12);
+}
+
+.island-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: var(--light);
+}
+
+.island-brand-text {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--light);
+  opacity: 0.9;
+}
+
+.island-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.island-cta {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.4rem 0.75rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--light);
+  opacity: 0.85;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+
+.island-cta:hover, .island-cta:active {
+  opacity: 1;
+  border-color: var(--gsap-green);
+  color: var(--gsap-green);
+  background: rgba(157, 255, 47, 0.08);
+}
+
+.menu-btn {
+  width: 36px;
+  height: 36px;
+  margin: 0;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--light);
+  transition: all 0.2s;
+}
+
+.menu-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(157, 255, 47, 0.4);
+  color: var(--gsap-green);
+}
+
+.menu-btn:active {
+  transform: scale(0.95);
+}
+
+.button-cont {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-btn svg { overflow: visible; display: block; }
+
+.menu-btn:focus-visible {
+  outline: 2px solid var(--gsap-green);
+  outline-offset: 2px;
+}
+
+/* ── Overlay ── */
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 75;
+  pointer-events: none;
+}
+
+.menu-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 8, 7, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  opacity: 0;
+}
+
+/* ── Panel ── */
+.menu-panel {
+  position: fixed;
+  top: 4.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(18, 21, 19, 0.95);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  padding: 1.15rem;
+  width: calc(100% - 1.5rem);
+  max-width: 440px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8), 0 0 25px rgba(157, 255, 47, 0.08);
+  visibility: hidden; /* GSAP autoAlpha handles this */
+  z-index: 85;
+}
+
+/* ── Links ── */
+.menu-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  text-decoration: none;
+  color: rgba(255, 253, 248, 0.8);
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 1.05rem;
+  line-height: 1;
+  transition: all 0.2s ease;
+}
+
+.menu-link + .menu-link {
+  margin-top: 0.25rem;
+}
+
+.menu-link:hover, .menu-link:active {
+  color: var(--gsap-green);
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateX(4px);
+}
+
+.menu-link:focus-visible {
+  outline: 2px solid var(--gsap-green);
+  outline-offset: -2px;
+  border-radius: 12px;
+}
+
+.link-num {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--gsap-green);
+  opacity: 0.75;
+  transition: opacity 0.15s;
+}
+
+.menu-link:hover .link-num {
+  opacity: 1;
+}
+
+.menu-footer {
+  margin-top: 1rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.menu-footer-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: rgba(255, 253, 248, 0.4);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
